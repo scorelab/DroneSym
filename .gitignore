@@ -35,3 +35,9 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+#Python virtualenv directories
+dronesym-python/flask-api/bin
+dronesym-python/flask-api/include
+dronesym-python/flask-api/lib
+dronesym-python/flask-api/pip-selfcheck.json
