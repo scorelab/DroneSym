@@ -37,6 +37,7 @@ jspm_packages
 .node_repl_history
 
 #Python virtualenv directories
+*.pyc
 dronesym-python/flask-api/bin
 dronesym-python/flask-api/include
 dronesym-python/flask-api/lib
