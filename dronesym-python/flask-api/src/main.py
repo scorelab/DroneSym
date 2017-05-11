@@ -20,10 +20,13 @@ def create_new_drone():
 	#This routes creates a new Dronekit SITL in the Drone Pool.
 	#The initial position needs to be send along the request as a JSON
 
-	if not request.json or not 'location' in request.json:
+	if not request.json or not 'location'in request.json:
 		abort(400)
 
-	return jsonify({"message": "Drone added to the fleet", "drone_id": 000})
+	home = request.json['location']
+	res = dronepool.create_new_drone(home=home)
+
+	return jsonify(res)
 
 @app.route('/dronesym/api/get/drones', methods=['GET'])
 def get_all_drones():

@@ -10,10 +10,15 @@ instance_count = 0
 firebase = None
 
 class Sim(SITL, object):
-	def __init__(self, instance=1, home=""):
+	def __init__(self, instance=1, home=None):
 		super(Sim, self).download("copter", "3.3", verbose=True)
 		self.instance = instance
-		self.home = home
+
+		if home:
+			self.home = home
+		else:
+			self.home = {"lat":6.9271, "lon":79.8612, "alt": 1}
+
 		self.p = None
 		return
 
@@ -21,7 +26,8 @@ class Sim(SITL, object):
 		return super(Sim, self).connection_string()[:-4] + str(5760 + self.instance * 10)
 
 	def launch(self):
-		super(Sim, self).launch(["--instance", str(self.instance)], await_ready=True, verbose=True)
+		home_str = str(self.home['lat']) + ',' + str(self.home['lon']) + ',' + str(self.home['alt']) + ',353'
+		super(Sim, self).launch(["--instance", str(self.instance), "--home", home_str], await_ready=True, verbose=True)
 
 	def get_sitl_status(self):
 		return { 'id': self.instance, 'home': self.home }
