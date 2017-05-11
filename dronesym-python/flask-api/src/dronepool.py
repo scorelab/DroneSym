@@ -32,11 +32,15 @@ def initialize():
 
 	drones = firebase.get('/drones', None)
 
+	if not drones:
+		return
+
 	for drone_id in drones:
 		if drone_id not in drone_pool.keys():
-			create_new_drone(db_key=drone_id)
+			location = firebase.get('/drones/'+ drone_id, 'global_rel')
+			create_new_drone(db_key=drone_id, home=location)
 
-def create_new_drone(home="", db_key=None):
+def create_new_drone(home=None, db_key=None):
 	global instance_count
 	drone = Sim(instance_count, home)
 	drone.launch()
