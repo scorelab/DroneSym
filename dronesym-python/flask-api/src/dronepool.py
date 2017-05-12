@@ -74,6 +74,22 @@ def get_drone_status(drone):
 
 	return status
 
+def run_mission(drone, target_height, waypoints):
+	while True:
+		if drone.location.global_relative_frame.alt >= target_height * 0.9:
+			break
+
+	print 'target alt reached'
+
+	mavparser.create_mission(drone, waypoints)
+	print 'mission acquired'
+
+	drone.mode = VehicleMode('AUTO')
+	print 'initiating sequence'
+
+	print 'in mission'
+
+
 def takeoff_drone(drone_id, target_height=10, waypoints=None):
 	try:
 		drone = drone_pool[drone_id]
@@ -88,26 +104,34 @@ def takeoff_drone(drone_id, target_height=10, waypoints=None):
 	drone.mode = VehicleMode('GUIDED')
 	drone.armed = True
 
-
 	while not drone.armed:
 		time.sleep(1)
 
 	drone.simple_takeoff(target_height)
 
-	while True:
-		if drone.location.global_relative_frame.alt >= target_height * 0.9:
-			break
-
-	mavparser.create_mission(drone, waypoints)
-
-	drone.mode = VehicleMode('AUTO')
-
 	url = '/drones/' + drone_id
+
+	if waypoints:
+		run_mission(drone, target_height, waypoints)
 
 	@drone.on_attribute('location')
 	def update_location(self, attr_name, value):
-		print 'lat: ' + `value.global_frame.lat` + ' - lon: ' + `value.global_frame.lon`
 		firebase.patch(url + '/global_loc/', {'lat': value.global_frame.lat, 'lon': value.global_frame.lon, 'alt': value.global_frame.alt})
 		firebase.patch(url + '/global_rel/', {'lat': value.global_relative_frame.lat, 'lon': value.global_relative_frame.lon, 'alt': value.global_relative_frame.alt})
+
+	@drone.on_attribute('airspeed')
+	def update_airspeed(self, attr_name, value):
+		firebase.patch(url, {'airspeed': value})
+
+	@drone.on_attribute('attitude')
+	def udpate_attitude(self, attr_name, value):
+		firebase.patch(url + '/attitude', { 'pitch': value.pitch, 'roll': value.roll, 'yaw': value.yaw })
+
+	@drone.on_attribute('heading')
+	def update_heading(self, attr_name, value):
+		firebase.patch(url, { 'heading': value })
+
+
+	print 'took off'
 
 	return True

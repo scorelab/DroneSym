@@ -4,6 +4,8 @@
 from flask import jsonify, Flask
 from flask import abort, request
 from flask import make_response
+import json, dronepool
+
 
 app = Flask(__name__)
 
@@ -38,9 +40,13 @@ def get_drone_by_id(drone_id):
 	#This routes returns the current state of the drone specified by the id
 	return jsonify({"state": "drone_state", "drone_id": drone_id})
 
-@app.route('/dronesym/api/<int:drone_id>/takeoff', methods=['POST'])
+@app.route('/dronesym/api/<string:drone_id>/takeoff', methods=['POST'])
 def send_takeoff(drone_id):
 	#This route issues a takeoff command to a specific drone
+	if request.json and request.json['waypoints']:
+		dronepool.takeoff_drone(drone_id, waypoints=request.json['waypoints'])
+	else:
+		dronepool.takeoff_drone(drone_id)
 	return jsonify({"status": "taking_off", "drone_id": drone_id})
 
 @app.route('/dronesym/api/<int:drone_id>/land', methods=['POST'])
