@@ -2,12 +2,11 @@
 
 from dronekit import Vehicle, VehicleMode, connect
 from dronekit_sitl import SITL
-import db, time
+import node, time
 import mavparser
 
 drone_pool = {}
 instance_count = 0
-firebase = None
 
 class Sim(SITL, object):
 	def __init__(self, instance=1, home=None):
@@ -33,17 +32,15 @@ class Sim(SITL, object):
 		return { 'id': self.instance, 'home': self.home }
 
 def initialize():
-	global firebase
-	firebase = db.get_db_handle()
 
-	drones = firebase.get('/drones', None)
+	drones = node.get_drones()['drones']
 
 	if not drones:
 		return
 
 	for drone_id in drones:
 		if drone_id not in drone_pool.keys():
-			location = firebase.get('/drones/'+ drone_id, 'global_rel')
+			location = node.get_drone_by_id(drone_id)['location']
 			create_new_drone(db_key=drone_id, home=location)
 
 def create_new_drone(home=None, db_key=None):
@@ -51,28 +48,12 @@ def create_new_drone(home=None, db_key=None):
 	drone = Sim(instance_count, home)
 	drone.launch()
 	drone_conn = connect(drone.connection_string(), wait_ready=True)
-	status = get_drone_status(drone_conn)
 
-	if not db_key:
-		res = firebase.post('/drones',  status)
-	else:
-		res = { 'name': db_key }
-
-	drone_pool[res['name']] = drone_conn
-
+	drone_pool[db_key] = drone_conn
 	instance_count += 1
+
+	res = { "status" : "OK", "id" : db_key }
 	return res
-
-def get_drone_status(drone):
-	status = {}
-
-	status['global_loc'] = { 'lat': drone.location.global_frame.lat, 'lon': drone.location.global_frame.lon, 'alt': drone.location.global_frame.alt}
-	status['global_rel'] = {'lat': drone.location.global_relative_frame.lat, 'lon': drone.location.global_relative_frame.lon, 'alt': drone.location.global_relative_frame.alt}
-	status['attitude'] = {'roll': drone.attitude.roll, 'pitch': drone.attitude.pitch, 'yaw': drone.attitude.yaw }
-	status['airspeed'] = drone.airspeed
-	status['heading'] = drone.heading
-
-	return status
 
 def run_mission(drone, target_height, waypoints):
 	while True:
@@ -109,28 +90,24 @@ def takeoff_drone(drone_id, target_height=10, waypoints=None):
 
 	drone.simple_takeoff(target_height)
 
-	url = '/drones/' + drone_id
-
 	if waypoints:
 		run_mission(drone, target_height, waypoints)
 
 	@drone.on_attribute('location')
 	def update_location(self, attr_name, value):
-		firebase.patch(url + '/global_loc/', {'lat': value.global_frame.lat, 'lon': value.global_frame.lon, 'alt': value.global_frame.alt})
-		firebase.patch(url + '/global_rel/', {'lat': value.global_relative_frame.lat, 'lon': value.global_relative_frame.lon, 'alt': value.global_relative_frame.alt})
+		node.update_drone(drone_id, { "location" : {"lat": value.global_relative_frame.lat, "lon": value.global_relative_frame.lon, "alt": value.global_relative_frame.alt}})
 
 	@drone.on_attribute('airspeed')
 	def update_airspeed(self, attr_name, value):
-		firebase.patch(url, {'airspeed': value})
+		node.update_drone(drone_id, {"airspeed": value})
 
 	@drone.on_attribute('attitude')
 	def udpate_attitude(self, attr_name, value):
-		firebase.patch(url + '/attitude', { 'pitch': value.pitch, 'roll': value.roll, 'yaw': value.yaw })
+		node.update_drone(drone_id, { "pitch": value.pitch, 'roll': value.roll, 'yaw': value.yaw })
 
 	@drone.on_attribute('heading')
 	def update_heading(self, attr_name, value):
-		firebase.patch(url, { 'heading': value })
-
+		node.update_drone(drone_id, { "heading": value })
 
 	print 'took off'
 
