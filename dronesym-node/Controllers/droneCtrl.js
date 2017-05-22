@@ -29,6 +29,8 @@ exports.getDroneIds = function(callBack){
 }
 
 exports.updateDroneStatus = function(id, status){
+	var timestamp = new Date();
+	status["timestamp"] = timestamp.valueOf();
 	droneRef.child(id).update(status);
 }
 
