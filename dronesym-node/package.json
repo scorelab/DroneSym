@@ -1,0 +1,29 @@
+{
+  "name": "drone-sym",
+  "version": "1.0.0",
+  "description": "DroneSym NodeJS API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hasa93/DroneSym.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hasa93/DroneSym/issues"
+  },
+  "homepage": "https://github.com/hasa93/DroneSym#readme",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.2",
+    "firebase": "^3.9.0",
+    "morgan": "^1.8.1",
+    "nodemon": "^1.11.0",
+    "request": "^2.81.0"
+  }
+}
