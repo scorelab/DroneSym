@@ -1,9 +1,9 @@
 var firebase = require('firebase-admin');
-var creds = require('FIREBASE_CREDS_FILE');
+var creds = require('FIREBASE_CRED_FILE');
 require('firebase/database');
 
 firebase.initializeApp({
-	databaseURL: "https://dronedb-213c3.firebaseio.com/",
+	databaseURL: "FIREBASE_URL",
 	credential: firebase.credential.cert(creds)
 });
 

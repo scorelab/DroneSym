@@ -33,4 +33,12 @@ router.post('/takeoff/:id', function(req, res){
 	});
 });
 
+router.post('/land/:id', function(req, res){
+	var droneId = req.params.id;
+
+	drones.landDrone(droneId, function(status){
+		res.json(status);
+	})
+});
+
 module.exports = router;

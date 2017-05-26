@@ -42,9 +42,10 @@ def send_takeoff(drone_id):
 		dronepool.takeoff_drone(drone_id)
 	return jsonify({"status": "taking_off", "drone_id": drone_id})
 
-@app.route(api_base_url + '/<int:drone_id>/land', methods=['POST'])
+@app.route(api_base_url + '/<string:drone_id>/land', methods=['POST'])
 def send_land(drone_id):
-	#This routes issues a landing command to a specific drone
+
+	dronepool.land_drone(drone_id)
 	return jsonify({"status": "landing", "drone_id": drone_id})
 
 if __name__ == '__main__':

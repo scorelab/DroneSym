@@ -112,3 +112,17 @@ def takeoff_drone(drone_id, target_height=10, waypoints=None):
 	print 'took off'
 
 	return True
+
+def land_drone(drone_id):
+	try:
+		drone = drone_pool[drone_id]
+	except:
+		raise
+
+	if not drone.armed:
+		return False
+
+	mavparser.issue_land_command(drone)
+	drone.mode = VehicleMode('AUTO')
+
+	return True

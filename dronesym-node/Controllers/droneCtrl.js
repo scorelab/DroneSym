@@ -31,7 +31,12 @@ exports.getDroneIds = function(callBack){
 exports.updateDroneStatus = function(id, status){
 	var timestamp = new Date();
 	status["timestamp"] = timestamp.valueOf();
-	droneRef.child(id).update(status);
+	droneRef.child(id).update(status, function(err){
+		if(err){
+			console.log(err);
+			return;
+		}
+	});
 }
 
 exports.getDroneById = function(id, callBack){
@@ -49,4 +54,10 @@ exports.takeoffDrone = function(id, waypoints, callBack){
 			callBack(body);
 		}
 	);
+}
+
+exports.landDrone = function(id, callBack){
+	request.post(`${flaskUrl}/${id}/land`, function(err, response, body){
+		callBack(body);
+	});
 }
