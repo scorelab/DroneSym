@@ -122,7 +122,10 @@ def land_drone(drone_id):
 	if not drone.armed:
 		return False
 
-	mavparser.issue_land_command(drone)
-	drone.mode = VehicleMode('AUTO')
+	cmds = drone.commands
+	cmds.wait_ready()
+	cmds.clear()
+
+	drone.mode = VehicleMode('LAND')
 
 	return True
