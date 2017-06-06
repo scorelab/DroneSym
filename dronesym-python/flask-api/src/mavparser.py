@@ -19,17 +19,3 @@ def create_mission(drone, waypoints):
 	print 'mission uploaded'
 
 	return
-
-def issue_land_command(drone):
-
-	print 'issuing the landing command...'
-
-	cmds = drone.commands
-	cmds.clear()
-
-	drone_location = drone.location.global_relative_frame
-	cmds.add(Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_LAND, 0, 0, 0, 0, 0, 0, drone_location.lat, drone_location.lon, 0))
-
-	cmds.upload()
-
-	print 'landing command uploaded'
