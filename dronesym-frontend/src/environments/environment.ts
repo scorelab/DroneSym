@@ -5,5 +5,9 @@
 
 export const environment = {
   production: false,
-  mapsApiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
+  mapsApiKey: 'YOUR_GOOGLE_MAPS_API_KEY',
+  firebase: {
+  	databaseURL: 'YOUR_FIREBASE_URL',
+  	apiKey: 'YOUR_FIREBASE_API_KEY'
+  }
 };
