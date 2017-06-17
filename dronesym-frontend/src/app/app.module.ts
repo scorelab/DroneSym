@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { environment } from '../environments/environment'
 
 import { AppComponent } from './app.component';
 import { AgmCoreModule } from '@agm/core';
@@ -11,7 +12,7 @@ import { AgmCoreModule } from '@agm/core';
   imports: [
     BrowserModule,
     AgmCoreModule.forRoot({
-    	apiKey: 'YOUR_API_KEY_HERE'
+    	apiKey: environment.mapsApiKey
     })
   ],
   providers: [],
