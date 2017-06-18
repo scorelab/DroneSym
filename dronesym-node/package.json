@@ -24,6 +24,7 @@
     "express": "^4.15.2",
     "firebase": "^3.9.0",
     "firebase-admin": "^5.0.0",
+    "http": "0.0.0",
     "morgan": "^1.8.1",
     "nodemon": "^1.11.0",
     "request": "^2.81.0",
