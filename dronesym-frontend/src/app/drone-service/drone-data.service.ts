@@ -1,16 +1,42 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { Http } from '@angular/http';
+import { environment } from '../../environments/environment';
+import * as io from 'socket.io-client';
+
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/first';
 
 @Injectable()
 export class DroneDataService {
 
-  constructor(private db: AngularFireDatabase) { }
+  baseUrl: string;
+  feed: any;
 
-  public getDronesList(): FirebaseListObservable<any[]>{
-    return this.db.list('/drones');
+  constructor(private http: Http) {
+    this.baseUrl = environment.nodeApiURL;
+  }
+
+  public createDrone(location: any): Promise<any>{
+    return this.http.post(`${this.baseUrl}/create`, location)
+        .map((res) => res.json())
+        .toPromise();
+  }
+
+  public getDroneFeed(): Observable<any>{
+    let feedObservable = new Observable((observer) => {
+        this.feed = io(environment.feedURL);
+
+        this.feed.on('SOCK_FEED_UPDATE', (data) => {
+          observer.next(data);
+        });
+
+        return () => {
+          this.feed.disconnect();
+        }
+    });
+
+    return feedObservable;
   }
 
 }
