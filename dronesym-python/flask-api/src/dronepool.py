@@ -25,7 +25,7 @@ class Sim(SITL, object):
 		return super(Sim, self).connection_string()[:-4] + str(5760 + self.instance * 10)
 
 	def launch(self):
-		home_str = str(self.home['lat']) + ',' + str(self.home['lon']) + ',' + str(self.home['alt']) + ',353'
+		home_str = str(self.home['lat']) + ',' + str(self.home['lon']) + ',0,353'
 		super(Sim, self).launch(["--instance", str(self.instance), "--home", home_str], await_ready=True, verbose=True)
 
 	def get_sitl_status(self):
