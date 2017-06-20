@@ -6,8 +6,6 @@
 export const environment = {
   production: false,
   mapsApiKey: 'YOUR_GOOGLE_MAPS_API_KEY',
-  firebase: {
-  	databaseURL: 'YOUR_FIREBASE_URL',
-  	apiKey: 'YOUR_FIREBASE_API_KEY'
-  }
+  nodeApiURL: 'http://localhost:3000/dronesym/api/node',
+  feedURL: 'http://localhost:3000/feed'
 };
