@@ -1,3 +1,9 @@
 agm-map{
 	height: 100vh;
 }
+
+.btn-floating{
+	position: absolute;
+	bottom: 35px;
+	right: 35px;
+}

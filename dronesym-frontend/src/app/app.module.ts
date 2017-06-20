@@ -7,10 +7,14 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { AgmCoreModule } from '@agm/core';
 import { DroneDataService } from './drone-service/drone-data.service';
+import { CursorTooltipComponent } from './cursor-tooltip/cursor-tooltip.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CursorTooltipComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
