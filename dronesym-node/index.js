@@ -3,13 +3,18 @@
 var express = require('express');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
-var droneRouter = require('./Routers/droneRouter');
-
+var cors = require('cors');
 var app = express();
+var http = require('http');
+
+http = http.Server(app);
+var sockConn = require('./websocket').init(http);
+var droneRouter = require('./Routers/droneRouter');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 app.use('/dronesym/api/node', droneRouter);
 
@@ -29,7 +34,7 @@ app.use(function(err, req, res, next) {
 });
 
 
-app.listen(3000, function(){
+http.listen(3000, function(){
 	console.log("Listening on 3000..");
 });
 

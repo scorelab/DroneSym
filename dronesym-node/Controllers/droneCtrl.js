@@ -1,9 +1,36 @@
 var request = require('request');
+var io = require('../websocket').connection;
 var db = require('../db');
 
 var droneRef = db.ref('/drones');
 
 var flaskUrl = 'http://localhost:5000/dronesym/api/flask';
+
+var sendSnapsot = function(snapshot){
+  var array = [];
+
+  snapshot.forEach(function(item){
+    itemVal = item.val();
+    itemVal['key'] = item.key;
+    array.push(itemVal);
+  });
+
+  io.emit('SOCK_FEED_UPDATE', array);
+}
+
+io.on('connection', function(socket){
+	console.log('FEED_SUBSCRIPTION');
+
+  //Initial drone data sent to client on first connection
+	droneRef.once("value", function(snapshot){
+    sendSnapsot(snapshot);
+  })
+});
+
+//Send update drone data upon change to firebase
+droneRef.on("value", function(snapshot){
+	sendSnapsot(snapshot);
+})
 
 exports.createDrone = function(location, callBack){
 	var droneKey = droneRef.push({'location': location });
