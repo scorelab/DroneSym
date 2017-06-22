@@ -9,12 +9,14 @@ import { AgmCoreModule } from '@agm/core';
 import { DroneDataService } from './drone-service/drone-data.service';
 import { CursorTooltipComponent } from './cursor-tooltip/cursor-tooltip.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { DroneOptionBoxComponent } from './drone-option-box/drone-option-box.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CursorTooltipComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    DroneOptionBoxComponent
   ],
   imports: [
     BrowserModule,

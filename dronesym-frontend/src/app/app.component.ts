@@ -1,8 +1,10 @@
 import { Component, ViewChild, AfterViewInit, NgZone } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { DroneDataService } from './drone-service/drone-data.service';
+
 import { CursorTooltipComponent } from './cursor-tooltip/cursor-tooltip.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { DroneOptionBoxComponent } from './drone-option-box/drone-option-box.component';
 
 declare var google: any;
 
@@ -95,7 +97,6 @@ export class AppComponent {
 
     this.map.setOptions({ draggableCursor: null });
     this.dialogParams.droneDialog.show = false;
-    this.createMode = "NONE";
+    this.createMode = this.createModes.NONE;
   }
-
 }
