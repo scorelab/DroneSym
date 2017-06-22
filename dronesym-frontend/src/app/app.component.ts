@@ -15,21 +15,14 @@ declare var google: any;
 export class AppComponent {
   @ViewChild('map') mapRef;
 
-  centerCoords = {
-    lat: 6.9023,
-    lon: 79.8613
-  };
+  centerCoords = { lat: 6.9023, lon: 79.8613 };
+  cursor: any = { lat: 0, lon: 0, x: 0, y: 0 };
 
   drones = [];
   map: any;
-  cursor: any = {
-    lat: 0,
-    lon: 0,
-    x: 0,
-    y: 0
-  };
 
-  createMode = 'NONE';
+  createModes = { 'NONE': 0, 'DRONES': 1, 'WAYPOINTS': 2 };
+  createMode: number;
 
   dialogParams = {
     droneDialog: { show: false },
@@ -41,8 +34,9 @@ export class AppComponent {
         .subscribe((data) => {
           this.drones = data;
           console.log(data);
-        })
+        });
 
+    this.createMode = this.createModes.NONE;
   }
 
   ngAfterViewInit(){
@@ -59,7 +53,7 @@ export class AppComponent {
       });
 
       this.map.addListener('click', (e) => {
-        if(this.createMode === 'CREATE_DR'){
+        if(this.createMode === this.createModes.DRONES){
           this._zone.run(() => {
             this.dialogParams.droneDialog.show = true;
             this.centerCoords.lat = e.latLng.lat();
@@ -72,8 +66,19 @@ export class AppComponent {
   }
 
   public goToCreateDroneMode() {
-    this.createMode = 'CREATE_DR';
-    this.map.setOptions({ draggableCursor: 'crosshair' });
+    this.switchCreateMode(this.createModes.DRONES);
+  }
+
+  public goToCreateWaypointsMode(){
+    this.switchCreateMode(this.createModes.WAYPOINTS);
+  }
+
+  public switchCreateMode(mode: number){
+    this.createMode = mode;
+
+    if(mode != this.createModes.NONE){
+      this.map.setOptions({ draggableCursor: 'crosshair' });
+    }
   }
 
   public createDrone(location){
@@ -82,7 +87,7 @@ export class AppComponent {
   }
 
   public processDialogResponse($data){
-    if(this.createMode === 'CREATE_DR'){
+    if(this.createMode === this.createModes.DRONES){
       if($data === 'DIALOG_CONFIRM'){
         this.createDrone(this.centerCoords);
       }
