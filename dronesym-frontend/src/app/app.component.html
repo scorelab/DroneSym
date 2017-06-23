@@ -1,10 +1,14 @@
 <agm-map #map [latitude]="centerCoords.lat" [longitude]="centerCoords.lon" [zoom] = "15"
 [streetViewControl]="false">
 	<agm-marker *ngFor="let drone of drones" [latitude]="drone.location.lat"
-		[longitude]="drone.location.lon"></agm-marker>
+		[longitude]="drone.location.lon">
+		<agm-info-window>
+			<drone-option-box (onSelected)="processDroneOptions($event)"></drone-option-box>
+		</agm-info-window>
+	</agm-marker>
 </agm-map>
 
-<cursor-tooltip *ngIf="createMode != 'NONE'" [latitude]="cursor.lat" [longitude]="cursor.lon" [x]="cursor.x" [y]="cursor.y"></cursor-tooltip>
+<cursor-tooltip *ngIf="createMode != createModes.NONE" [latitude]="cursor.lat" [longitude]="cursor.lon" [x]="cursor.x" [y]="cursor.y"></cursor-tooltip>
 
 <confirm-dialog [show]="this.dialogParams.droneDialog.show" (onResponse)="processDialogResponse($event)"></confirm-dialog>
 
