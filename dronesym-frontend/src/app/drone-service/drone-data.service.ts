@@ -39,4 +39,16 @@ export class DroneDataService {
     return feedObservable;
   }
 
+  public updateDroneWaypoints(droneId: string, waypoints: [any]){
+    return this.http.post(`${this.baseUrl}/update/waypoints/${droneId}`, { 'waypoints': waypoints})
+        .map((res) => res.json())
+        .toPromise();
+  }
+
+  public takeOffDrone(droneId: string, waypoints: [any]){
+    return this.http.post(`${this.baseUrl}/takeoff/${droneId}`, waypoints)
+           .map((res) => res.json())
+           .toPromise();
+  }
+
 }

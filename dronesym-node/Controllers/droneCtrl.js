@@ -33,13 +33,25 @@ droneRef.on("value", function(snapshot){
 })
 
 exports.createDrone = function(location, callBack){
-	var droneKey = droneRef.push({'location': location });
+	var droneKey = droneRef.push({'location': location, 'waypoints': [location] });
 
 	request.post(`${flaskUrl}/spawn`, { json : { droneId: droneKey.key, location: location } },
 	function(error, response, body){
 		console.log(body);
 		callBack(body);
 	})
+}
+
+exports.updateWaypoints = function(id, waypoints, callBack){
+  var waypointsRef = droneRef.child(id).child('waypoints');
+
+  waypointsRef.set(waypoints, function(err){
+    if(err){
+      callBack({ status: "ERROR", msg: err });
+      return;
+    }
+    callBack({ status: "OK" });
+  });
 }
 
 exports.getDroneIds = function(callBack){

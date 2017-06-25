@@ -19,7 +19,7 @@ export class DroneOptionBoxComponent implements OnInit {
   }
 
   public onTakeoff(){
-    this.onSelected.emit('SELECT_TAKEOFF');
+    this.onSelected.emit('SELECT_TAKEOFF');;
   }
 
 }
