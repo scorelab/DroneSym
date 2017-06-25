@@ -9,7 +9,7 @@ Install AngularCLI
 ```sh
 $ npm install -g @angular/cli
 ```
-Set environmental variable in `./dronesym-frontend/src/environment.ts`
+Set environmental variable in `./dronesym-frontend/src/environments/environment.ts`
 
 ```sh
 mapsApiKey: 'YOUR_GOOGLE_MAPS_API_KEY',
