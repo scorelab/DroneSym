@@ -41,4 +41,14 @@ router.post('/land/:id', function(req, res){
 	})
 });
 
+router.post('/update/waypoints/:id', function(req, res){
+	var droneId = req.params.id;
+	var waypoints = req.body.waypoints;
+
+	drones.updateWaypoints(droneId, waypoints, function(status){
+		console.log(status);
+		res.json(status);
+	});
+});
+
 module.exports = router;
