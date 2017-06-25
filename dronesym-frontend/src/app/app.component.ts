@@ -21,6 +21,7 @@ export class AppComponent {
   cursor: any = { lat: 0, lon: 0, x: 0, y: 0 };
 
   drones = [];
+  currDrone: any;
   map: any;
 
   createModes = { 'NONE': 0, 'DRONES': 1, 'WAYPOINTS': 2 };
@@ -63,24 +64,48 @@ export class AppComponent {
             console.log('Create Drone Mode');
           })
         }
+
+        else if(this.createMode === this.createModes.WAYPOINTS){
+          this._zone.run(() => {
+            this.currDrone.waypoints.push({ 'lat': e.latLng.lat(), 'lon': e.latLng.lng() })
+            console.log(this.currDrone.waypoints);
+          })
+        }
       })
     });
+  }
+
+  private switchCreateMode(mode: number){
+    this.createMode = mode;
+
+    if(mode != this.createModes.NONE){
+      this.map.setOptions({ draggableCursor: 'crosshair' });
+    }
+  }
+
+  public setCurrentDrone(drone){
+    this.currDrone = drone;
+    console.log(this.currDrone);
   }
 
   public goToCreateDroneMode() {
     this.switchCreateMode(this.createModes.DRONES);
   }
 
-  public goToCreateWaypointsMode(){
-    this.switchCreateMode(this.createModes.WAYPOINTS);
+  public finishAddingWaypoints(){
+    this.switchCreateMode(this.createModes.NONE);
+    this.droneFeed.updateDroneWaypoints(this.currDrone.key, this.currDrone.waypoints)
+        .then((status) => console.log(status));
   }
 
-  public switchCreateMode(mode: number){
-    this.createMode = mode;
+  public takeOffDrone(){
+    this.droneFeed.takeOffDrone(this.currDrone.key, this.currDrone.waypoints)
+        .then((status) => console.log(status));
+  }
 
-    if(mode != this.createModes.NONE){
-      this.map.setOptions({ draggableCursor: 'crosshair' });
-    }
+  public cancelAddingWaypoints(){
+    this.switchCreateMode(this.createModes.NONE);
+    this.currDrone.waypoints = [this.currDrone.waypoints[0]]
   }
 
   public createDrone(location){
@@ -98,5 +123,17 @@ export class AppComponent {
     this.map.setOptions({ draggableCursor: null });
     this.dialogParams.droneDialog.show = false;
     this.createMode = this.createModes.NONE;
+  }
+
+   public processDroneBox($data){
+     if($data === "SELECT_WAYPOINTS"){
+        this.switchCreateMode(this.createModes.WAYPOINTS);
+        console.log("Waypoints mode");
+     }
+
+     else if($data === "SELECT_TAKEOFF"){
+       this.takeOffDrone();
+       console.log("Taking off");
+     }
   }
 }

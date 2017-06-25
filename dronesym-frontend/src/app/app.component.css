@@ -2,7 +2,7 @@ agm-map{
 	height: 100vh;
 }
 
-.btn-floating{
+.control-buttons{
 	position: absolute;
 	bottom: 35px;
 	right: 35px;
