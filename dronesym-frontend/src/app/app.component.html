@@ -12,7 +12,7 @@
 
 </agm-map>
 
-<cursor-tooltip *ngIf="createMode == createModes.DRONE" [latitude]="cursor.lat" [longitude]="cursor.lon" [x]="cursor.x" [y]="cursor.y"></cursor-tooltip>
+<cursor-tooltip *ngIf="createMode == createModes.DRONES || createMode == createModes.WAYPOINTS" [latitude]="cursor.lat" [longitude]="cursor.lon" [x]="cursor.x" [y]="cursor.y"></cursor-tooltip>
 
 <confirm-dialog [show]="this.dialogParams.droneDialog.show" (onResponse)="processDialogResponse($event)"></confirm-dialog>
 
