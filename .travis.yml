@@ -1,7 +1,6 @@
-languge:
-  - python
+languge: python
   
 python:
-  - 2.7
+    - 2.7
   
  
