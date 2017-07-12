@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/rhperera/DroneSym.svg?branch=master)](https://travis-ci.org/rhperera/DroneSym)
+
 # DroneSym
 
 ### Setting Up the Project
