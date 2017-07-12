@@ -5,4 +5,4 @@ python:
 
 install: "pip install -r dronesym-python/requirements.txt"
 
-script: pytest
+script: py.test dronesym-python
