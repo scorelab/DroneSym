@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/rhperera/DroneSym.svg?branch=master)](https://travis-ci.org/rhperera/DroneSym)
+[![Build Status](https://travis-ci.org/scorelab/DroneSym.svg?branch=master)](https://travis-ci.org/scorelab/DroneSym)
 
 # DroneSym
 
