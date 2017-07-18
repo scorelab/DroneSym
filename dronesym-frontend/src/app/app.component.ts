@@ -141,4 +141,10 @@ export class AppComponent {
        console.log("Taking off");
      }
   }
+
+  public deleteWaypoint(index){
+    this.currDrone.waypoints.splice(index, 1);
+    this.droneFeed.updateDroneWaypoints(this.currDrone.key, this.currDrone.waypoints)
+        .then((status) => console.log("Deleted"));
+  }
 }
