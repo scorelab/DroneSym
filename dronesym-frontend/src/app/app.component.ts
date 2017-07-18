@@ -21,6 +21,8 @@ export class AppComponent {
   cursor: any = { lat: 0, lon: 0, x: 0, y: 0 };
 
   drones = [];
+  droneIndices = [];
+
   currDrone: any;
   map: any;
 
@@ -35,8 +37,11 @@ export class AppComponent {
   constructor(private droneFeed: DroneDataService, private _zone: NgZone) {
     this.droneFeed.getDroneFeed()
         .subscribe((data) => {
+          if(data.length > this.droneIndices.length){
+            this.droneIndices = Array(data.length).fill(0).map((x, i) => i);
+          }
+
           this.drones = data;
-          console.log(data);
         });
 
     this.createMode = this.createModes.NONE;
