@@ -110,7 +110,10 @@ export class AppComponent {
 
   public cancelAddingWaypoints(){
     this.switchCreateMode(this.createModes.NONE);
-    this.currDrone.waypoints = [this.currDrone.waypoints[0]]
+    let currPosition = { 'lat': this.currDrone.location.lat, 'lon': this.currDrone.location.lon };
+    this.currDrone.waypoints = [currPosition]
+    this.droneFeed.updateDroneWaypoints(this.currDrone.key, this.currDrone.waypoints)
+        .then((status) => console.log(status));
   }
 
   public createDrone(location){
