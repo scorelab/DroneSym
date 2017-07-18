@@ -3,6 +3,10 @@
 	<agm-marker *ngFor="let waypoint of currDrone?.waypoints" [latitude]="waypoint.lat"
 	[longitude]="waypoint.lon" [iconUrl]="'assets/img/blue.png'"></agm-marker>
 
+	<agm-polyline *ngIf="currDrone?.waypoints.length > 1" strokeColor="blue" strokeOpacity="0.6">
+		<agm-polyline-point *ngFor="let waypoint of currDrone?.waypoints" [latitude]="waypoint.lat" [longitude]="waypoint.lon"> </agm-polyline-point>
+	</agm-polyline>
+
 	<agm-marker *ngFor="let i of droneIndices" [latitude]="drones[i].location.lat"
 		[longitude]="drones[i].location.lon" (markerClick)="setCurrentDrone(drones[i])">
 		<agm-info-window>
