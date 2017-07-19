@@ -46,7 +46,7 @@ export class DroneDataService {
   }
 
   public takeOffDrone(droneId: string, waypoints: [any]){
-    return this.http.post(`${this.baseUrl}/takeoff/${droneId}`, waypoints)
+    return this.http.post(`${this.baseUrl}/takeoff/${droneId}`, {'waypoints': waypoints})
            .map((res) => res.json())
            .toPromise();
   }

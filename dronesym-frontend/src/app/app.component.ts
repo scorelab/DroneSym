@@ -21,6 +21,8 @@ export class AppComponent {
   cursor: any = { lat: 0, lon: 0, x: 0, y: 0 };
 
   drones = [];
+  droneIndices = [];
+
   currDrone: any;
   map: any;
 
@@ -35,8 +37,11 @@ export class AppComponent {
   constructor(private droneFeed: DroneDataService, private _zone: NgZone) {
     this.droneFeed.getDroneFeed()
         .subscribe((data) => {
+          if(data.length > this.droneIndices.length){
+            this.droneIndices = Array(data.length).fill(0).map((x, i) => i);
+          }
+
           this.drones = data;
-          console.log(data);
         });
 
     this.createMode = this.createModes.NONE;
@@ -105,7 +110,10 @@ export class AppComponent {
 
   public cancelAddingWaypoints(){
     this.switchCreateMode(this.createModes.NONE);
-    this.currDrone.waypoints = [this.currDrone.waypoints[0]]
+    let currPosition = { 'lat': this.currDrone.location.lat, 'lon': this.currDrone.location.lon };
+    this.currDrone.waypoints = [currPosition]
+    this.droneFeed.updateDroneWaypoints(this.currDrone.key, this.currDrone.waypoints)
+        .then((status) => console.log(status));
   }
 
   public createDrone(location){
@@ -135,5 +143,11 @@ export class AppComponent {
        this.takeOffDrone();
        console.log("Taking off");
      }
+  }
+
+  public deleteWaypoint(index){
+    this.currDrone.waypoints.splice(index, 1);
+    this.droneFeed.updateDroneWaypoints(this.currDrone.key, this.currDrone.waypoints)
+        .then((status) => console.log("Deleted"));
   }
 }
