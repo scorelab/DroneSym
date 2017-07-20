@@ -11,13 +11,36 @@ import { DroneDataService } from './drone-service/drone-data.service';
 import { CursorTooltipComponent } from './cursor-tooltip/cursor-tooltip.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { DroneOptionBoxComponent } from './drone-option-box/drone-option-box.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { LoginComponent } from './login/login.component';
+
+const appRoutes: Routes = [
+  {
+    path: 'dashboard',
+    component: DashboardComponent
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: '',
+    component: LoginComponent
+  },
+  {
+    path: '**',
+    component: LoginComponent
+  }
+]
 
 @NgModule({
   declarations: [
     AppComponent,
     CursorTooltipComponent,
     ConfirmDialogComponent,
-    DroneOptionBoxComponent
+    DroneOptionBoxComponent,
+    DashboardComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
