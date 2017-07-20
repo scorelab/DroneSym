@@ -2,6 +2,8 @@
 
 var express = require('express');
 var logger = require('morgan');
+var mongoose = require('mongoose');
+var passport = require('passport');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var app = express();
@@ -9,14 +11,33 @@ var http = require('http');
 
 http = http.Server(app);
 var sockConn = require('./websocket').init(http);
+
 var droneRouter = require('./Routers/droneRouter');
+var userRouter = require('./Routers/userRouter');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
+//passport configuration
+var passportConfig = require('./config/passportconfig')(passport);
+app.use(passport.initialize());
+
+//mongodb connection
+mongoose.connect('mongodb://admin:admin@ds163232.mlab.com:63232/dronesym');
+
+mongoose.connection.on('error', function(err){
+  console.log(err);
+})
+
+mongoose.connection.on('open', function(){
+  console.log('Userbase connected...');
+})
+
+
 app.use('/dronesym/api/node', droneRouter);
+app.use('/dronesym/api/user', userRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
