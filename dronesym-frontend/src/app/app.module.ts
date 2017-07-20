@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { environment } from '../environments/environment';
 import { MaterializeModule } from 'angular2-materialize';
 import { HttpModule } from '@angular/http';
+import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { AgmCoreModule } from '@agm/core';
@@ -24,7 +25,8 @@ import { DroneOptionBoxComponent } from './drone-option-box/drone-option-box.com
     HttpModule,
     AgmCoreModule.forRoot({
     	apiKey: environment.mapsApiKey
-    })
+    }),
+    RouterModule.forRoot(appRoutes)
   ],
   providers: [
     DroneDataService
