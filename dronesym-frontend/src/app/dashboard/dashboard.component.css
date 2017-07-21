@@ -6,4 +6,13 @@ agm-map{
 	position: absolute;
 	bottom: 35px;
 	right: 35px;
+	z-index: 2;
+}
+
+.profile-button{
+	position: absolute;
+	top: 35px;
+	right:35px;
+	z-index: 2;
+	height: 10vh;
 }

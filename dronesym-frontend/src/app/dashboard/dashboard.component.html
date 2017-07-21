@@ -9,7 +9,7 @@
 
 	<agm-marker *ngFor="let i of droneIndices" [latitude]="drones[i].location.lat"
 		[longitude]="drones[i].location.lon" (markerClick)="setCurrentDrone(drones[i])">
-		<agm-info-window>
+		<agm-info-window [isOpen]="currDrone?.key === drones[i].key">
 			<drone-option-box (onSelected)="processDroneBox($event)"></drone-option-box>
 		</agm-info-window>
 	</agm-marker>
@@ -20,16 +20,26 @@
 
 <confirm-dialog [show]="this.dialogParams.droneDialog.show" (onResponse)="processDialogResponse($event)"></confirm-dialog>
 
+<div class="fixed-action-btn horizontal click-to-toggle profile-button">
+	<a class="btn-floating btn-large blue tooltipped" data-delay="50" data-position="above" data-tooltip="Menu" materialize="tooltip">
+		<i class="material-icons">menu</i>
+	</a>
+	<ul>
+		<li><a class="btn-floating red darken-1 tooltipped" data-delay="50" data-position="above" data-tooltip="Logout" materialize="tooltip"><i class="material-icons">power_settings_new</i></a></li>
+	</ul>
+</div>
+
 <div class="control-buttons">
+
 	<div *ngIf="createMode == createModes.WAYPOINTS"  class="row">
-		<a (click)="finishAddingWaypoints()" class="btn-floating btn-large waves-effect waves-light green"><i class="material-icons">done</i></a>
+		<a (click)="finishAddingWaypoints()" class="btn-floating btn-large waves-effect waves-light green tooltipped" data-delay="50" data-position="above" data-tooltip="Finish" materialize="tooltip"><i class="material-icons">done</i></a>
 	</div>
 
 	<div *ngIf="createMode == createModes.WAYPOINTS"  class="row">
-		<a (click)="cancelAddingWaypoints()" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">close</i></a>
+		<a (click)="cancelAddingWaypoints()" class="btn-floating btn-large waves-effect waves-light red tooltipped" data-delay="50" data-position="above" data-tooltip="Cancel" materialize="tooltip"><i class="material-icons">close</i></a>
 	</div>
 
 	<div *ngIf="createMode == createModes.NONE || createMode == createModes.DRONES" class="row">
-		<a (click)="goToCreateDroneMode()" class="btn-floating btn-large waves-effect waves-light blue"><i class="material-icons">add</i></a>
+		<a (click)="goToCreateDroneMode()" class="btn-floating btn-large waves-effect waves-light blue tooltipped" data-delay="50" data-position="above" data-tooltip="Drop new drone" materialize="tooltip"><i class="material-icons">add</i></a>
 	</div>
 </div>

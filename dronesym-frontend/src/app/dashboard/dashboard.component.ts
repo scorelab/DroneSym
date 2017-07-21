@@ -7,6 +7,7 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 import { DroneOptionBoxComponent } from '../drone-option-box/drone-option-box.component';
 
 declare var google: any;
+declare var Materialize: any;
 
 @Component({
   selector: 'app-dashboard',
@@ -86,6 +87,9 @@ export class DashboardComponent{
     if(mode != this.createModes.NONE){
       this.map.setOptions({ draggableCursor: 'crosshair' });
     }
+    else{
+      this.map.setOptions({ draggableCursor: null });
+    }
   }
 
   public setCurrentDrone(drone){
@@ -95,6 +99,7 @@ export class DashboardComponent{
 
   public goToCreateDroneMode() {
     this.switchCreateMode(this.createModes.DRONES);
+    Materialize.toast("Click on map to put drones", 4000);
   }
 
   public finishAddingWaypoints(){
@@ -136,7 +141,7 @@ export class DashboardComponent{
    public processDroneBox($data){
      if($data === "SELECT_WAYPOINTS"){
         this.switchCreateMode(this.createModes.WAYPOINTS);
-        console.log("Waypoints mode");
+        Materialize.toast("Click on map to put waypoints", 4000);
      }
 
      else if($data === "SELECT_TAKEOFF"){
@@ -146,9 +151,11 @@ export class DashboardComponent{
   }
 
   public deleteWaypoint(index){
-    this.currDrone.waypoints.splice(index, 1);
-    this.droneFeed.updateDroneWaypoints(this.currDrone.key, this.currDrone.waypoints)
-        .then((status) => console.log("Deleted"));
+    if(this.createMode === this.createModes.WAYPOINTS){
+        this.currDrone.waypoints.splice(index, 1);
+        this.droneFeed.updateDroneWaypoints(this.currDrone.key, this.currDrone.waypoints)
+            .then((status) => console.log("Deleted"));
+    }
   }
 
 }
