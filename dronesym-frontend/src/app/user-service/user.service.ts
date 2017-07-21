@@ -38,6 +38,8 @@ export class UserService {
             else if(status === 'Unauthorized'){
               resolve(false);
             }
+          }, (err) => {
+            reject(err);
           })
     })
 

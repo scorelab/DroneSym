@@ -11,6 +11,8 @@ import { AppComponent } from './app.component';
 import { AgmCoreModule } from '@agm/core';
 import { DroneDataService } from './drone-service/drone-data.service';
 import { UserService } from './user-service/user.service';
+import { RouteGuardService } from './route-guard/route-guard.service';
+
 import { CursorTooltipComponent } from './cursor-tooltip/cursor-tooltip.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { DroneOptionBoxComponent } from './drone-option-box/drone-option-box.component';
@@ -38,7 +40,8 @@ import { LoginComponent } from './login/login.component';
   providers: [
     DroneDataService,
     UserService,
-    AuthHttpService
+    AuthHttpService,
+    RouteGuardService
   ],
   bootstrap: [AppComponent]
 })
