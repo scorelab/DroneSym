@@ -1,5 +1,6 @@
 import { Component, ViewChild, AfterViewInit, NgZone } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { DroneDataService } from '../drone-service/drone-data.service';
 
 import { CursorTooltipComponent } from '../cursor-tooltip/cursor-tooltip.component';
@@ -35,7 +36,7 @@ export class DashboardComponent{
     waypointDialog: { show: false }
   }
 
-  constructor(private droneFeed: DroneDataService, private _zone: NgZone) {
+  constructor(private droneFeed: DroneDataService, private _zone: NgZone, private router: Router) {
     this.droneFeed.getDroneFeed()
         .subscribe((data) => {
           if(data.length > this.droneIndices.length){
@@ -156,6 +157,11 @@ export class DashboardComponent{
         this.droneFeed.updateDroneWaypoints(this.currDrone.key, this.currDrone.waypoints)
             .then((status) => console.log("Deleted"));
     }
+  }
+
+  public logout(){
+    localStorage.setItem('token', '');
+    this.router.navigate(['login']);
   }
 
 }
