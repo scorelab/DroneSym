@@ -10,7 +10,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class DroneDataService {
 
-  baseUrl: string;
+  private baseUrl: string;
   feed: any;
 
   constructor(private http: Http) {
