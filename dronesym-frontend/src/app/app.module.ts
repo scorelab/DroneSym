@@ -4,6 +4,7 @@ import { environment } from '../environments/environment';
 import { MaterializeModule } from 'angular2-materialize';
 import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
+import { AppRouter } from './app-router';
 
 import { AppComponent } from './app.component';
 import { AgmCoreModule } from '@agm/core';
@@ -13,25 +14,6 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { DroneOptionBoxComponent } from './drone-option-box/drone-option-box.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
-
-const appRoutes: Routes = [
-  {
-    path: 'dashboard',
-    component: DashboardComponent
-  },
-  {
-    path: 'login',
-    component: LoginComponent
-  },
-  {
-    path: '',
-    component: LoginComponent
-  },
-  {
-    path: '**',
-    component: LoginComponent
-  }
-]
 
 @NgModule({
   declarations: [
@@ -49,7 +31,7 @@ const appRoutes: Routes = [
     AgmCoreModule.forRoot({
     	apiKey: environment.mapsApiKey
     }),
-    RouterModule.forRoot(appRoutes)
+    AppRouter
   ],
   providers: [
     DroneDataService
