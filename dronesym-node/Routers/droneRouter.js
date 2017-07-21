@@ -5,7 +5,7 @@ var router = express.Router();
 
 var authenticate = passport.authenticate('jwt', { session: false });
 
-router.post('/create', function(req, res){
+router.post('/create', authenticate, function(req, res){
 	drones.createDrone(req.body, function(response){
 		res.json(response);
 	});
