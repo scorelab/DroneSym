@@ -15,4 +15,8 @@ router.post('/create', passport.authenticate('jwt', { session: false }), functio
 	})
 })
 
+router.get('/authenticate', passport.authenticate('jwt', { session: false }), function(req, res){
+	res.json('Authorized');
+})
+
 module.exports = router;
