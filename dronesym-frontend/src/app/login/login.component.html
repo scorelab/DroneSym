@@ -7,16 +7,16 @@
 				<form materialize>
 					<div class="input-field col s11">
 						<label for="username"> Username </label>
-						<input id="username" type="text"/>
+						<input (input)="setUsername($event)" id="username" type="text"/>
 					</div>
 
 					<div class="input-field col s11">
 						<label for="password"> Password </label>
-						<input id="password" type="password"/>
+						<input (input)="setPassword($event)" id="password" type="password"/>
 					</div>
 
 					<div class="row">
-						<button class="waves-effect waves-light btn blue darken-3 col s4 offset-s4">Login</button>
+						<button (click) = "onLogin($event)" class="waves-effect waves-light btn blue darken-3 col s4 offset-s4">Login</button>
 					</div>
 				</form>
 			</div>
