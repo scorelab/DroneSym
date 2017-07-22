@@ -20,26 +20,34 @@
 
 <confirm-dialog [show]="this.dialogParams.droneDialog.show" (onResponse)="processDialogResponse($event)"></confirm-dialog>
 
-<div class="fixed-action-btn horizontal click-to-toggle profile-button">
-	<a class="btn-floating btn-large blue tooltipped" data-delay="50" data-position="above" data-tooltip="Menu" materialize="tooltip">
-		<i class="material-icons">menu</i>
-	</a>
-	<ul>
-		<li><a (click)="logout()" class="btn-floating red darken-1 tooltipped" data-delay="50" data-position="above" data-tooltip="Logout" materialize="tooltip"><i class="material-icons">power_settings_new</i></a></li>
-	</ul>
-</div>
 
 <div class="control-buttons">
-
-	<div *ngIf="createMode == createModes.WAYPOINTS"  class="row">
-		<a (click)="finishAddingWaypoints()" class="btn-floating btn-large waves-effect waves-light green tooltipped" data-delay="50" data-position="above" data-tooltip="Finish" materialize="tooltip"><i class="material-icons">done</i></a>
+	<div *ngIf="createMode == createModes.NONE || createMode == createModes.DRONES" class="fixed-action-btn">
+		<a class="btn-floating btn-large btn-large waves-effect waves-light blue tooltipped" data-delay="50" data-position="left" data-tooltip="Menu" materialize="tooltip">
+			<i class="material-icons">menu</i>
+		</a>
+		<ul>
+			<li>
+				<a (click)="logout()" class="btn-floating red darken-1 tooltipped" data-delay="50" data-position="left" data-tooltip="Logout" materialize="tooltip"><i class="material-icons">power_settings_new</i></a>
+			</li>
+			<li>
+				<a (click)="goToCreateDroneMode()" class="btn-floating green tooltipped" data-delay="50" data-position="left" data-tooltip="Drop new drone" materialize="tooltip"><i class="material-icons">location_on</i></a>
+			</li>
+			<li>
+				<a (click)="goToCreateDroneMode()" class="btn-floating yellow darken-3 tooltipped" data-delay="50" data-position="left" data-tooltip="Create User" materialize="tooltip"><i class="material-icons">person_add</i></a>
+			</li>
+		</ul>
 	</div>
 
 	<div *ngIf="createMode == createModes.WAYPOINTS"  class="row">
-		<a (click)="cancelAddingWaypoints()" class="btn-floating btn-large waves-effect waves-light red tooltipped" data-delay="50" data-position="above" data-tooltip="Cancel" materialize="tooltip"><i class="material-icons">close</i></a>
+		<a (click)="finishAddingWaypoints()" class="btn-floating btn-large waves-effect waves-light green tooltipped" data-delay="50" data-position="left" data-tooltip="Finish" materialize="tooltip"><i class="material-icons">done</i></a>
 	</div>
 
-	<div *ngIf="createMode == createModes.NONE || createMode == createModes.DRONES" class="row">
+	<div *ngIf="createMode == createModes.WAYPOINTS"  class="row">
+		<a (click)="cancelAddingWaypoints()" class="btn-floating btn-large waves-effect waves-light red tooltipped" data-delay="50" data-position="left" data-tooltip="Cancel" materialize="tooltip"><i class="material-icons">close</i></a>
+	</div>
+
+	<!-- <div *ngIf="createMode == createModes.NONE || createMode == createModes.DRONES" class="row">
 		<a (click)="goToCreateDroneMode()" class="btn-floating btn-large waves-effect waves-light blue tooltipped" data-delay="50" data-position="above" data-tooltip="Drop new drone" materialize="tooltip"><i class="material-icons">add</i></a>
-	</div>
+	</div> -->
 </div>
