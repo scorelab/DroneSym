@@ -3,7 +3,7 @@
 	<agm-marker *ngFor="let waypoint of currDrone?.waypoints; let i = index" [latitude]="waypoint.lat"
 	[longitude]="waypoint.lon" (markerClick)="deleteWaypoint(i)" [iconUrl]="'assets/img/blue.png'"></agm-marker>
 
-	<agm-polyline *ngIf="currDrone?.waypoints.length > 1" strokeColor="blue" strokeOpacity="0.6">
+	<agm-polyline *ngIf="currDrone?.waypoints?.length > 1" strokeColor="blue" strokeOpacity="0.6">
 		<agm-polyline-point *ngFor="let waypoint of currDrone?.waypoints" [latitude]="waypoint.lat" [longitude]="waypoint.lon"> </agm-polyline-point>
 	</agm-polyline>
 
@@ -46,8 +46,4 @@
 	<div *ngIf="createMode == createModes.WAYPOINTS"  class="row">
 		<a (click)="cancelAddingWaypoints()" class="btn-floating btn-large waves-effect waves-light red tooltipped" data-delay="50" data-position="left" data-tooltip="Cancel" materialize="tooltip"><i class="material-icons">close</i></a>
 	</div>
-
-	<!-- <div *ngIf="createMode == createModes.NONE || createMode == createModes.DRONES" class="row">
-		<a (click)="goToCreateDroneMode()" class="btn-floating btn-large waves-effect waves-light blue tooltipped" data-delay="50" data-position="above" data-tooltip="Drop new drone" materialize="tooltip"><i class="material-icons">add</i></a>
-	</div> -->
 </div>

@@ -78,6 +78,13 @@ export class DashboardComponent{
             console.log(this.currDrone.waypoints);
           })
         }
+
+        else if(this.createMode === this.createModes.NONE){
+          this._zone.run(() => {
+            this.currDrone = {};
+            console.log(this.currDrone);
+          });
+        }
       })
     });
   }
