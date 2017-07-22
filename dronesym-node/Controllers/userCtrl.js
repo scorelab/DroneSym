@@ -89,22 +89,12 @@ exports.authorizeUser = function(roles){
 	return function(req, res, next){
 		var user = req.user;
 
-		User.findById(user._id, function(err, foundUser){
-			if(err){
-				return next(err);
-			}
-
-			if(!foundUser){
-				return next('No user found');
-			}
-
-			if(roles.indexOf(foundUser.role) > -1){
-				next()
-				return;
-			}
-			else{
-				next('Unauthorized');
-			}
-		})
+		if(roles.indexOf(user.role) > -1){
+			next()
+		}
+		else{
+			res.status(401).json('Unauthorize');
+			return;
+		}
 	}
 }

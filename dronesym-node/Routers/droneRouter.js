@@ -1,11 +1,13 @@
 var express = require('express');
 var passport = require('passport');
 var drones = require('../Controllers/droneCtrl');
+var userCtrl = require('../Controllers/userCtrl');
 var router = express.Router();
 
 var authenticate = passport.authenticate('jwt', { session: false });
+var authorize = userCtrl.authorizeUser;
 
-router.post('/create', authenticate, function(req, res){
+router.post('/create', authenticate, authorize(['admin']), function(req, res){
 	drones.createDrone(req.body, function(response){
 		res.json(response);
 	});
@@ -28,7 +30,7 @@ router.post('/update/:id', function(req, res){
 	res.json({ status: "OK" });
 });
 
-router.post('/takeoff/:id', authenticate , function(req, res){
+router.post('/takeoff/:id', authenticate , authorize(['admin', 'user']), function(req, res){
 	var waypoints = req.body.waypoints;
 
 	drones.takeoffDrone(req.params.id, waypoints, function(status){
@@ -36,7 +38,7 @@ router.post('/takeoff/:id', authenticate , function(req, res){
 	});
 });
 
-router.post('/land/:id', function(req, res){
+router.post('/land/:id', authenticate, authorize(['admin', 'user']), function(req, res){
 	var droneId = req.params.id;
 
 	drones.landDrone(droneId, function(status){
@@ -44,7 +46,7 @@ router.post('/land/:id', function(req, res){
 	})
 });
 
-router.post('/update/waypoints/:id', authenticate , function(req, res){
+router.post('/update/waypoints/:id', authenticate, authorize(['admin', 'user']), function(req, res){
 	var droneId = req.params.id;
 	var waypoints = req.body.waypoints;
 
