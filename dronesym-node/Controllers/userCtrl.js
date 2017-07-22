@@ -75,7 +75,7 @@ exports.loginUser = function(uname, password, callBack){
 
 			if(isMatched){
 				var token = tokenizeUserInfo(user);
-				callBack({ status: "OK", token: "JWT " + token });
+				callBack({ status: "OK", token: "JWT " + token, role: user.role });
 			}
 			else{
 				callBack({ status: "ERROR", msg: "Invalid password"});
