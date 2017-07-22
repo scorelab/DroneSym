@@ -32,6 +32,7 @@ export class LoginComponent {
         .then((res) => {
           if(res.status === "OK"){
             localStorage.setItem('token', res.token);
+            this.userService.setUserRole(res.role);
             this.router.navigate(['dashboard']);
           }
           else{

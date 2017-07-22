@@ -9,6 +9,7 @@ import 'rxjs/add/operator/map';
 export class UserService {
 
   private baseUrl: string;
+  private userRole: string;
 
   constructor(private http: AuthHttpService) {
     this.baseUrl = `${environment.nodeApiURL}/user`;
@@ -44,6 +45,14 @@ export class UserService {
     })
 
     return authPromise;
+  }
+
+  public setUserRole(role){
+    this.userRole = role;
+  }
+
+  public getUserRole(): string{
+    return this.userRole;
   }
 
 }
