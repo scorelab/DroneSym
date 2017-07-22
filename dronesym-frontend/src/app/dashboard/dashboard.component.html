@@ -3,7 +3,7 @@
 	<agm-marker *ngFor="let waypoint of currDrone?.waypoints; let i = index" [latitude]="waypoint.lat"
 	[longitude]="waypoint.lon" (markerClick)="deleteWaypoint(i)" [iconUrl]="'assets/img/blue.png'"></agm-marker>
 
-	<agm-polyline *ngIf="currDrone?.waypoints?.length > 1" strokeColor="blue" strokeOpacity="0.6">
+	<agm-polyline *ngIf="currDrone?.waypoints?.length > 1" strokeColor="blue" strokeOpacity="0.8">
 		<agm-polyline-point *ngFor="let waypoint of currDrone?.waypoints" [latitude]="waypoint.lat" [longitude]="waypoint.lon"> </agm-polyline-point>
 	</agm-polyline>
 
@@ -13,6 +13,10 @@
 			<drone-option-box (onSelected)="processDroneBox($event)"></drone-option-box>
 		</agm-info-window>
 	</agm-marker>
+
+	<agm-polyline *ngFor="let droneIndex of trailIndices" strokeColor="blue" strokeOpacity="0.5">
+		<agm-polyline-point *ngFor="let waypoint of drones[droneIndex]?.waypoints" [latitude]="waypoint.lat" [longitude]="waypoint.lon"> </agm-polyline-point>
+	</agm-polyline>
 
 </agm-map>
 
@@ -32,6 +36,9 @@
 			</li>
 			<li>
 				<a (click)="goToCreateDroneMode()" class="btn-floating green tooltipped" data-delay="50" data-position="left" data-tooltip="Drop new drone" materialize="tooltip"><i class="material-icons">location_on</i></a>
+			</li>
+			<li>
+				<a (click)="toggleAllTrails()" class="btn-floating blue darken-3 tooltipped" data-delay="50" data-position="left" data-tooltip="Show/Hide Paths" materialize="tooltip"><i class="material-icons">timeline</i></a>
 			</li>
 			<li>
 				<a (click)="goToCreateDroneMode()" class="btn-floating yellow darken-3 tooltipped" data-delay="50" data-position="left" data-tooltip="Create User" materialize="tooltip"><i class="material-icons">person_add</i></a>

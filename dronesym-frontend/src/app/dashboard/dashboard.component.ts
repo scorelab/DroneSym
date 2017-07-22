@@ -24,6 +24,7 @@ export class DashboardComponent{
 
   drones = [];
   droneIndices = [];
+  trailIndices = [];
 
   currDrone: any;
   map: any;
@@ -163,6 +164,18 @@ export class DashboardComponent{
         this.currDrone.waypoints.splice(index, 1);
         this.droneFeed.updateDroneWaypoints(this.currDrone.key, this.currDrone.waypoints)
             .then((status) => console.log("Deleted"));
+    }
+  }
+
+  public toggleAllTrails(){
+    console.log('Trail toggle...');
+    if(this.droneIndices.length > 0 && this.trailIndices.length == 0){
+      this.droneIndices.forEach((droneIndex) => {
+        this.trailIndices.push(droneIndex);
+      })
+    }
+    else{
+      this.trailIndices = [];
     }
   }
 
