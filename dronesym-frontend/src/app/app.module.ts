@@ -18,6 +18,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { DroneOptionBoxComponent } from './drone-option-box/drone-option-box.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
+import { UserSignupComponent } from './user-signup/user-signup.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { LoginComponent } from './login/login.component';
     ConfirmDialogComponent,
     DroneOptionBoxComponent,
     DashboardComponent,
-    LoginComponent
+    LoginComponent,
+    UserSignupComponent
   ],
   imports: [
     BrowserModule,

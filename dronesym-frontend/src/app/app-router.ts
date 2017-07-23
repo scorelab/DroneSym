@@ -5,6 +5,7 @@ import { RouteGuardService } from './route-guard/route-guard.service';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { UserSignupComponent } from './user-signup/user-signup.component';
 
 const appRoutes: Routes = [
   {
@@ -15,6 +16,11 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'signup',
+    component: UserSignupComponent,
+    canActivate: [ RouteGuardService ]
   },
   {
     path: '',
