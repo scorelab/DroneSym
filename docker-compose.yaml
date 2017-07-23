@@ -14,5 +14,3 @@ services:
       build: './dronesym-python'
       ports:
         - "5000:5000"
-      depends_on:
-        - "node"

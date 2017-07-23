@@ -1,13 +1,10 @@
 import requests
-from requests.adapters import HTTPAdapter
 from requests.exceptions import ConnectionError
 import json
 import time
 
-apiUrl = 'http://0.0.0.0:3000/dronesym/api/node'
-
+apiUrl = 'http://node:3000/dronesym/api/node'
 s = requests.Session()
-s.mount('http://', HTTPAdapter(max_retries=5));
 
 def update_drone(id, status):
 	try:
@@ -29,9 +26,10 @@ def get_drone_by_id(id):
 
 def get_drones():
 	try:
-		response = requests.get(apiUrl + '/get')
+		response = s.get(apiUrl + '/get')
 		return response.json()
-	except requests.ConnectionError:
+	except requests.ConnectionError as e:
+		print e
 		print "Retrying..."
 		time.sleep(1)
 		return get_drones()
