@@ -1,8 +1,13 @@
 import requests
+from requests.adapters import HTTPAdapter
+from requests.exceptions import ConnectionError
 import json
 import time
 
 apiUrl = 'http://localhost:3000/dronesym/api/node'
+
+s = requests.Session()
+s.mount('http://', HTTPAdapter(max_retries=5));
 
 def update_drone(id, status):
 	try:
