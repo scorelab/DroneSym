@@ -4,7 +4,7 @@ from requests.exceptions import ConnectionError
 import json
 import time
 
-apiUrl = 'http://localhost:3000/dronesym/api/node'
+apiUrl = 'http://0.0.0.0:3000/dronesym/api/node'
 
 s = requests.Session()
 s.mount('http://', HTTPAdapter(max_retries=5));
