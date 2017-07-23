@@ -2,6 +2,7 @@ import { Component, ViewChild, AfterViewInit, NgZone } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { DroneDataService } from '../drone-service/drone-data.service';
+import { UserService } from '../user-service/user.service';
 
 import { CursorTooltipComponent } from '../cursor-tooltip/cursor-tooltip.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
@@ -32,12 +33,14 @@ export class DashboardComponent{
   createModes = { 'NONE': 0, 'DRONES': 1, 'WAYPOINTS': 2 };
   createMode: number;
 
+  userRole: string;
+
   dialogParams = {
     droneDialog: { show: false },
     waypointDialog: { show: false }
   }
 
-  constructor(private droneFeed: DroneDataService, private _zone: NgZone, private router: Router) {
+  constructor(private droneFeed: DroneDataService, private _zone: NgZone, private router: Router, private userService: UserService) {
     this.droneFeed.getDroneFeed()
         .subscribe((data) => {
           if(data.length > this.droneIndices.length){
@@ -45,6 +48,11 @@ export class DashboardComponent{
           }
 
           this.drones = data;
+        });
+
+    this.userService.getUserRole()
+        .then((role) => {
+          this.userRole = role;
         });
 
     this.createMode = this.createModes.NONE;
@@ -109,6 +117,10 @@ export class DashboardComponent{
   public goToCreateDroneMode() {
     this.switchCreateMode(this.createModes.DRONES);
     Materialize.toast("Click on map to put drones", 4000);
+  }
+
+  public goToSignup(){
+    this.router.navigate(['signup']);
   }
 
   public finishAddingWaypoints(){
@@ -180,8 +192,12 @@ export class DashboardComponent{
   }
 
   public logout(){
-    localStorage.setItem('token', '');
+    this.userService.logout();
     this.router.navigate(['login']);
+  }
+
+  public isAuthorized(roles){
+    this.userService.getUserRole();
   }
 
 }

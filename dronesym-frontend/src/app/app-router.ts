@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, RouterStateSnapshot } from '@angular/router';
 import { RouteGuardService } from './route-guard/route-guard.service';
+import { AdminAuthorizeService } from './admin-authorize/admin-authorize.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -20,7 +21,10 @@ const appRoutes: Routes = [
   {
     path: 'signup',
     component: UserSignupComponent,
-    canActivate: [ RouteGuardService ]
+    canActivate: [
+      RouteGuardService,
+      AdminAuthorizeService
+    ]
   },
   {
     path: '',

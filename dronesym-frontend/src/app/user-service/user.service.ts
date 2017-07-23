@@ -17,8 +17,22 @@ export class UserService {
 
   public login(username, password){
     return this.http.post(`${this.baseUrl}/login`, { 'uname': username, 'password': password })
-        .map((res) => res.json())
+        .map((res) => {
+          let status = res.json();
+          if(status.status === "OK"){
+            localStorage.setItem('token', status.token);
+            this.userRole = status.role;
+          }
+          return status;
+         })
         .toPromise();
+  }
+
+  public createUser(username, password, role){
+    let user = { 'uname': username, 'password': password, 'role': role }
+    return this.http.post(`${this.baseUrl}/create`,  user)
+           .map((res) => res.json())
+           .toPromise();
   }
 
   public isAuthenticated(): Promise<boolean>{
@@ -47,12 +61,34 @@ export class UserService {
     return authPromise;
   }
 
-  public setUserRole(role){
-    this.userRole = role;
+  public logout(){
+    localStorage.setItem('token', '');
+    this.userRole = '';
   }
 
-  public getUserRole(): string{
-    return this.userRole;
+  public getUserRole(): Promise<string>{
+    let promise = new Promise((resolve, reject) => {
+      if(this.userRole){
+        resolve(this.userRole);
+        return;
+      }
+
+      this.http.get(`${this.baseUrl}/role`)
+          .subscribe((res) => {
+            let status = res.json();
+            if(status.status === "OK"){
+              this.userRole = status.role;
+              resolve(status.role);
+            }
+            else{
+              reject('ERROR');
+            }
+          }, (err) => {
+            reject(err);
+          })
+    })
+
+    return promise;
   }
 
 }

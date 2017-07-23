@@ -4,7 +4,7 @@ import { environment } from '../environments/environment';
 import { MaterializeModule } from 'angular2-materialize';
 import { HttpModule } from '@angular/http';
 import { AuthHttpService } from './auth-http/auth-http.service';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes} from '@angular/router';
 import { AppRouter } from './app-router';
 
 import { AppComponent } from './app.component';
@@ -12,6 +12,7 @@ import { AgmCoreModule } from '@agm/core';
 import { DroneDataService } from './drone-service/drone-data.service';
 import { UserService } from './user-service/user.service';
 import { RouteGuardService } from './route-guard/route-guard.service';
+import { AdminAuthorizeService } from './admin-authorize/admin-authorize.service';
 
 import { CursorTooltipComponent } from './cursor-tooltip/cursor-tooltip.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
@@ -43,7 +44,8 @@ import { UserSignupComponent } from './user-signup/user-signup.component';
     DroneDataService,
     UserService,
     AuthHttpService,
-    RouteGuardService
+    RouteGuardService,
+    AdminAuthorizeService
   ],
   bootstrap: [AppComponent]
 })

@@ -16,7 +16,7 @@ var tokenizeUserInfo = function(user){
 	return token;
 }
 
-exports.createUser = function(uname, password, callBack){
+exports.createUser = function(uname, password, role, callBack){
 	if(!uname || !password){
 		callBack({ status: "ERROR", msg: "Username and password must be specified"})
 		return;
@@ -37,6 +37,7 @@ exports.createUser = function(uname, password, callBack){
 
 		user.uname = uname;
 		user.password = password;
+		user.role = role;
 
 		user.save(function(err, status){
 			if(err){

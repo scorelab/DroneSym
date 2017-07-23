@@ -13,9 +13,13 @@ router.post('/login', function(req, res){
 })
 
 router.post('/create', authenticate, authorize(['admin']), function(req, res){
-	userCtrl.createUser(req.body.uname, req.body.password, function(status){
+	userCtrl.createUser(req.body.uname, req.body.password, req.body.role, function(status){
 		res.json(status);
 	})
+})
+
+router.get('/role', authenticate, function(req, res){
+	res.json({ status: 'OK', role: req.user.role});
 })
 
 router.get('/authenticate', authenticate, function(req, res){
