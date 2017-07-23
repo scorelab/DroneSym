@@ -37,7 +37,7 @@ mongoose.connection.on('open', function(){
 
 
 app.use('/dronesym/api/node', droneRouter);
-app.use('/dronesym/api/user', userRouter);
+app.use('/dronesym/api/node/user', userRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

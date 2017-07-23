@@ -1,0 +1,20 @@
+.login-background{
+	background-color: #f5f5f5;
+}
+
+.login-card{
+	margin-top: 2%;
+	margin-bottom: 20%;
+}
+
+.logo-container{
+	height: 200px;
+	width: 200px;
+	margin-left: 26%;
+	margin-right: auto;
+}
+
+.footer-label{
+	font-style: italic;
+	color: #5e5e5e;
+}

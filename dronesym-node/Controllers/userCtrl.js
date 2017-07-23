@@ -16,7 +16,7 @@ var tokenizeUserInfo = function(user){
 	return token;
 }
 
-exports.createUser = function(uname, password, callBack){
+exports.createUser = function(uname, password, role, callBack){
 	if(!uname || !password){
 		callBack({ status: "ERROR", msg: "Username and password must be specified"})
 		return;
@@ -37,6 +37,7 @@ exports.createUser = function(uname, password, callBack){
 
 		user.uname = uname;
 		user.password = password;
+		user.role = role;
 
 		user.save(function(err, status){
 			if(err){
@@ -75,7 +76,7 @@ exports.loginUser = function(uname, password, callBack){
 
 			if(isMatched){
 				var token = tokenizeUserInfo(user);
-				callBack({ status: "OK", token: "JWT " + token });
+				callBack({ status: "OK", token: "JWT " + token, role: user.role });
 			}
 			else{
 				callBack({ status: "ERROR", msg: "Invalid password"});
@@ -89,22 +90,12 @@ exports.authorizeUser = function(roles){
 	return function(req, res, next){
 		var user = req.user;
 
-		User.findById(user._id, function(err, foundUser){
-			if(err){
-				return next(err);
-			}
-
-			if(!foundUser){
-				return next('No user found');
-			}
-
-			if(roles.indexOf(foundUser.role) > -1){
-				next()
-				return;
-			}
-			else{
-				next('Unauthorized');
-			}
-		})
+		if(roles.indexOf(user.role) > -1){
+			next()
+		}
+		else{
+			res.status(401).json('Unauthorize');
+			return;
+		}
 	}
 }

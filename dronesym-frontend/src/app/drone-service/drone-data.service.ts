@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { AuthHttpService } from '../auth-http/auth-http.service';
 import { environment } from '../../environments/environment';
 import * as io from 'socket.io-client';
 
@@ -10,10 +10,10 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class DroneDataService {
 
-  baseUrl: string;
+  private baseUrl: string;
   feed: any;
 
-  constructor(private http: Http) {
+  constructor(private http: AuthHttpService) {
     this.baseUrl = environment.nodeApiURL;
   }
 

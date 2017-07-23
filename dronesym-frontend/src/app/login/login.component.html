@@ -1,0 +1,33 @@
+<div class="row login-background">
+	<div class="col s4 offset-s4 login-card">
+		<div class="card">
+			<div class="card-image">
+				<div class="logo-container">
+					<img src="./assets/img/dronesym_logo.png"/>
+				</div>
+			</div>
+
+			<div class="card-content">
+				<span class="card-title center-align">Login</span>
+
+				<form materialize>
+					<div class="input-field col s10 offset-s1">
+						<label for="username"> Username </label>
+						<input (input)="setUsername($event)" id="username" type="text"/>
+					</div>
+
+					<div class="input-field col s10 offset-s1">
+						<label for="password"> Password </label>
+						<input (input)="setPassword($event)" id="password" type="password"/>
+					</div>
+
+					<div class="row">
+						<button (click) = "onLogin($event)" class="waves-effect waves-light btn blue darken-3 col s4 offset-s4">Login</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="footer-label center-align"> DroneSym v1.0 </div>
+	</div>
+</div>
