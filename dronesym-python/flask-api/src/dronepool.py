@@ -136,7 +136,6 @@ def takeoff_drone(drone_id, target_height=10, waypoints=None):
 			detach_event_listeners(drone, value, "FINISHED")
 			return
 
-
 	def update_airspeed(self, attr_name, value):
 		node.update_drone(drone_id, {"airspeed": value})
 
