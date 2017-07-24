@@ -257,5 +257,4 @@ export class DashboardComponent{
     this.droneFeed.landDrone(this.currDrone.key)
         .then((res) => console.log(res));
   }
-
 }
