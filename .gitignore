@@ -46,3 +46,4 @@ dronesym-python/flask-api/pip-selfcheck.json
 #Config files
 dronesym-frontend/src/environments/environment.ts
 dronesym-node/db.js
+
