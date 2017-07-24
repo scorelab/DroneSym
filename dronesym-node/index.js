@@ -14,6 +14,7 @@ var sockConn = require('./websocket').init(http);
 
 var droneRouter = require('./Routers/droneRouter');
 var userRouter = require('./Routers/userRouter');
+var mongoConfig = require('./config/mongoconfig');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -25,7 +26,7 @@ var passportConfig = require('./config/passportconfig')(passport);
 app.use(passport.initialize());
 
 //mongodb connection
-mongoose.connect('mongodb://admin:admin@ds163232.mlab.com:63232/dronesym');
+mongoose.connect(mongoConfig.dbUri);
 
 mongoose.connection.on('error', function(err){
   console.log(err);
