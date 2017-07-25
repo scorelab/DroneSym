@@ -4,7 +4,7 @@ var db = require('../db');
 
 var droneRef = db.ref('/drones');
 
-var flaskUrl = 'http://localhost:5000/dronesym/api/flask';
+var flaskUrl = 'http://flask:5000/dronesym/api/flask';
 
 var sendSnapsot = function(snapshot){
   var array = [];
