@@ -34,6 +34,7 @@ export class DashboardComponent{
   createMode: number;
 
   userRole: string;
+  waypointIcon: string;
 
   dialogParams = {
     droneDialog: { show: false },
@@ -56,6 +57,7 @@ export class DashboardComponent{
         });
 
     this.createMode = this.createModes.NONE;
+    this.waypointIcon = './assets/img/blue.png';
   }
 
   ngAfterViewInit(){
@@ -198,6 +200,19 @@ export class DashboardComponent{
 
   public isAuthorized(roles){
     this.userService.getUserRole();
+  }
+
+  public changeWaypointIcon(isMouseOver){
+    if(this.createMode === this.createModes.NONE){
+      return;
+    }
+
+    if(isMouseOver){
+      this.waypointIcon = './assets/img/red.png';
+    }
+    else{
+      this.waypointIcon = './assets/img/blue.png';
+    }
   }
 
 }

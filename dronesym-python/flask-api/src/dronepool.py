@@ -93,21 +93,30 @@ def takeoff_drone(drone_id, target_height=10, waypoints=None):
 	if waypoints:
 		run_mission(drone, target_height, waypoints)
 
-	@drone.on_attribute('location')
-	def update_location(self, attr_name, value):
-		node.update_drone(drone_id, { "location" : {"lat": value.global_relative_frame.lat, "lon": value.global_relative_frame.lon, "alt": value.global_relative_frame.alt}})
 
-	@drone.on_attribute('airspeed')
+	def update_location(self, attr_name, value):
+		if drone.commands.next == len(drone.commands):
+			drone.remove_attribute_listener('location', update_location)
+			drone.remove_attribute_listener('airspeed', update_airspeed)
+			drone.remove_attribute_listener('attitude', udpate_attitude)
+			drone.remove_attribute_listener('heading', update_heading)
+			node.update_drone(drone_id, { "location" : {"lat": value.global_relative_frame.lat, "lon": value.global_relative_frame.lon, "alt": value.global_relative_frame.alt}, "inFlight": "FALSE"})
+			return
+		node.update_drone(drone_id, { "location" : {"lat": value.global_relative_frame.lat, "lon": value.global_relative_frame.lon, "alt": value.global_relative_frame.alt}, "waypoint": drone.commands.next, "inFlight": "TRUE"})
+
 	def update_airspeed(self, attr_name, value):
 		node.update_drone(drone_id, {"airspeed": value})
 
-	@drone.on_attribute('attitude')
 	def udpate_attitude(self, attr_name, value):
 		node.update_drone(drone_id, { "pitch": value.pitch, 'roll': value.roll, 'yaw': value.yaw })
 
-	@drone.on_attribute('heading')
 	def update_heading(self, attr_name, value):
 		node.update_drone(drone_id, { "heading": value })
+
+	drone.add_attribute_listener('location', update_location)
+	drone.add_attribute_listener('airspeed', update_airspeed)
+	drone.add_attribute_listener('attitude', udpate_attitude)
+	drone.add_attribute_listener('heading', update_heading)
 
 	print 'took off'
 

@@ -1,7 +1,7 @@
 <agm-map #map [latitude]="centerCoords.lat" [longitude]="centerCoords.lon" [zoom] = "15"
 [streetViewControl]="false">
 	<agm-marker *ngFor="let waypoint of currDrone?.waypoints; let i = index" [latitude]="waypoint.lat"
-	[longitude]="waypoint.lon" (markerClick)="deleteWaypoint(i)" [iconUrl]="'assets/img/blue.png'"></agm-marker>
+	[longitude]="waypoint.lon" (markerClick)="deleteWaypoint(i)" [iconUrl]="waypointIcon" (mouseOut)="changeWaypointIcon(false)" (mouseOver)="changeWaypointIcon(true)"></agm-marker>
 
 	<agm-polyline *ngIf="currDrone?.waypoints?.length > 1" strokeColor="blue" strokeOpacity="0.8">
 		<agm-polyline-point *ngFor="let waypoint of currDrone?.waypoints" [latitude]="waypoint.lat" [longitude]="waypoint.lon"> </agm-polyline-point>

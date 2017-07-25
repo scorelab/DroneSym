@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  mapsApiKey: 'YOUR_GOOGLE_MAPS_API_KEY',
+  mapsApiKey: 'YOUR_GOOLE_MAPS_API_KEY',
   nodeApiURL: 'http://localhost:3000/dronesym/api/node',
   feedURL: 'http://localhost:3000/feed'
 };
