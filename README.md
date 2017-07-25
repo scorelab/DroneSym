@@ -48,3 +48,19 @@ Starting the Angular2 development server
 $ npm install
 $ ng serve
 ```
+
+### Part 4 - Running with Docker (Optional)
+
+Checkout to docker branch
+
+```sh
+$ git checkout docker
+```
+
+Navigate to the root folder
+
+Run
+
+```sh
+$ docker-compose up
+```
