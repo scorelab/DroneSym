@@ -51,4 +51,16 @@ export class DroneDataService {
            .toPromise();
   }
 
+  public landDrone(droneId: string){
+    return this.http.post(`${this.baseUrl}/land/${droneId}`, {})
+              .map((res) => res.json())
+              .toPromise();
+  }
+
+  public resumeFlight(droneId: string){
+    return this.http.post(`${this.baseUrl}/resume/${droneId}`, {})
+               .map((res) => res.json())
+               .toPromise();
+  }
+
 }
