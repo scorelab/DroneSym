@@ -100,3 +100,10 @@ exports.landDrone = function(id, callBack){
 		callBack(body);
 	});
 }
+
+exports.resumeFlight = function(id, callBack){
+	console.log('resuming...');
+	request.post(`${flaskUrl}/${id}/resume`, function(err, response, body){
+		callBack(body);
+	});
+}
