@@ -49,6 +49,7 @@ export class DashboardComponent{
           }
 
           this.drones = data;
+          this.updateCurrDrone();
         });
 
     this.userService.getUserRole()
@@ -111,6 +112,21 @@ export class DashboardComponent{
     }
   }
 
+  private updateCurrDrone(){
+    if(!this.currDrone){
+      return;
+    }
+
+    let drone = this.drones.filter((drone) => {
+      return drone.key === this.currDrone.key;
+    })[0];
+
+    this.currDrone.status = drone.status;
+    this.currDrone.location.alt = drone.location.alt;
+    this.currDrone.airspeed = drone.airspeed;
+    this.currDrone.heading = drone.heading;
+  }
+
   public setCurrentDrone(drone){
     this.currDrone = drone;
     console.log(this.currDrone);
@@ -133,6 +149,16 @@ export class DashboardComponent{
 
   public takeOffDrone(){
     this.droneFeed.takeOffDrone(this.currDrone.key, this.currDrone.waypoints)
+        .then((status) => console.log(status));
+  }
+
+  public cancelFlight(){
+    this.droneFeed.landDrone(this.currDrone.key)
+        .then((status) => console.log(status));
+  }
+
+  public resumeFlight(){
+    this.droneFeed.resumeFlight(this.currDrone.key)
         .then((status) => console.log(status));
   }
 
@@ -170,6 +196,17 @@ export class DashboardComponent{
      else if($data === "SELECT_TAKEOFF"){
        this.takeOffDrone();
        console.log("Taking off");
+     }
+
+     else if($data === "SELECT_RESUME"){
+       this.resumeFlight();
+       console.log("Resuming...");
+
+     }
+
+     else if($data === "SELECT_CANCEL"){
+       this.cancelFlight();
+       console.log("Cancelling...");
      }
   }
 
@@ -213,6 +250,11 @@ export class DashboardComponent{
     else{
       this.waypointIcon = './assets/img/blue.png';
     }
+  }
+
+  public landDrone(){
+    this.droneFeed.landDrone(this.currDrone.key)
+        .then((res) => console.log(res));
   }
 
 }
