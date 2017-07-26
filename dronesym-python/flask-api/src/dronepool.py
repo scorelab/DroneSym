@@ -117,7 +117,7 @@ def takeoff_drone(drone_id, target_height=10, waypoints=None):
 		return
 
 	def update_location(self, attr_name, value):
-		if drone.mode == VehicleMode('LAND') and drone.global_relative_frame.alt <= 0.1:
+		if drone.mode == VehicleMode('LAND') and drone.location.global_relative_frame.alt <= 0.1:
 			detach_event_listeners(drone, value, "HALTED")
 			return
 
@@ -125,7 +125,7 @@ def takeoff_drone(drone_id, target_height=10, waypoints=None):
 			detach_event_listeners(drone, value, "FINISHED")
 			return
 
-		waypoint = waypoints[drone.commands.next - 1]
+		waypoint = waypoints[min(drone.commands.next - 1, len(waypoints))]
 		node.update_drone(drone_id, { "location" : {"lat": value.global_relative_frame.lat, "lon": value.global_relative_frame.lon, "alt": value.global_relative_frame.alt}, "waypoint": waypoint, "status": "FLYING"})
 
 	def update_airspeed(self, attr_name, value):
