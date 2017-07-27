@@ -109,6 +109,7 @@ export class DashboardComponent{
     }
     else{
       this.map.setOptions({ draggableCursor: null });
+      this.waypointIcon = './assets/img/blue.png';
     }
   }
 
