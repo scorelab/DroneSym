@@ -44,9 +44,13 @@ def send_takeoff(drone_id):
 
 @app.route(api_base_url + '/<string:drone_id>/land', methods=['POST'])
 def send_land(drone_id):
-
 	dronepool.land_drone(drone_id)
 	return jsonify({"status": "landing", "drone_id": drone_id})
+
+@app.route(api_base_url + '/<string:drone_id>/resume', methods=['POST'])
+def send_resume(drone_id):
+	dronepool.resume_flight(drone_id)
+	return jsonify({"status": "resuming", "drone_id": drone_id})
 
 if __name__ == '__main__':
 	dronepool.initialize()

@@ -56,4 +56,10 @@ router.post('/update/waypoints/:id', authenticate, authorize(['admin', 'user']),
 	});
 });
 
+router.post('/resume/:id', authenticate, authorize(['admin', 'user']), function(req, res){
+	var droneId = req.params.id;
+	drones.resumeFlight(droneId, function(status){
+		res.json(status);
+	});
+})
 module.exports = router;
