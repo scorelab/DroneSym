@@ -117,7 +117,10 @@ def takeoff_drone(drone_id, target_height=10, waypoints=None):
 		return
 
 	def update_location(self, attr_name, value):
-		waypoint = waypoints[(drone.commands.next - 1) % len(waypoints)]
+
+		next_wp = (drone.commands.next - 1) % len(waypoints)
+		waypoint = waypoints[next_wp]
+
 		node.update_drone(drone_id, { "location" : {"lat": value.global_relative_frame.lat, "lon": value.global_relative_frame.lon, "alt": value.global_relative_frame.alt}, "waypoint": waypoint, "status": "FLYING"})
 
 		if drone.mode == VehicleMode('LAND') and drone.location.global_relative_frame.alt <= 0.1:
