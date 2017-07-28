@@ -56,6 +56,7 @@ def resume_flight(drone_id):
 		waypoints.append(drone['waypoints'][wp])
 
 	next_waypoint = waypoints.index(drone['waypoint'])
+	print next_waypoint
 
 	takeoff_drone(drone_id, waypoints=waypoints[next_waypoint:])
 
@@ -105,6 +106,8 @@ def takeoff_drone(drone_id, target_height=10, waypoints=None):
 
 	drone.simple_takeoff(target_height)
 
+	print waypoints
+
 	if waypoints:
 		run_mission(drone, target_height, waypoints)
 
@@ -118,8 +121,10 @@ def takeoff_drone(drone_id, target_height=10, waypoints=None):
 
 	def update_location(self, attr_name, value):
 
-		next_wp = (drone.commands.next - 1) % len(waypoints)
+		next_wp = max(drone.commands.next - 2, 0) % len(waypoints)
 		waypoint = waypoints[next_wp]
+
+		# print next_wp
 
 		node.update_drone(drone_id, { "location" : {"lat": value.global_relative_frame.lat, "lon": value.global_relative_frame.lon, "alt": value.global_relative_frame.alt}, "waypoint": waypoint, "status": "FLYING"})
 
