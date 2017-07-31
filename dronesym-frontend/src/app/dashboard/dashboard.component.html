@@ -1,7 +1,8 @@
 <agm-map #map [latitude]="centerCoords.lat" [longitude]="centerCoords.lon" [zoom] = "15"
 [streetViewControl]="false">
 	<agm-marker *ngFor="let waypoint of currDrone?.waypoints; let i = index" [latitude]="waypoint.lat"
-	[longitude]="waypoint.lon" (markerClick)="deleteWaypoint(i)" [iconUrl]="waypointIcon" (mouseOut)="changeWaypointIcon(false)" (mouseOver)="changeWaypointIcon(true)"></agm-marker>
+
+	[longitude]="waypoint.lon" [label]="i.toString()" (markerClick)="deleteWaypoint(i)" [iconUrl]="waypointIcon" (mouseOut)="changeWaypointIcon(false)" (mouseOver)="changeWaypointIcon(true)"></agm-marker>
 
 	<agm-polyline *ngIf="currDrone?.waypoints?.length > 1" strokeColor="blue" strokeOpacity="0.8">
 		<agm-polyline-point *ngFor="let waypoint of currDrone?.waypoints" [latitude]="waypoint.lat" [longitude]="waypoint.lon"> </agm-polyline-point>
@@ -10,7 +11,7 @@
 	<agm-marker *ngFor="let i of droneIndices" [latitude]="drones[i].location.lat"
 		[longitude]="drones[i].location.lon" (markerClick)="setCurrentDrone(drones[i])">
 		<agm-info-window [isOpen]="currDrone?.key === drones[i].key">
-			<drone-option-box (onSelected)="processDroneBox($event)"></drone-option-box>
+			<drone-option-box [state]="currDrone?.status" [airspeed]="currDrone?.airspeed" [altitude]="currDrone?.location?.alt" [heading]="currDrone?.heading" (onSelected)="processDroneBox($event)"></drone-option-box>
 		</agm-info-window>
 	</agm-marker>
 

@@ -40,8 +40,25 @@ def initialize():
 
 	for drone_id in drones:
 		if drone_id not in drone_pool.keys():
-			location = node.get_drone_by_id(drone_id)['location']
+			drone = node.get_drone_by_id(drone_id)
+			location = drone['location']
 			create_new_drone(db_key=drone_id, home=location)
+
+			if 'status' in drone.keys() and drone['status'] == 'FLYING':
+				resume_flight(drone_id)
+
+def resume_flight(drone_id):
+	drone = node.get_drone_by_id(drone_id)
+
+	waypoints = []
+
+	for wp in sorted(drone['waypoints']):
+		waypoints.append(drone['waypoints'][wp])
+
+	next_waypoint = waypoints.index(drone['waypoint'])
+	print next_waypoint
+
+	takeoff_drone(drone_id, waypoints=waypoints[next_waypoint:])
 
 def create_new_drone(home=None, db_key=None):
 	global instance_count
@@ -70,7 +87,6 @@ def run_mission(drone, target_height, waypoints):
 
 	print 'in mission'
 
-
 def takeoff_drone(drone_id, target_height=10, waypoints=None):
 	try:
 		drone = drone_pool[drone_id]
@@ -90,19 +106,41 @@ def takeoff_drone(drone_id, target_height=10, waypoints=None):
 
 	drone.simple_takeoff(target_height)
 
+	print waypoints
+
 	if waypoints:
 		run_mission(drone, target_height, waypoints)
 
+	def detach_event_listeners(drone, value, status):
+		drone.remove_attribute_listener('location', update_location)
+		drone.remove_attribute_listener('airspeed', update_airspeed)
+		drone.remove_attribute_listener('attitude', udpate_attitude)
+		drone.remove_attribute_listener('heading', update_heading)
+		node.update_drone(drone_id, { "location" : {"lat": value.global_relative_frame.lat, "lon": value.global_relative_frame.lon, "alt": value.global_relative_frame.alt}, "status": status})
+		return
 
 	def update_location(self, attr_name, value):
-		if drone.commands.next == len(drone.commands):
-			drone.remove_attribute_listener('location', update_location)
-			drone.remove_attribute_listener('airspeed', update_airspeed)
-			drone.remove_attribute_listener('attitude', udpate_attitude)
-			drone.remove_attribute_listener('heading', update_heading)
-			node.update_drone(drone_id, { "location" : {"lat": value.global_relative_frame.lat, "lon": value.global_relative_frame.lon, "alt": value.global_relative_frame.alt}, "inFlight": "FALSE"})
+
+		node.update_drone(drone_id, { "location" : {"lat": value.global_relative_frame.lat, "lon": value.global_relative_frame.lon, "alt": value.global_relative_frame.alt}, "status": "FLYING"})
+
+		command_len = len(drone.commands)
+		wp_len = len(waypoints)
+
+		if command_len >= wp_len :
+			diff = command_len - wp_len
+			next_wp = max(drone.commands.next - diff, 0) % len(waypoints)
+			waypoint = waypoints[next_wp]
+			# print "df: " + `diff`
+			# print next_wp
+			node.update_drone(drone_id, { "waypoint" : waypoint })
+
+		if drone.mode == VehicleMode('LAND') and drone.location.global_relative_frame.alt <= 0.1:
+			detach_event_listeners(drone, value, "HALTED")
 			return
-		node.update_drone(drone_id, { "location" : {"lat": value.global_relative_frame.lat, "lon": value.global_relative_frame.lon, "alt": value.global_relative_frame.alt}, "waypoint": drone.commands.next, "inFlight": "TRUE"})
+
+		if drone.commands.next == len(drone.commands):
+			detach_event_listeners(drone, value, "FINISHED")
+			return
 
 	def update_airspeed(self, attr_name, value):
 		node.update_drone(drone_id, {"airspeed": value})

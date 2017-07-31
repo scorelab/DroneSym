@@ -1,3 +1,11 @@
 .drone-box{
 	margin: 6px;
 }
+
+.info-box{
+	border-radius: 3px;
+    background-color: #e6e6e6;
+    color: #484747;
+    padding: 5px;
+    font-size: 1.1rem;
+}
