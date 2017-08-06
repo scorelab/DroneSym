@@ -44,7 +44,7 @@ export class DashboardComponent{
   constructor(private droneFeed: DroneDataService, private _zone: NgZone, private router: Router, private userService: UserService) {
     this.droneFeed.getDroneFeed()
         .subscribe((data) => {
-          if(data.length > this.droneIndices.length){
+          if(data.length != this.droneIndices.length){
             this.droneIndices = Array(data.length).fill(0).map((x, i) => i);
           }
 
