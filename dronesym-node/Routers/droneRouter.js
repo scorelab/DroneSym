@@ -9,7 +9,7 @@ var authorize = userCtrl.authorizeUser;
 
 router.post('/create', authenticate, authorize(['admin']), function(req, res){
 	var drone = req.body;
-	drones.createDrone(drone.name, drone.location, function(response){
+	drones.createDrone(drone.name, drone.location, req.user.id, function(response){
 		res.json(response);
 	});
 });

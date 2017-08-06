@@ -6,7 +6,7 @@ var droneRef = db.ref('/drones');
 
 var flaskUrl = 'http://flask:5000/dronesym/api/flask';
 
-var sendSnapsot = function(snapshot){
+var sendSnapsot = function(snapshot,socket){
   var array = [];
 
   snapshot.forEach(function(item){
@@ -15,30 +15,37 @@ var sendSnapsot = function(snapshot){
     array.push(itemVal);
   });
 
-  io.emit('SOCK_FEED_UPDATE', array);
+  socket.emit('SOCK_FEED_UPDATE', array);
 }
 
 io.on('connection', function(socket){
 	console.log('FEED_SUBSCRIPTION');
+	var userId = socket.decoded_token.id;
 
-  //Initial drone data sent to client on first connection
-	droneRef.once("value", function(snapshot){
-    sendSnapsot(snapshot);
-  })
+	socket.emit('hello', userId);
+
+	var userRef = droneRef.orderByChild("user").equalTo(userId);
+  	//Initial drone data sent to client on first connection
+	userRef.once("value", function(snapshot){
+    	sendSnapsot(snapshot, socket);
+  	})
+
+	userRef.on("value", function(snapshot){
+		sendSnapsot(snapshot, socket);
+	})
 });
 
 //Send update drone data upon change to firebase
-droneRef.on("value", function(snapshot){
-	sendSnapsot(snapshot);
-})
 
-exports.createDrone = function(name, location, callBack){
+exports.createDrone = function(name, location, userId, callBack){
 	if(!name  || name === ''){
 		callBack({ status : "ERROR", msg: "Drone name is required"});
 		return;
 	}
 
-	var droneKey = droneRef.push({'name': name, 'location': location, 'waypoints': [location] });
+	console.log("Creating new drone");
+
+	var droneKey = droneRef.push({'name': name, 'user' : userId, 'location': location, 'waypoints': [location] });
 
 	request.post(`${flaskUrl}/spawn`, { json : { droneId: droneKey.key, location: location } },
 	function(error, response, body){
