@@ -31,9 +31,6 @@
 			<i class="material-icons">menu</i>
 		</a>
 		<ul>
-			<li>
-				<a (click)="logout()" class="btn-floating red darken-1 tooltipped" data-delay="50" data-position="left" data-tooltip="Logout" materialize="tooltip"><i class="material-icons">power_settings_new</i></a>
-			</li>
 			<li *ngIf="userRole === 'admin'" >
 				<a (click)="goToCreateDroneMode()" class="btn-floating green tooltipped" data-delay="50" data-position="left" data-tooltip="Drop new drone" materialize="tooltip"><i class="material-icons">location_on</i></a>
 			</li>

@@ -20,6 +20,8 @@ import { DroneOptionBoxComponent } from './drone-option-box/drone-option-box.com
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { UserSignupComponent } from './user-signup/user-signup.component';
+import { UserViewComponent } from './user-view/user-view.component';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { UserSignupComponent } from './user-signup/user-signup.component';
     DroneOptionBoxComponent,
     DashboardComponent,
     LoginComponent,
-    UserSignupComponent
+    UserSignupComponent,
+    UserViewComponent,
+    UserDashboardComponent
   ],
   imports: [
     BrowserModule,

@@ -31,7 +31,7 @@ export class LoginComponent {
     this.userService.login(this.user.username, this.user.password)
         .then((res) => {
           if(res.status === "OK"){
-            this.router.navigate(['dashboard']);
+            this.router.navigate(['dashboard/map']);
           }
           else{
             Materialize.toast(res.msg, 4000);

@@ -7,16 +7,32 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserSignupComponent } from './user-signup/user-signup.component';
+import { UserViewComponent } from './user-view/user-view.component';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 
 const appRoutes: Routes = [
   {
-    path: 'dashboard',
-    component: DashboardComponent,
-    canActivate: [ RouteGuardService ]
-  },
-  {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'dashboard',
+    component: UserViewComponent,
+    canActivate: [
+      RouteGuardService
+    ],
+    children: [
+      {
+        path: 'map',
+        component: DashboardComponent,
+        canActivate: [ RouteGuardService ]
+      },
+      {
+        path: 'user',
+        component: UserDashboardComponent,
+        canActivate: [ RouteGuardService ]
+      }
+    ]
   },
   {
     path: 'signup',
