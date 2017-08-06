@@ -32,8 +32,13 @@ droneRef.on("value", function(snapshot){
 	sendSnapsot(snapshot);
 })
 
-exports.createDrone = function(location, callBack){
-	var droneKey = droneRef.push({'location': location, 'waypoints': [location] });
+exports.createDrone = function(name, location, callBack){
+	if(!name  || name === ''){
+		callBack({ status : "ERROR", msg: "Drone name is required"});
+		return;
+	}
+
+	var droneKey = droneRef.push({'name': name, 'location': location, 'waypoints': [location] });
 
 	request.post(`${flaskUrl}/spawn`, { json : { droneId: droneKey.key, location: location } },
 	function(error, response, body){

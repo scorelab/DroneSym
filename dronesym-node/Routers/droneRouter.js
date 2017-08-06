@@ -8,7 +8,8 @@ var authenticate = passport.authenticate('jwt', { session: false });
 var authorize = userCtrl.authorizeUser;
 
 router.post('/create', authenticate, authorize(['admin']), function(req, res){
-	drones.createDrone(req.body, function(response){
+	var drone = req.body;
+	drones.createDrone(drone.name, drone.location, function(response){
 		res.json(response);
 	});
 });

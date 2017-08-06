@@ -17,8 +17,8 @@ export class DroneDataService {
     this.baseUrl = environment.nodeApiURL;
   }
 
-  public createDrone(location: any): Promise<any>{
-    return this.http.post(`${this.baseUrl}/create`, location)
+  public createDrone(name: string, location: any): Promise<any>{
+    return this.http.post(`${this.baseUrl}/create`, { 'location' : location, 'name' : name})
         .map((res) => res.json())
         .toPromise();
   }

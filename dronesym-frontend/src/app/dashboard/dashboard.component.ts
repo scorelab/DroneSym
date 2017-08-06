@@ -171,15 +171,21 @@ export class DashboardComponent{
         .then((status) => console.log(status));
   }
 
-  public createDrone(location){
-    this.droneFeed.createDrone(location)
-        .then((res) => console.log(res));
+  public createDrone(name, location){
+    this.droneFeed.createDrone(name, location)
+        .then((res) => {
+          if(res.status === "ERROR"){
+            console.log(res);
+            Materialize.toast(res.msg, 4000);
+          }
+        });
   }
 
   public processDialogResponse($data){
+    console.log($data);
     if(this.createMode === this.createModes.DRONES){
-      if($data === 'DIALOG_CONFIRM'){
-        this.createDrone(this.centerCoords);
+      if($data.message === 'DIALOG_CONFIRM'){
+        this.createDrone($data.name, this.centerCoords);
       }
     }
 
