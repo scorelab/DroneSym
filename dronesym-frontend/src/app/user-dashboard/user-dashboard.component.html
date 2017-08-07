@@ -1,3 +1,14 @@
-<p>
-  user-dashboard works!
-</p>
+<ul id="slide-out" class="side-nav fixed">
+  <nav>
+    <div class="nav-wrapper light-blue darken-4">
+    <a href="#" class="brand-logo">DroneSym</a>
+    </div>
+  </nav>
+  <div class="collection">
+    <a routerLink="groups" class="collection-item dashboard-button dash-yellow">
+    <i class="material-icons small"> donut_small </i> <div> Manage Groups </div></a>
+    <a routerLink="list" class="collection-item dashboard-button dash-green"><i class="material-icons small"> flight </i> <div> Manage Drones </div></a>
+  </div>
+</ul>
+
+<router-outlet></router-outlet>

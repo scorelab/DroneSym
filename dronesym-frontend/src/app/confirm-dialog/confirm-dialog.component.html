@@ -1,6 +1,6 @@
 <div id="dialog" class="modal" materialize="modal" [materializeActions]="modalActions">
     <div class="modal-content">
-      <h5 class=".center-align">Create New Drone</h5>
+      <h5 class=".center-align">{{ message }}</h5>
     </div>
 
     <form materialize>
@@ -13,7 +13,7 @@
     </form>
 
 	<div class="modal-footer">
-	  <a (click)="confirm()" class="modal-action modal-close waves-effect waves-blue btn-flat">Yes</a>
-	  <a (click)="cancel()" class="modal-action modal-close waves-effect waves-red btn-flat">No</a>
+	  <a (click)="confirm()" class="modal-action modal-close waves-effect waves-blue btn-flat">Continue</a>
+	  <a (click)="cancel()" class="modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
 	</div>
 </div>

@@ -23,7 +23,7 @@
 
 <cursor-tooltip *ngIf="createMode == createModes.DRONES || createMode == createModes.WAYPOINTS" [latitude]="cursor.lat" [longitude]="cursor.lon" [x]="cursor.x" [y]="cursor.y"></cursor-tooltip>
 
-<confirm-dialog [show]="this.dialogParams.droneDialog.show" (onResponse)="processDialogResponse($event)"></confirm-dialog>
+<confirm-dialog [message]="'Create New Drone'" [show]="this.dialogParams.droneDialog.show" (onResponse)="processDialogResponse($event)"></confirm-dialog>
 
 
 <div class="control-buttons">

@@ -11,10 +11,29 @@ import 'rxjs/add/operator/map';
 export class DroneDataService {
 
   private baseUrl: string;
+  private visibleDrones: any;
+  private drones: any;
+  private droneObserver: any;
+
   feed: any;
 
   constructor(private http: AuthHttpService) {
     this.baseUrl = environment.nodeApiURL;
+    this.drones = [];
+    this.visibleDrones = [];
+  }
+
+  private filterDrones(){
+    return this.drones.filter((drone) => this.visibleDrones.indexOf(drone.key) > -1);
+  }
+
+  public setVisibility(droneId, visibility=true){
+     if(visibility){
+       this.visibleDrones.indexOf(droneId) == -1 ? this.visibleDrones.push(droneId) : null;
+     }
+     else{
+       this.visibleDrones.indexOf(droneId) > -1 ? this.visibleDrones = this.visibleDrones.filter((drone) => drone.key !== droneId) : null;
+     }
   }
 
   public createDrone(name: string, location: any): Promise<any>{
@@ -27,10 +46,11 @@ export class DroneDataService {
     let feedObservable = new Observable((observer) => {
         let token = localStorage.getItem('token').slice(4);
         this.feed = io(environment.feedURL, { 'query' : `token=${token}`});
+        this.droneObserver = observer;
 
         this.feed.on('SOCK_FEED_UPDATE', (data) => {
-          console.log(data);
-          observer.next(data);
+          this.drones = data;
+          observer.next(this.drones);
         });
 
         return () => {
@@ -65,4 +85,33 @@ export class DroneDataService {
                .toPromise();
   }
 
+  public createGroup(name: string){
+    return this.http.post(`${this.baseUrl}/groups/create`, { 'name' : name })
+               .map((res) => res.json())
+               .toPromise();
+  }
+
+  public getGroups(){
+    return this.http.get(`${this.baseUrl}/groups`)
+               .map((res) => res.json())
+               .toPromise();
+  }
+
+  public addToGroup(groupId: string, drones: [string]){
+    return this.http.post(`${this.baseUrl}/groups/${groupId}/add`, { 'drones' : drones })
+               .map((res) => res.json())
+               .toPromise();
+  }
+
+  public removeFromGroup(groupId: string, droneId: string){
+    return this.http.post(`${this.baseUrl}/groups/${groupId}/remove/${droneId}`, {})
+               .map((res) => res.json())
+               .toPromise();
+  }
+
+  public removeGroup(groupId: string){
+    return this.http.post(`${this.baseUrl}/groups/remove/${groupId}`, {})
+               .map((res) => res.json())
+               .toPromise();
+  }
 }

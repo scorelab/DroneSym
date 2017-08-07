@@ -1,0 +1,32 @@
+<div class="info-pane">
+	<div class="row">
+		<h4 class="info-header"> Drone Groups </h4>
+		<div class="half-bar blue col s1"></div>
+		<div class="half-bar yellow col s1"></div>
+	</div>
+
+	<div class="row">
+		<a (click)="showCreateGroupDialog()" class="waves-effect waves-light blue btn"><i class="material-icons medium left">gamepad</i> Create Group</a>
+	</div>
+
+	<confirm-dialog [message]="'Create New Group'" [show]="this.showGroupDialog" (onResponse)="createGroup($event)"></confirm-dialog>
+
+	<drones-box (onResponse)="addDronesToGroup($event)" [message]="'Select Drones'" [drones]="drones" [show]="showDronesDialog"></drones-box>
+
+	<div class="row">
+		<ul materialize="collapsible" class="collapsible col s10" data-collapsible="accordion">
+			<li *ngFor="let group of groups">
+
+	            <div class="collapsible-header"><h5> {{ group.name }} <span (click)="removeGroup(group._id)"class="new badge red" data-badge-caption="delete"> </span> <span class="new badge light-blue" data-badge-caption="drone(s)">{{ group.drones.length }} </span> </h5></div>
+
+	            <div class="collapsible-body">
+	            	<a (click)="showSelectDronesDialog(group._id)" class="waves-effect waves-dark blue-text text-darken-2 btn-flat light-blue lighten-5"> <i class="material-icons large left">add</i> Add Drones</a>
+
+	            	<ul  *ngIf="group.drones.length > 0" class="collection">
+	            		<li *ngFor="let drone of group.drones" class="collection-item"> {{ getName(drone) }}<a (click)="removeFromGroup(group._id, drone)" class="secondary-content tooltipped" data-delay="50" data-position="bottom" data-tooltip="Remove" materialize="tooltip"><i class="material-icons red-text">clear</i></a></li>
+	            	</ul>
+	            </div>
+	        </li>
+		</ul>
+	</div>
+</div>
