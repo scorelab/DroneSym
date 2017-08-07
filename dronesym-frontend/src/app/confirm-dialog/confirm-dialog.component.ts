@@ -12,7 +12,7 @@ export class ConfirmDialogComponent implements OnInit {
   name: string;
 
   @Output('onResponse') onResponse = new EventEmitter<any>();
-
+  @Input('message') message: string;
   @Input()
   set show(show: boolean){
     if(show){
