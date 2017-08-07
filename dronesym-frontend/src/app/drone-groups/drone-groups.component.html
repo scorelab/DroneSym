@@ -5,7 +5,7 @@
 		<div class="half-bar yellow col s1"></div>
 	</div>
 
-	<div class="row">
+	<div class="row" *ngIf="userRole === 'admin'">
 		<a (click)="showCreateGroupDialog()" class="waves-effect waves-light blue btn"><i class="material-icons medium left">gamepad</i> Create Group</a>
 	</div>
 
