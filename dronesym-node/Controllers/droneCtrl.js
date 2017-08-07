@@ -1,5 +1,6 @@
 var request = require('request');
 var io = require('../websocket').connection;
+var Group = require('../Models/group');
 var db = require('../db');
 
 var droneRef = db.ref('/drones');
@@ -54,6 +55,75 @@ exports.createDrone = function(name, location, userId, callBack){
 	})
 }
 
+exports.createGroup = function(groupName, userId, callBack){
+	if(!groupName || groupName === ""){
+		callBack( { status : "ERROR", msg: "Group name must be specified"});			return;
+	}
+
+	Group.find({ name : groupName }, function(err, groups){
+		if(groups.length > 0){
+			callBack({ status : "ERROR", msg : "Group Exists"});
+			return;
+		}
+
+
+		var group = new Group();
+		group.name = groupName;
+		group.userId = userId;
+
+		group.save(function(err, group){
+			if(err){
+				callBack({ status : "ERROR", msg : err })
+				return;
+			}
+
+			callBack({ status : "OK", group : group });
+		})
+	})
+}
+
+exports.removeGroup = function(groupId, callBack){
+	Group.findOneAndRemove({ _id : groupId }, function(err, group){
+		if(err){
+			callBack({ status : "ERROR", msg: err });
+			return;
+		}
+		callBack({ status : "OK", group : group });
+	})
+}
+
+exports.getGroups = function(userId, callBack){
+	Group.find({ userId : userId }, function(err, groups){
+		if(err){
+			callBack({ status : "ERROR", msg: err });
+			return;
+		}
+
+		callBack({ status : "OK", groups : groups });
+	})
+}
+
+exports.addToGroup = function(groupId, drones, callBack){
+	Group.findOneAndUpdate({ _id : groupId }, { $push : { drones : { $each : drones }}}, { new : true }, function(err, group){
+		if(err){
+			callBack({ status : "ERROR", msg : err });
+			return;
+		}
+		callBack({ status : "OK", group : group});
+	})
+}
+
+exports.removeFromGroup = function(groupId, droneId, callBack){
+	Group.findOneAndUpdate({ _id : groupId }, { $pull : { drones : droneId }}, { new : true }, function(err, group){
+		if(err){
+			callBack({ status : "ERROR", msg : err });
+			return;
+		}
+		callBack({ status : "OK", group : group });
+
+	})
+}
+
 exports.updateWaypoints = function(id, waypoints, callBack){
   var waypointsRef = droneRef.child(id).child('waypoints');
 
@@ -74,7 +144,6 @@ exports.getDroneIds = function(callBack){
 		snapshot.forEach(function(drone){
 			drones.push(drone.key);
 		});
-
 		callBack(drones);
 	});
 }
