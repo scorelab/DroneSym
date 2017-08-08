@@ -1,0 +1,13 @@
+.signup-background{
+	background-color: #f5f5f5;
+}
+
+.signup-header{
+	display: flex;
+	flex-direction: row;
+}
+
+.logo-badge{
+	height: 60px;
+	width: 60px;
+}

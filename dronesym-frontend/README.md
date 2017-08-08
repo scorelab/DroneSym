@@ -16,7 +16,7 @@ mapsApiKey: 'YOUR_GOOGLE_MAPS_API_KEY',
 nodeApiURL: 'http://localhost:3000/dronesym/api/node',
 feedURL: 'http://localhost:3000/feed'
 ```
-_Note: Dronesym Node server (`./dronesym-node/`) and DroneSym Flase server (`./dronesym-python/flask-api/src`) should be running before starting the frontend server_
+_Note: Dronesym Node server (`./dronesym-node/`) and DroneSym Flask server (`./dronesym-python/flask-api/src`) should be running before starting the frontend server_
 
 Starting the Angular2 development server
 

@@ -1,12 +1,29 @@
+<div class="info-box">
+  <h5> {{ droneName }} </h5>
+	<i class="material-icons">terrain</i> Altitude - {{ droneAlt | number:'1.2' }}<br>
+	<i class="material-icons">navigation </i> Heading - {{ droneHeading | number: '1.0-2' }} <br>
+	<i class="material-icons">play_arrow </i> Airspeed - {{ droneSpeed | number: '1.2'}}
+</div>
+
 <div class="row drone-box">
-	<div class="col s6">
+	<div *ngIf="droneState === 'FINISHED' || droneState === 'HALTED'" [ngClass]="{ 'col' : true, 's4' : droneState === 'HALTED', 's6': droneState != 'HALTED'}">
      <a class="btn-floating btn-large waves-effect waves-light blue tooltipped"
      data-delay="50" data-position="bottom" data-tooltip="Takeoff" materialize="tooltip"
      (click)="onTakeoff()"><i class="material-icons">near_me</i></a>
 	</div>
 
-  <div class="col s6">
-     <a class="btn-floating btn-large waves-effect waves-light amber tooltipped" data-delay="50" data-position="bottom" data-tooltip="Add Waypoints" materialize="tooltip"
+  <div *ngIf="droneState === 'FINISHED' || droneState === 'HALTED'" [ngClass]="{ 'col' : true, 's4' : droneState === 'HALTED', 's6': droneState != 'HALTED'}">
+     <a class="btn-floating btn-large waves-effect waves-light amber tooltipped" data-delay="50" data-position="bottom" data-tooltip="Edit Waypoints" materialize="tooltip"
      (click)="onWaypoints()"><i class="material-icons">explore</i></a>
+  </div>
+
+  <div *ngIf="droneState === 'HALTED'" [ngClass]="{ 'col' : true, 's4' : droneState === 'HALTED', 's6': droneState != 'HALTED'}">
+     <a class="btn-floating btn-large waves-effect waves-light green tooltipped" data-delay="50" data-position="bottom" data-tooltip="Resume flight" materialize="tooltip"
+     (click)="onResume()"><i class="material-icons">replay</i></a>
+  </div>
+
+  <div *ngIf="droneState === 'FLYING'" [ngClass]="{ 'col' : true, 's4' : droneState === 'HALTED', 's6': droneState != 'HALTED'}">
+     <a class="btn-floating btn-large waves-effect waves-light red tooltipped" data-delay="50" data-position="bottom" data-tooltip="Cancel and Land" materialize="tooltip"
+     (click)="onCancel()"><i class="material-icons">clear</i></a>
   </div>
 </div>

@@ -9,9 +9,10 @@ import { MaterializeAction } from 'angular2-materialize';
 export class ConfirmDialogComponent implements OnInit {
 
   modalActions = new EventEmitter<string|MaterializeAction>();
+  name: string;
 
-  @Output('onResponse') onResponse = new EventEmitter<string>();
-
+  @Output('onResponse') onResponse = new EventEmitter<any>();
+  @Input('message') message: string;
   @Input()
   set show(show: boolean){
     if(show){
@@ -22,9 +23,15 @@ export class ConfirmDialogComponent implements OnInit {
     }
   }
 
-  constructor() { }
+  constructor() {
+    this.name = "";
+  }
 
   ngOnInit() {
+  }
+
+  public setName($event){
+    this.name = $event.target.value;
   }
 
   public cancel(){
@@ -32,6 +39,6 @@ export class ConfirmDialogComponent implements OnInit {
   }
 
   public confirm(){
-    this.onResponse.emit('DIALOG_CONFIRM');
+    this.onResponse.emit({'message' : 'DIALOG_CONFIRM', 'name' : this.name });
   }
 }

@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/scorelab/DroneSym.svg?branch=master)](https://travis-ci.org/scorelab/DroneSym)
 
 # DroneSym
+[![Build Status](https://travis-ci.org/scorelab/DroneSym.svg?branch=develop)](https://travis-ci.org/scorelab/DroneSym)
 
 ### Setting Up the Project
 
@@ -49,4 +50,20 @@ Starting the Angular2 development server
 ```sh
 $ npm install
 $ ng serve
+```
+
+### Part 4 - Running with Docker (Optional)
+
+Checkout to docker branch
+
+```sh
+$ git checkout docker
+```
+
+Navigate to the root folder
+
+Run
+
+```sh
+$ docker-compose up
 ```
