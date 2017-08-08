@@ -1,4 +1,5 @@
 # DroneSym
+[![Build Status](https://travis-ci.org/scorelab/DroneSym.svg?branch=develop)](https://travis-ci.org/scorelab/DroneSym)
 
 ### Setting Up the Project
 
