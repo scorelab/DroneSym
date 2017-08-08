@@ -44,7 +44,7 @@ export class DashboardComponent{
   constructor(private droneFeed: DroneDataService, private _zone: NgZone, private router: Router, private userService: UserService) {
     this.droneFeed.getDroneFeed()
         .subscribe((data) => {
-          if(data.length > this.droneIndices.length){
+          if(data.length != this.droneIndices.length){
             this.droneIndices = Array(data.length).fill(0).map((x, i) => i);
           }
 
@@ -171,15 +171,21 @@ export class DashboardComponent{
         .then((status) => console.log(status));
   }
 
-  public createDrone(location){
-    this.droneFeed.createDrone(location)
-        .then((res) => console.log(res));
+  public createDrone(name, location){
+    this.droneFeed.createDrone(name, location)
+        .then((res) => {
+          if(res.status === "ERROR"){
+            console.log(res);
+            Materialize.toast(res.msg, 4000);
+          }
+        });
   }
 
   public processDialogResponse($data){
+    console.log($data);
     if(this.createMode === this.createModes.DRONES){
-      if($data === 'DIALOG_CONFIRM'){
-        this.createDrone(this.centerCoords);
+      if($data.message === 'DIALOG_CONFIRM'){
+        this.createDrone($data.name, this.centerCoords);
       }
     }
 

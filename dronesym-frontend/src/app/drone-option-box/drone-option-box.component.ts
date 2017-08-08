@@ -15,6 +15,8 @@ export class DroneOptionBoxComponent implements OnInit {
   droneAlt: number;
 
   @Output('onSelected') onSelected = new EventEmitter<string>();
+  @Input('name') droneName: string;
+
   @Input()
   set state(state: string){
     this.droneState = state || 'FINISHED';

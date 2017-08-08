@@ -1,0 +1,38 @@
+.side-nav{
+	width: 12%;
+	box-shadow: none;
+	background-color: #efefef
+}
+
+.brand-logo{
+	padding-left: 6px;
+}
+
+.collection{
+	margin-top: 0;
+	border: none;
+}
+
+.dashboard-button{
+	color: #01579b !important;
+	text-transform: uppercase;
+	height: 10%;
+	border-radius: 0;
+	background-color: inherit;
+	border: none;
+	text-align : center;
+}
+
+.dashboard-button:hover{
+	color: #01579b !important;
+}
+
+.dashboard-button.dash-yellow:hover{
+	color: #f9a825 !important;
+	border-left: 5px solid #fdd835;
+}
+
+.dashboard-button.dash-green:hover{
+	color: #4caf50 !important;
+	border-left: 5px solid #4caf50;
+}
