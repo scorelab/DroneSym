@@ -13,6 +13,7 @@ export class ConfirmDialogComponent implements OnInit {
 
   @Output('onResponse') onResponse = new EventEmitter<any>();
   @Input('message') message: string;
+  @Input('inputEnabled') inputEnabled: boolean;
   @Input()
   set show(show: boolean){
     if(show){
