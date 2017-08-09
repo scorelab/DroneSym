@@ -62,9 +62,37 @@ exports.createDrone = function(name, location, userId, callBack){
 	})
 }
 
+exports.removeDrone = function(droneId, droneStatus, callBack){
+	if(droneStatus === "FLYING"){
+		callBack({ status : "ERROR", msg : "Drone in flight"});
+		return;
+	}
+
+	var removeFromGroups = function(droneId){
+		Group.update({ drones : { $in : [droneId]}}, { $pull : { drones : droneId }}, { multi : true }, function(err, group){
+			if(err){
+				console.log(err);
+				return;
+			}
+		})
+	}
+
+	request.post(`${flaskUrl}/remove/${droneId}`, {}, function(error, response, body){
+		if(error){
+			callBack({ status : "ERROR", msg : "Connection error"});
+			return;
+		}
+
+		removeFromGroups(droneId);
+		droneRef.child(droneId).remove();
+		callBack(JSON.parse(body));
+	})
+}
+
 exports.createGroup = function(groupName, userId, callBack){
 	if(!groupName || groupName === ""){
-		callBack( { status : "ERROR", msg: "Group name must be specified"});			return;
+		callBack( { status : "ERROR", msg: "Group name must be specified"});
+		return;
 	}
 
 	Group.find({ name : groupName }, function(err, groups){

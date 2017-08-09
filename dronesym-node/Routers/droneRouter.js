@@ -14,6 +14,15 @@ router.post('/create', authenticate, authorize(['admin']), function(req, res){
 	});
 });
 
+router.post('/remove/:id', function(req, res){
+	var drone = req.body;
+	console.log(drone);
+
+	drones.removeDrone(req.params.id, drone.status, function(status){
+		res.json(status);
+	});
+})
+
 router.get('/get', function(req, res){
 	drones.getDroneIds(function(ids){
 		res.json({ "status" : "OK", "drones": ids });
