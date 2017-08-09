@@ -7,7 +7,7 @@
     	<div class="row">
 	    	<ul  *ngIf="drones.length > 0" class="collection col s8 offset-s2">
 	        	<li *ngFor="let drone of drones" class="collection-item list-item">
-	        		<input (click)="toggleDrone(drone.key)" [id]="drone.name" type="checkbox" class="filled-in">
+	        		<input (click)="toggleDrone(drone.key)" [id]="drone.name" type="checkbox" class="filled-in" [checked]="isSelected(drone.key)">
 	        		<label [for]="drone.name"> {{ drone.name }} </label>
 	        	</li>
 	        </ul>
