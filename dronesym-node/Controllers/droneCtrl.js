@@ -9,11 +9,19 @@ var flaskUrl = 'http://localhost:5000/dronesym/api/flask';
 
 var sendSnapsot = function(snapshot,socket){
   var array = [];
+  var userId = socket.decoded_token.id;
 
   snapshot.forEach(function(item){
-    itemVal = item.val();
-    itemVal['key'] = item.key;
-    array.push(itemVal);
+    let drone = item.val();
+
+    if(drone.users.indexOf(userId) == -1){
+        return;
+    }
+
+    drone['key'] = item.key;
+    delete drone['users'];
+
+    array.push(drone);
   });
 
   socket.emit('SOCK_FEED_UPDATE', array);
@@ -25,13 +33,12 @@ io.on('connection', function(socket){
 
 	socket.emit('hello', userId);
 
-	var userRef = droneRef.orderByChild("user").equalTo(userId);
   	//Initial drone data sent to client on first connection
-	userRef.once("value", function(snapshot){
+	droneRef.once("value", function(snapshot){
     	sendSnapsot(snapshot, socket);
   	})
 
-	userRef.on("value", function(snapshot){
+	droneRef.on("value", function(snapshot){
 		sendSnapsot(snapshot, socket);
 	})
 });
@@ -46,7 +53,7 @@ exports.createDrone = function(name, location, userId, callBack){
 
 	console.log("Creating new drone");
 
-	var droneKey = droneRef.push({'name': name, 'user' : userId, 'location': location, 'waypoints': [location] });
+	var droneKey = droneRef.push({'name': name, 'users' : [userId], 'location': location, 'waypoints': [location] })
 
 	request.post(`${flaskUrl}/spawn`, { json : { droneId: droneKey.key, location: location } },
 	function(error, response, body){
