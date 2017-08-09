@@ -40,7 +40,7 @@ export class DroneGroupsComponent {
 			.catch((err) => console.log(err))
 
 		this.droneFeed.getDroneFeed()
-			.subscribe((drones) => { console.log(drones); this.drones = drones });
+			.subscribe((drones) => { this.drones = drones });
 	}
 
 
