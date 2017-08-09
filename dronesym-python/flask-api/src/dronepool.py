@@ -72,6 +72,20 @@ def create_new_drone(home=None, db_key=None):
 	res = { "status" : "OK", "id" : db_key }
 	return res
 
+def remove_drone(drone_id):
+	if drone_id not in drone_pool:
+		return { "status" : "ERROR", "msg" : "Drone instance not found" }
+
+	drone = drone_pool[drone_id]
+
+	if drone.mode == VehicleMode('AUTO'):
+		return { "status" : "ERROR", "msg" : "Drone in operation" }
+
+	del drone_pool[drone_id]
+
+	return { "status" : "OK", "id" : drone_id }
+
+
 def run_mission(drone, target_height, waypoints):
 	while True:
 		if drone.location.global_relative_frame.alt >= target_height * 0.9:

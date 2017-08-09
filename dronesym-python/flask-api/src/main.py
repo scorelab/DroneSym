@@ -32,6 +32,11 @@ def create_new_drone():
 
 	return jsonify(res)
 
+@app.route(api_base_url + '/remove/<string:drone_id>', methods=['POST'])
+def remove_drone(drone_id):
+	res = dronepool.remove_drone(drone_id)
+	return jsonify(res);
+
 @app.route(api_base_url + '/<string:drone_id>/takeoff', methods=['POST'])
 def send_takeoff(drone_id):
 	#This route issues a takeoff command to a specific drone
