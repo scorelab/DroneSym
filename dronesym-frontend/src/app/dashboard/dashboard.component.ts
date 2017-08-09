@@ -122,6 +122,10 @@ export class DashboardComponent{
       return drone.key === this.currDrone.key;
     })[0];
 
+    if(!drone){
+      return;
+    }
+    
     this.currDrone.status = drone.status;
     this.currDrone.location.alt = drone.location.alt;
     this.currDrone.airspeed = drone.airspeed;
