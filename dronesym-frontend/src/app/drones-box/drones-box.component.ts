@@ -38,6 +38,10 @@ export class DronesBoxComponent {
     }
   }
 
+  isSelected(droneId){
+    return this.selectedItems.indexOf(droneId) > -1;
+  }
+
   confirm(){
     this.response.emit({ action : 'DRONES_BOX_CONFIRM' , items : this.selectedItems });
     this.selectedItems = [];
