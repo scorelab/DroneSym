@@ -42,6 +42,12 @@ export class DroneDataService {
         .toPromise();
   }
 
+  public removeDrone(droneId: string, droneStatus: string){
+    return this.http.post(`${this.baseUrl}/remove/${droneId}`, { 'status' : droneStatus })
+               .map((res) => res.json())
+               .toPromise();
+  }
+
   public getDroneFeed(): Observable<any>{
     let feedObservable = new Observable((observer) => {
         let token = localStorage.getItem('token').slice(4);
