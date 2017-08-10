@@ -11,7 +11,7 @@ declare var Materialize;
 
 
 export class DroneListComponent {
-  
+
   drones: any;
   showRenameConfirmation: boolean;
   showDeleteConfirmation: boolean;
@@ -25,7 +25,7 @@ export class DroneListComponent {
   	this.droneFeed.getDroneFeed()
   		.subscribe((drones) => {
         if(this.drones.length != drones.length){
-  			  this.drones = drones;          
+  			  this.drones = drones;
         }
   		})
   }

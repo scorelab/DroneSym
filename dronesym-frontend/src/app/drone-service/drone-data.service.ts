@@ -11,7 +11,6 @@ import 'rxjs/add/operator/map';
 export class DroneDataService {
 
   private baseUrl: string;
-  private visibleDrones: any;
   private drones: any;
   private droneObserver: any;
 
@@ -20,20 +19,6 @@ export class DroneDataService {
   constructor(private http: AuthHttpService) {
     this.baseUrl = environment.nodeApiURL;
     this.drones = [];
-    this.visibleDrones = [];
-  }
-
-  private filterDrones(){
-    return this.drones.filter((drone) => this.visibleDrones.indexOf(drone.key) > -1);
-  }
-
-  public setVisibility(droneId, visibility=true){
-     if(visibility){
-       this.visibleDrones.indexOf(droneId) == -1 ? this.visibleDrones.push(droneId) : null;
-     }
-     else{
-       this.visibleDrones.indexOf(droneId) > -1 ? this.visibleDrones = this.visibleDrones.filter((drone) => drone.key !== droneId) : null;
-     }
   }
 
   public createDrone(name: string, location: any): Promise<any>{
