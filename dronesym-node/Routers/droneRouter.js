@@ -14,7 +14,7 @@ router.post('/create', authenticate, authorize(['admin']), function(req, res){
 	});
 });
 
-router.post('/remove/:id', function(req, res){
+router.post('/remove/:id', authenticate, authorize(['admin']), function(req, res){
 	var drone = req.body;
 	console.log(drone);
 
@@ -103,5 +103,11 @@ router.post('/groups/:id/remove/:droneId', authenticate, function(req, res){
 		res.json(status);
 	})
 })
+
+router.post('/update/:id/name', function(req, res){
+	drones.updateDroneName(req.params.id, req.body.name, function(status){
+		res.json(status);
+	})
+});
 
 module.exports = router;

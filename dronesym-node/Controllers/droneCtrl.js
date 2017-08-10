@@ -223,3 +223,13 @@ exports.resumeFlight = function(id, callBack){
 		callBack(body);
 	});
 }
+
+exports.updateDroneName = function(droneId, newName, callBack){
+	if(!newName || newName === ""){
+		callBack({ status : "ERROR", msg : "New name must be specified"});
+		return;
+	}
+
+	droneRef.child(droneId).child("name").set(newName);
+	callBack({ status : "OK" });
+}
