@@ -183,7 +183,7 @@ exports.getDroneIds = function(callBack){
 	});
 }
 
-exports.updateDroneStatus = function(id, status){
+exports.updateDroneStatus = function(id, status, callBack){
 	var timestamp = new Date();
 	status["timestamp"] = timestamp.valueOf();
 	droneRef.child(id).update(status, function(err){
@@ -191,6 +191,7 @@ exports.updateDroneStatus = function(id, status){
 			console.log(err);
 			return;
 		}
+		callBack({ status : "OK", update : status });
 	});
 }
 
@@ -222,14 +223,4 @@ exports.resumeFlight = function(id, callBack){
 	request.post(`${flaskUrl}/${id}/resume`, function(err, response, body){
 		callBack(body);
 	});
-}
-
-exports.updateDroneName = function(droneId, newName, callBack){
-	if(!newName || newName === ""){
-		callBack({ status : "ERROR", msg : "New name must be specified"});
-		return;
-	}
-
-	droneRef.child(droneId).child("name").set(newName);
-	callBack({ status : "OK" });
 }

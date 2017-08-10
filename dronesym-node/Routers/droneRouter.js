@@ -36,8 +36,9 @@ router.get('/get/:id', function(req, res){
 });
 
 router.post('/update/:id', function(req, res){
-	drones.updateDroneStatus(req.params.id, req.body);
-	res.json({ status: "OK" });
+	drones.updateDroneStatus(req.params.id, req.body, function(status){
+		res.json(status);
+	});
 });
 
 router.post('/takeoff/:id', authenticate , authorize(['admin', 'user']), function(req, res){
@@ -103,11 +104,5 @@ router.post('/groups/:id/remove/:droneId', authenticate, function(req, res){
 		res.json(status);
 	})
 })
-
-router.post('/update/:id/name', function(req, res){
-	drones.updateDroneName(req.params.id, req.body.name, function(status){
-		res.json(status);
-	})
-});
 
 module.exports = router;

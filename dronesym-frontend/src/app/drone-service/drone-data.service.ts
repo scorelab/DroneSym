@@ -105,4 +105,10 @@ export class DroneDataService {
                .map((res) => res.json())
                .toPromise();
   }
+
+  public updateName(droneId: string, newName: string){
+    return this.http.post(`${this.baseUrl}/update/${droneId}`, { 'name' : newName })
+               .map((res) => res.json())
+               .toPromise();
+  }
 }
