@@ -14,7 +14,7 @@ router.post('/create', authenticate, authorize(['admin']), function(req, res){
 	});
 });
 
-router.post('/remove/:id', function(req, res){
+router.post('/remove/:id', authenticate, authorize(['admin']), function(req, res){
 	var drone = req.body;
 	console.log(drone);
 
@@ -36,8 +36,9 @@ router.get('/get/:id', function(req, res){
 });
 
 router.post('/update/:id', function(req, res){
-	drones.updateDroneStatus(req.params.id, req.body);
-	res.json({ status: "OK" });
+	drones.updateDroneStatus(req.params.id, req.body, function(status){
+		res.json(status);
+	});
 });
 
 router.post('/takeoff/:id', authenticate , authorize(['admin', 'user']), function(req, res){

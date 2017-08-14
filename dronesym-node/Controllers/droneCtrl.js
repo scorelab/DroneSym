@@ -183,7 +183,7 @@ exports.getDroneIds = function(callBack){
 	});
 }
 
-exports.updateDroneStatus = function(id, status){
+exports.updateDroneStatus = function(id, status, callBack){
 	var timestamp = new Date();
 	status["timestamp"] = timestamp.valueOf();
 	droneRef.child(id).update(status, function(err){
@@ -191,6 +191,7 @@ exports.updateDroneStatus = function(id, status){
 			console.log(err);
 			return;
 		}
+		callBack({ status : "OK", update : status });
 	});
 }
 

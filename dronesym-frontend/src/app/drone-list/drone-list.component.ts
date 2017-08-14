@@ -11,21 +11,23 @@ declare var Materialize;
 
 
 export class DroneListComponent {
-  
+
   drones: any;
   showRenameConfirmation: boolean;
   showDeleteConfirmation: boolean;
+
   currDrone: any;
 
   constructor(private droneFeed: DroneDataService) {
     this.showDeleteConfirmation = false;
     this.showRenameConfirmation = false;
+
     this.drones = [];
 
   	this.droneFeed.getDroneFeed()
   		.subscribe((drones) => {
         if(this.drones.length != drones.length){
-  			  this.drones = drones;          
+  			  this.drones = drones;
         }
   		})
   }
@@ -33,7 +35,11 @@ export class DroneListComponent {
   showDeleteConfirmationDialog(drone){
     this.currDrone = drone;
     this.showDeleteConfirmation = true;
-    console.log('Delete drone');
+  }
+
+  showRenameConfirmationDialog(drone){
+    this.currDrone = drone;
+    this.showRenameConfirmation = true;
   }
 
   deleteResponse($event){
@@ -55,6 +61,20 @@ export class DroneListComponent {
           })
     }
 
+
     this.showDeleteConfirmation = false;
   }
+
+  renameResponse($event){
+    if($event.message === 'DIALOG_CONFIRM'){
+      this.droneFeed.updateName(this.currDrone.key, $event.name)
+         .then((res) => {
+                 console.log(res);
+                 this.currDrone.name = res.update.name;
+          })
+    }
+
+    this.showRenameConfirmation = false;
+  }
+
 }

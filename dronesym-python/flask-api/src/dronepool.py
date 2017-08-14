@@ -7,10 +7,11 @@ import mavparser
 
 drone_pool = {}
 instance_count = 0
+env_test = False
 
 class Sim(SITL, object):
 	def __init__(self, instance=1, home=None):
-		super(Sim, self).download("copter", "3.3", verbose=True)
+		super(Sim, self).download("copter", "3.3", verbose=not env_test)
 		self.instance = instance
 
 		if home:
@@ -26,7 +27,7 @@ class Sim(SITL, object):
 
 	def launch(self):
 		home_str = str(self.home['lat']) + ',' + str(self.home['lon']) + ',0,353'
-		super(Sim, self).launch(["--instance", str(self.instance), "--home", home_str], await_ready=True, verbose=True)
+		super(Sim, self).launch(["--instance", str(self.instance), "--home", home_str], await_ready=True, verbose=not env_test)
 
 	def get_sitl_status(self):
 		return { 'id': self.instance, 'home': self.home }
