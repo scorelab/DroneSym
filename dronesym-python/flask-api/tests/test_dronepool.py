@@ -33,7 +33,6 @@ class TestDronePool(unittest.TestCase):
 
 	def test_remove_drone(self):
 		vehicle = mocks.MockVehicle()
-
 		dronepool.drone_pool["test"] = vehicle
 
 		res = dronepool.remove_drone("test")
@@ -68,3 +67,11 @@ class TestDronePool(unittest.TestCase):
 		dronepool.drone_pool = { "test" : vehicle}
 		res = dronepool.land_drone("test")
 		self.assertEqual(res, False)
+
+	def test_run_mission(self):
+		vehicle = mocks.MockVehicle()
+		mavparser = mocks.MockMavParser()
+		vehicle.setAltitude(10)
+		dronepool.mavparser = mavparser
+		dronepool.run_mission(vehicle, 10, waypoints=[])
+		self.assertEqual(vehicle.mode, VehicleMode('AUTO'))
