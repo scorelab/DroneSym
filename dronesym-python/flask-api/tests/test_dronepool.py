@@ -15,10 +15,9 @@ sys.path.insert(0, source_dir)
 
 import dronepool
 
-dronepool.env_test = True
-
 class TestDronePool(unittest.TestCase):
 	def setUp(self):
+		dronepool.env_test = True
 		dronepool.instance_count = 0
 
 	def tearDown(self):
@@ -69,9 +68,3 @@ class TestDronePool(unittest.TestCase):
 		dronepool.drone_pool = { "test" : vehicle}
 		res = dronepool.land_drone("test")
 		self.assertEqual(res, False)
-
-
-
-
-suite = unittest.TestLoader().loadTestsFromTestCase(TestDronePool)
-unittest.TextTestRunner(verbosity=2).run(suite)
