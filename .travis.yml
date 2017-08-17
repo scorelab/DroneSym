@@ -5,4 +5,4 @@ python:
 
 install: "pip install -r dronesym-python/requirements.txt"
 
-script: pytest dronesym-python/flask-api/tests/test_dronepool.py
+script: pytest dronesym-python
