@@ -14,7 +14,11 @@ var sendSnapsot = function(snapshot,socket){
   snapshot.forEach(function(item){
     let drone = item.val();
 
-    if(drone.users.indexOf(userId) == -1){
+    let droneUsers = drone.users.map(function(user) {
+    	return user.userId;
+    });
+
+    if(droneUsers.indexOf(userId) == -1){
         return;
     }
 
@@ -53,7 +57,7 @@ exports.createDrone = function(name, location, userId, callBack){
 
 	console.log("Creating new drone");
 
-	var droneKey = droneRef.push({'name': name, 'users' : [userId], 'location': location, 'waypoints': [location] })
+	var droneKey = droneRef.push({'name': name, 'users' : [ { userId : userId, groupId : "creator" }], 'location': location, 'waypoints': [location] })
 
 	request.post(`${flaskUrl}/spawn`, { json : { droneId: droneKey.key, location: location } },
 	function(error, response, body){

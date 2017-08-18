@@ -1,7 +1,32 @@
 var User = require('../Models/user');
+var Group = require('../Models/group');
 var jwt = require('jsonwebtoken');
 var jwtConfig = require('../config/jwtconfig');
+var db = require('../db.js');
 
+
+var updateUsers = function(droneId, userInfo, insert=true) {
+	let droneRef = db.ref('drones/' + droneId + '/users');
+
+	droneRef.once("value", function(snapshot) {
+		var users = snapshot.val();
+
+		if(insert) {
+			users.push(userInfo);
+		}
+		else {
+			users = users.filter(function(user) {
+				return (user.userId != userInfo.userId && user.groupId != userInfo.groupId) || user.groupId === "creator";
+			});
+		}
+
+		if(users.length == 0) {
+			users.push(userInfo);
+		}
+
+		droneRef.set(users);
+	})
+}
 
 var tokenizeUserInfo = function(user){
 	var userInfo = {};
@@ -98,4 +123,39 @@ exports.authorizeUser = function(roles){
 			return;
 		}
 	}
+}
+
+exports.updateUserGroups = function(userId, groupId, insert=true, callBack) {
+	User.findOne({ _id : userId }, function(err, user) {
+		if(err) {
+			callBack({ status : "ERROR", msg : err });
+			return;
+		}
+
+		if(!user) {
+			callBack({ status : "ERROR", msg : "User not found" });
+			return;
+		}
+
+		Group.findOne({ _id : groupId }, function(err, group) {
+			if(err) {
+				callBack({ status : "ERROR", msg : err });
+				return;
+			}
+
+			if(!group) {
+				callBack({ status : "ERROR", msg : "Group not found" });
+				return;
+			}
+
+			let drones = group.drones;
+
+			drones.forEach(function(drone) {
+				let userInfo = { userId : userId, groupId : groupId };
+				updateUsers(drone, userInfo, insert);
+			});
+
+			callBack({ status : "OK" });
+		})
+	})
 }
