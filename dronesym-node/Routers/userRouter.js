@@ -26,4 +26,16 @@ router.get('/authenticate', authenticate, function(req, res){
 	res.json('Authorized');
 })
 
+router.post('/:groupId/add', authenticate, authorize(['admin']), function(req, res) {
+	userCtrl.updateUserGroups(req.body.userId, req.params.groupId, insert=true, function(status) {
+		res.json(status);
+	});
+});
+
+router.post('/:groupId/remove', authenticate, authorize(['admin']), function(req, res) {
+	userCtrl.updateUserGroups(req.body.userId, req.params.groupId, insert=false, function(status) {
+		res.json(status);
+	});
+});
+
 module.exports = router;
