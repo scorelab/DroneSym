@@ -91,4 +91,10 @@ export class UserService {
     return promise;
   }
 
+  public getUserList() :Promise<any> {
+    return this.http.get(`${this.baseUrl}/list`)
+               .map((res) => res.json())
+               .toPromise();
+  }
+
 }

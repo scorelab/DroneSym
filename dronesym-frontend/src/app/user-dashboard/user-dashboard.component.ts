@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../user-service/user.service';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -7,7 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserDashboardComponent implements OnInit {
 
-  constructor() { }
+  public userRole : string;
+
+  constructor(private userService :UserService) {
+  	userService.getUserRole().then((role) => {
+  		this.userRole = role;
+  	})
+  }
 
   ngOnInit() {
   }

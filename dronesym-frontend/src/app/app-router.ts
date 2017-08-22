@@ -11,6 +11,7 @@ import { UserViewComponent } from './user-view/user-view.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { DroneGroupsComponent } from './drone-groups/drone-groups.component';
 import { DroneListComponent } from './drone-list/drone-list.component';
+import { UserManagementComponent } from './user-management/user-management.component';
 
 const appRoutes: Routes = [
   {
@@ -43,17 +44,14 @@ const appRoutes: Routes = [
               path: 'list',
               component: DroneListComponent,
               canActivate: [ RouteGuardService ]
+            },
+            {
+              path: 'users',
+              component: UserManagementComponent,
+              canActivate: [ RouteGuardService ]
             }
         ]
       }
-    ]
-  },
-  {
-    path: 'signup',
-    component: UserSignupComponent,
-    canActivate: [
-      RouteGuardService,
-      AdminAuthorizeService
     ]
   },
   {

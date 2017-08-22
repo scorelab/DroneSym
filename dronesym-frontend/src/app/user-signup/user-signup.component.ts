@@ -1,15 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../user-service/user.service';
+import { MaterializeAction } from 'angular2-materialize';
 
 declare var Materialize;
 
 @Component({
-  selector: 'app-user-signup',
+  selector: 'user-signup',
   templateUrl: './user-signup.component.html',
   styleUrls: ['./user-signup.component.css']
 })
 export class UserSignupComponent implements OnInit {
+
+  modalActions = new EventEmitter<string|MaterializeAction>();
+
+  @Output('onResponse') onResponse = new EventEmitter<any>();
+  @Input()
+  set show(show: boolean){
+    if(show){
+      this.modalActions.emit({ action: 'modal', params:['open']});
+    }
+    else{
+      this.modalActions.emit({ action: 'modal', params:['close']});
+      this.onResponse.emit({ status : "CLOSED" });
+    }
+  }
+
 
   private user :any;
 
@@ -52,15 +68,17 @@ export class UserSignupComponent implements OnInit {
     this.userService.createUser(this.user.uname, this.user.password, this.user.role)
         .then((status) => {
           if(status.status === "OK"){
-            Materialize.toast("User created. Redirecting to dashboard...", 4000, '', () => {
-              this.router.navigate(['dashboard']);
-            });
+            Materialize.toast("User created successfully", 4000);
+            this.modalActions.emit({ action: 'modal', params:['close']});
+            this.onResponse.emit({ status : "CLOSED" });
           }
           else if(status.status === "ERROR"){
             Materialize.toast(status.msg, 4000);
+            this.onResponse.emit({ status : "ERROR", msg : status.msg });
           }
         }, (err) => {
           Materialize.toast("Oops something went wrong...", 4000);
+          this.onResponse.emit({ status : "ERROR", msg : err });
           console.log(err);
         })
     console.log(this.user);
@@ -70,6 +88,10 @@ export class UserSignupComponent implements OnInit {
     let role = $event.target.value.toLowerCase();
     this.user.role = role;
     console.log(this.user);
+  }
+
+  public cancel() {
+    this.onResponse.emit({ status : "CANCEL" });
   }
 
 }

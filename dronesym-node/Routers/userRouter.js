@@ -38,4 +38,10 @@ router.post('/:groupId/remove', authenticate, authorize(['admin']), function(req
 	});
 });
 
+router.get('/list', authenticate, authorize(['admin']), function(req, res) {
+	userCtrl.getUserList(req.user.id, function(status) {
+		res.json(status);
+	})
+});
+
 module.exports = router;
