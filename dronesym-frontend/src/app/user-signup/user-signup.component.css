@@ -11,3 +11,8 @@
 	height: 60px;
 	width: 60px;
 }
+
+#signupmodal{
+	width : 30%;
+	overflow: hidden;
+}

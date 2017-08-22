@@ -159,3 +159,21 @@ exports.updateUserGroups = function(userId, groupId, insert=true, callBack) {
 		})
 	})
 }
+
+exports.getUserList = function(userId, callBack) {
+	User.find({ _id : { $ne : userId }}, function(err, users) {
+		if(err) {
+			callBack({ status : "ERROR", msg : err });
+			return;
+		}
+
+		let filteredUsers = users.map(function(user) {
+			return {
+				id : user._id,
+				uname : user.uname
+			}
+		});
+
+		callBack({ status : "OK", users : filteredUsers });
+	})
+}

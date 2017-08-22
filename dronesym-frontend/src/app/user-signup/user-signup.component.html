@@ -1,5 +1,4 @@
-<div class="row signup-background">
-	<div class="col s4 offset-s4 login-card">
+<div id="signupmodal" class="modal" materialize="modal" [materializeActions]="modalActions">
 		<div class="card">
 			<div class="card-content">
 
@@ -13,7 +12,6 @@
 						<label for="username"> Username </label>
 						<input (input)="setUsername($event)" id="username" type="text"/>
 					</div>
-
 
 					<div class="input-field col s10 offset-s1" >
 						<select (change)="onRoleSelect($event)" materialize="material_select">
@@ -35,10 +33,10 @@
 
 
 					<div class="row">
-						<button (click) = "onSignup($event)" class="waves-effect waves-light btn blue darken-3 col s4 offset-s4">Create User</button>
+						<button (click) = "onSignup($event)" class="waves-effect waves-light btn blue darken-3 col s3 offset-s3">Create User</button>
+						<a (click)="cancel()" class="center-align waves-effect waves-red btn-flat col s3">Cancel</a>
 					</div>
 				</form>
 			</div>
 		</div>
-	</div>
 </div>

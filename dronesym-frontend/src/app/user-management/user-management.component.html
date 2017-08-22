@@ -1,0 +1,31 @@
+<div class="info-pane">
+	<div class="row">
+		<h4 class="info-header"> Manage Users </h4>
+		<div class="half-bar blue col s1"></div>
+		<div class="half-bar yellow col s1"></div>
+	</div>
+
+	<div class="row" *ngIf="userRole === 'admin'">
+		<a (click)="showCreateUserDialog()" class="waves-effect waves-light blue btn"><i class="material-icons medium left">gamepad</i> Create User </a>
+	</div>
+
+	<user-signup [show]="showUserSignUpDialog" (onResponse)="onUserSignupResponse()"> </user-signup>
+
+	<div class="row">
+		<ul materialize="collapsible" class="collapsible col s10" data-collapsible="accordion">
+			<li *ngFor="let user of users">
+
+	            <div class="collapsible-header"><h5> {{ user.uname }} </h5></div>
+
+	            <div class="collapsible-body">
+	            	<a (click)="showSelectGroupsDialog()" class="waves-effect waves-dark blue-text text-darken-2 btn-flat light-blue lighten-5"> <i class="material-icons large left">add</i> Add Groups</a>
+
+	            	<ul  *ngIf="groups.length > 0" class="collection">
+	            		<li *ngFor="let group of groups" class="collection-item"> {{ group.name }}<a (click)="removeFromGroup(group._id)" class="secondary-content tooltipped" data-delay="50" data-position="bottom" data-tooltip="Remove" materialize="tooltip"><i class="material-icons red-text">clear</i></a></li>
+	            	</ul>
+	            </div>
+	        </li>
+		</ul>
+	</div>
+</div>
+
