@@ -10,6 +10,7 @@
 	</div>
 
 	<user-signup [show]="showUserSignUpDialog" (onResponse)="onUserSignupResponse()"> </user-signup>
+	<drones-box [show]="showDroneGroupsDialog" [drones]="groups" [message]="'Select drone groups'" (onResponse)="onDronesBoxResponse($event)"> </drones-box>
 
 	<div class="row">
 		<ul materialize="collapsible" class="collapsible col s10" data-collapsible="accordion">
@@ -18,10 +19,10 @@
 	            <div class="collapsible-header"><h5> {{ user.uname }} </h5></div>
 
 	            <div class="collapsible-body">
-	            	<a (click)="showSelectGroupsDialog()" class="waves-effect waves-dark blue-text text-darken-2 btn-flat light-blue lighten-5"> <i class="material-icons large left">add</i> Add Groups</a>
+	            	<a (click)="showGroupsDialog(user.id)" class="waves-effect waves-dark blue-text text-darken-2 btn-flat light-blue lighten-5"> <i class="material-icons large left">add</i> Add Groups</a>
 
-	            	<ul  *ngIf="groups.length > 0" class="collection">
-	            		<li *ngFor="let group of groups" class="collection-item"> {{ group.name }}<a (click)="removeFromGroup(group._id)" class="secondary-content tooltipped" data-delay="50" data-position="bottom" data-tooltip="Remove" materialize="tooltip"><i class="material-icons red-text">clear</i></a></li>
+	            	<ul  *ngIf="user.groups.length > 0" class="collection">
+	            		<li *ngFor="let group of user.groups" class="collection-item"> {{ group.groupName }}<a (click)="removeFromGroup(user.id,group.groupId)" class="secondary-content tooltipped" data-delay="50" data-position="bottom" data-tooltip="Remove" materialize="tooltip"><i class="material-icons red-text">clear</i></a></li>
 	            	</ul>
 	            </div>
 	        </li>

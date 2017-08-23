@@ -33,13 +33,10 @@
 		</a>
 		<ul>
 			<li *ngIf="userRole === 'admin'" >
-				<a (click)="goToCreateDroneMode()" class="btn-floating green tooltipped" data-delay="50" data-position="left" data-tooltip="Drop new drone" materialize="tooltip"><i class="material-icons">location_on</i></a>
+				<a (click)="goToCreateDroneMode()" class="btn-floating yellow darken-3 tooltipped" data-delay="50" data-position="left" data-tooltip="Drop new drone" materialize="tooltip"><i class="material-icons">location_on</i></a>
 			</li>
 			<li>
 				<a (click)="toggleAllTrails()" class="btn-floating blue darken-3 tooltipped" data-delay="50" data-position="left" data-tooltip="Show/Hide Paths" materialize="tooltip"><i class="material-icons">timeline</i></a>
-			</li>
-			<li *ngIf = "userRole === 'admin'">
-				<a (click)="goToSignup()" class="btn-floating yellow darken-3 tooltipped" data-delay="50" data-position="left" data-tooltip="Create User" materialize="tooltip"><i class="material-icons">person_add</i></a>
 			</li>
 		</ul>
 	</div>

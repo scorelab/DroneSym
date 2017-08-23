@@ -17,16 +17,10 @@ var userSchema = mongoose.Schema({
 		required: true,
 		default: 'user'
 	},
-	users: {
+	groups: {
 		type : [{
-			userId : {
-				type : String,
-				required : true
-			},
-			userName : {
-				type : String,
-				require : true
-			}
+			groupId : String,
+			groupName : String
 		}],
 		default : []
 	}

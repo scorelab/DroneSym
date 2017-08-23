@@ -12,6 +12,10 @@ var groupSchema = mongoose.Schema({
 	drones: {
 		type: [String],
 		default: []
+	},
+	users: {
+		type: [String],
+		default : []
 	}
 })
 

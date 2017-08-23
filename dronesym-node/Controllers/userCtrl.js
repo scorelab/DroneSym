@@ -5,7 +5,8 @@ var jwtConfig = require('../config/jwtconfig');
 var db = require('../db.js');
 
 
-var updateUsers = function(droneId, userInfo, insert=true) {
+var updateFirebase = function(droneId, userInfo, insert=true) {
+
 	let droneRef = db.ref('drones/' + droneId + '/users');
 
 	droneRef.once("value", function(snapshot) {
@@ -18,10 +19,6 @@ var updateUsers = function(droneId, userInfo, insert=true) {
 			users = users.filter(function(user) {
 				return (user.userId != userInfo.userId && user.groupId != userInfo.groupId) || user.groupId === "creator";
 			});
-		}
-
-		if(users.length == 0) {
-			users.push(userInfo);
 		}
 
 		droneRef.set(users);
@@ -39,6 +36,14 @@ var tokenizeUserInfo = function(user){
 	});
 
 	return token;
+}
+
+var filterUser = function(user) {
+	return {
+		id : user._id,
+		uname : user.uname,
+		groups : user.groups
+	}
 }
 
 exports.createUser = function(uname, password, role, callBack){
@@ -126,36 +131,54 @@ exports.authorizeUser = function(roles){
 }
 
 exports.updateUserGroups = function(userId, groupId, insert=true, callBack) {
-	User.findOne({ _id : userId }, function(err, user) {
+
+	Group.findOne({ _id : groupId }, function(err, group) {
+
 		if(err) {
 			callBack({ status : "ERROR", msg : err });
 			return;
 		}
 
-		if(!user) {
-			callBack({ status : "ERROR", msg : "User not found" });
+		if(!group) {
+			callBack({ status : "ERROR", msg : "Group not found" });
 			return;
 		}
 
-		Group.findOne({ _id : groupId }, function(err, group) {
+		let groupInfo = { userId : userId, groupId : groupId, groupName : group.name };
+
+		User.findOne({ _id : userId }, function(err, user) {
+
 			if(err) {
 				callBack({ status : "ERROR", msg : err });
 				return;
 			}
 
-			if(!group) {
-				callBack({ status : "ERROR", msg : "Group not found" });
-				return;
-			}
-
 			let drones = group.drones;
 
-			drones.forEach(function(drone) {
-				let userInfo = { userId : userId, groupId : groupId };
-				updateUsers(drone, userInfo, insert);
+			drones.forEach(function(droneId) {
+				updateFirebase(droneId, groupInfo, insert);
 			});
 
-			callBack({ status : "OK" });
+			if(insert) {
+				User.findOneAndUpdate({ _id : userId }, { $push : { groups : groupInfo }} , { new : true }, function(err, user) {
+					if(err) {
+						callBack({ status : "ERROR", msg : err });
+						return;
+					}
+
+					callBack({ status : "OK", user : filterUser(user)});
+				});
+			}
+			else {
+				User.findOneAndUpdate({ _id : userId }, { $pull : { groups : { $in : [{ groupId : groupId }]}}}, { new : true }, function(err, user) {
+					if(err) {
+						callBack({ status : "ERROR" });
+						return;
+					}
+
+					callBack({ status : "OK", user : filterUser(user) });
+				});
+			}
 		})
 	})
 }
@@ -167,10 +190,21 @@ exports.getUserList = function(userId, callBack) {
 			return;
 		}
 
+		if(!users) {
+			callBack({ status : "ERROR", msg : "No user found"});
+			return;
+		}
+
 		let filteredUsers = users.map(function(user) {
 			return {
 				id : user._id,
-				uname : user.uname
+				uname : user.uname,
+				groups : user.groups.map((drone) => {
+					return {
+						groupId : drone.groupId,
+						groupName : drone.groupName
+					}
+				})
 			}
 		});
 
