@@ -1,6 +1,7 @@
 var request = require('request');
 var io = require('../websocket').connection;
 var Group = require('../Models/group');
+var User = require('../Models/user');
 var db = require('../db');
 
 var droneRef = db.ref('/drones');
@@ -124,11 +125,19 @@ exports.createGroup = function(groupName, userId, callBack){
 exports.removeGroup = function(groupId, callBack){
 	Group.findOneAndRemove({ _id : groupId }, function(err, group){
 		if(err){
-			callBack({ status : "ERROR", msg: err });
+			callBack({ status : "ERROR", msg : err });
 			return;
 		}
-		callBack({ status : "OK", group : group });
-	})
+
+		User.update({}, { $pull : { groups : { $in : { groupId : groupId }}}}, function(err, group) {
+			if(err) {
+				callBack({ status : "ERROR", msg : err });
+				return;
+			}
+
+			callBack({ status : "OK", group : group });
+		});
+	});
 }
 
 exports.getGroups = function(userId, callBack){
@@ -137,9 +146,8 @@ exports.getGroups = function(userId, callBack){
 			callBack({ status : "ERROR", msg: err });
 			return;
 		}
-
 		callBack({ status : "OK", groups : groups });
-	})
+	});
 }
 
 exports.addToGroup = function(groupId, drones, callBack){
@@ -149,7 +157,7 @@ exports.addToGroup = function(groupId, drones, callBack){
 			return;
 		}
 		callBack({ status : "OK", group : group});
-	})
+	});
 }
 
 exports.removeFromGroup = function(groupId, droneId, callBack){
@@ -160,7 +168,7 @@ exports.removeFromGroup = function(groupId, droneId, callBack){
 		}
 		callBack({ status : "OK", group : group });
 
-	})
+	});
 }
 
 exports.updateWaypoints = function(id, waypoints, callBack){

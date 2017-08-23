@@ -97,4 +97,16 @@ export class UserService {
                .toPromise();
   }
 
+  public addUserToGroup(userId, groupId) :Promise<any> {
+    return this.http.post(`${this.baseUrl}/${groupId}/add`, { userId : userId })
+               .map((res) => res.json())
+               .toPromise();
+  }
+
+  public removeUserFromGroup(userId, groupId) :Promise<any> {
+    return this.http.post(`${this.baseUrl}/${groupId}/remove`, { userId : userId })
+               .map((res) => res.json())
+               .toPromise();
+  }
+
 }
