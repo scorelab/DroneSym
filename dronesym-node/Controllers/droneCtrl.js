@@ -1,6 +1,7 @@
 var request = require('request');
 var io = require('../websocket').connection;
 var Group = require('../Models/group');
+var User = require('../Models/user');
 var db = require('../db');
 
 var droneRef = db.ref('/drones');
@@ -14,7 +15,11 @@ var sendSnapsot = function(snapshot,socket){
   snapshot.forEach(function(item){
     let drone = item.val();
 
-    if(drone.users.indexOf(userId) == -1){
+    let droneUsers = drone.users.map(function(user) {
+    	return user.userId;
+    });
+
+    if(droneUsers.indexOf(userId) == -1){
         return;
     }
 
@@ -53,7 +58,7 @@ exports.createDrone = function(name, location, userId, callBack){
 
 	console.log("Creating new drone");
 
-	var droneKey = droneRef.push({'name': name, 'users' : [userId], 'location': location, 'waypoints': [location] })
+	var droneKey = droneRef.push({'name': name, 'users' : [ { userId : userId, groupId : "creator" }], 'location': location, 'waypoints': [location] })
 
 	request.post(`${flaskUrl}/spawn`, { json : { droneId: droneKey.key, location: location } },
 	function(error, response, body){
@@ -120,11 +125,19 @@ exports.createGroup = function(groupName, userId, callBack){
 exports.removeGroup = function(groupId, callBack){
 	Group.findOneAndRemove({ _id : groupId }, function(err, group){
 		if(err){
-			callBack({ status : "ERROR", msg: err });
+			callBack({ status : "ERROR", msg : err });
 			return;
 		}
-		callBack({ status : "OK", group : group });
-	})
+
+		User.update({}, { $pull : { groups : { $in : { groupId : groupId }}}}, function(err, group) {
+			if(err) {
+				callBack({ status : "ERROR", msg : err });
+				return;
+			}
+
+			callBack({ status : "OK", group : group });
+		});
+	});
 }
 
 exports.getGroups = function(userId, callBack){
@@ -133,9 +146,8 @@ exports.getGroups = function(userId, callBack){
 			callBack({ status : "ERROR", msg: err });
 			return;
 		}
-
 		callBack({ status : "OK", groups : groups });
-	})
+	});
 }
 
 exports.addToGroup = function(groupId, drones, callBack){
@@ -145,7 +157,7 @@ exports.addToGroup = function(groupId, drones, callBack){
 			return;
 		}
 		callBack({ status : "OK", group : group});
-	})
+	});
 }
 
 exports.removeFromGroup = function(groupId, droneId, callBack){
@@ -156,7 +168,7 @@ exports.removeFromGroup = function(groupId, droneId, callBack){
 		}
 		callBack({ status : "OK", group : group });
 
-	})
+	});
 }
 
 exports.updateWaypoints = function(id, waypoints, callBack){
