@@ -1,9 +1,19 @@
 <div id="dialog" class="modal" materialize="modal" [materializeActions]="modalActions">
     <div class="modal-content">
-      <h5 class=".center-align">Put it here?</h5>
+      <h5 class=".center-align">{{ message }}</h5>
     </div>
-    <div class="modal-footer">
-      <a (click)="confirm()" class="modal-action modal-close waves-effect waves-blue btn-flat">Yes</a>
-      <a (click)="cancel()" class="modal-action modal-close waves-effect waves-red btn-flat">No</a>
-    </div>
+
+    <form materialize *ngIf="inputEnabled">
+    	<div class="row">
+	    	<div class="input-field col s6 offset-s3">
+				<label for="name"> Name </label>
+				<input (input)="setName($event)" id="name" type="text"/>
+			</div>
+		</div>
+    </form>
+
+	<div class="modal-footer">
+	  <a (click)="confirm()" class="modal-action modal-close waves-effect waves-blue btn-flat">Continue</a>
+	  <a (click)="cancel()" class="modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
+	</div>
 </div>

@@ -20,6 +20,12 @@ import { DroneOptionBoxComponent } from './drone-option-box/drone-option-box.com
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { UserSignupComponent } from './user-signup/user-signup.component';
+import { UserViewComponent } from './user-view/user-view.component';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { DroneGroupsComponent } from './drone-groups/drone-groups.component';
+import { DroneListComponent } from './drone-list/drone-list.component';
+import { DronesBoxComponent } from './drones-box/drones-box.component';
+import { UserManagementComponent } from './user-management/user-management.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +35,13 @@ import { UserSignupComponent } from './user-signup/user-signup.component';
     DroneOptionBoxComponent,
     DashboardComponent,
     LoginComponent,
-    UserSignupComponent
+    UserSignupComponent,
+    UserViewComponent,
+    UserDashboardComponent,
+    DroneGroupsComponent,
+    DroneListComponent,
+    DronesBoxComponent,
+    UserManagementComponent
   ],
   imports: [
     BrowserModule,

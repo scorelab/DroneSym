@@ -7,10 +7,11 @@ import mavparser
 
 drone_pool = {}
 instance_count = 0
+env_test = False
 
 class Sim(SITL, object):
 	def __init__(self, instance=1, home=None):
-		super(Sim, self).download("copter", "3.3", verbose=True)
+		super(Sim, self).download("copter", "3.3", verbose=not env_test)
 		self.instance = instance
 
 		if home:
@@ -26,7 +27,7 @@ class Sim(SITL, object):
 
 	def launch(self):
 		home_str = str(self.home['lat']) + ',' + str(self.home['lon']) + ',0,353'
-		super(Sim, self).launch(["--instance", str(self.instance), "--home", home_str], await_ready=True, verbose=True)
+		super(Sim, self).launch(["--instance", str(self.instance), "--home", home_str], await_ready=True, verbose=not env_test)
 
 	def get_sitl_status(self):
 		return { 'id': self.instance, 'home': self.home }
@@ -71,6 +72,20 @@ def create_new_drone(home=None, db_key=None):
 
 	res = { "status" : "OK", "id" : db_key }
 	return res
+
+def remove_drone(drone_id):
+	if drone_id not in drone_pool:
+		return { "status" : "ERROR", "msg" : "Drone instance not found" }
+
+	drone = drone_pool[drone_id]
+
+	if drone.mode == VehicleMode('AUTO'):
+		return { "status" : "ERROR", "msg" : "Drone in operation" }
+
+	del drone_pool[drone_id]
+
+	return { "status" : "OK", "id" : drone_id }
+
 
 def run_mission(drone, target_height, waypoints):
 	while True:

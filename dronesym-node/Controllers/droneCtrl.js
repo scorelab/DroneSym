@@ -1,45 +1,174 @@
 var request = require('request');
 var io = require('../websocket').connection;
+var Group = require('../Models/group');
+var User = require('../Models/user');
 var db = require('../db');
 
 var droneRef = db.ref('/drones');
 
 var flaskUrl = 'http://flask:5000/dronesym/api/flask';
 
-var sendSnapsot = function(snapshot){
+var sendSnapsot = function(snapshot,socket){
   var array = [];
+  var userId = socket.decoded_token.id;
 
   snapshot.forEach(function(item){
-    itemVal = item.val();
-    itemVal['key'] = item.key;
-    array.push(itemVal);
+    let drone = item.val();
+
+    let droneUsers = drone.users.map(function(user) {
+    	return user.userId;
+    });
+
+    if(droneUsers.indexOf(userId) == -1){
+        return;
+    }
+
+    drone['key'] = item.key;
+    delete drone['users'];
+
+    array.push(drone);
   });
 
-  io.emit('SOCK_FEED_UPDATE', array);
+  socket.emit('SOCK_FEED_UPDATE', array);
 }
 
 io.on('connection', function(socket){
 	console.log('FEED_SUBSCRIPTION');
+	var userId = socket.decoded_token.id;
 
-  //Initial drone data sent to client on first connection
+	socket.emit('hello', userId);
+
+  	//Initial drone data sent to client on first connection
 	droneRef.once("value", function(snapshot){
-    sendSnapsot(snapshot);
-  })
+    	sendSnapsot(snapshot, socket);
+  	})
+
+	droneRef.on("value", function(snapshot){
+		sendSnapsot(snapshot, socket);
+	})
 });
 
 //Send update drone data upon change to firebase
-droneRef.on("value", function(snapshot){
-	sendSnapsot(snapshot);
-})
 
-exports.createDrone = function(location, callBack){
-	var droneKey = droneRef.push({'location': location, 'waypoints': [location] });
+exports.createDrone = function(name, location, userId, callBack){
+	if(!name  || name === ''){
+		callBack({ status : "ERROR", msg: "Drone name is required"});
+		return;
+	}
+
+	console.log("Creating new drone");
+
+	var droneKey = droneRef.push({'name': name, 'users' : [ { userId : userId, groupId : "creator" }], 'location': location, 'waypoints': [location] })
 
 	request.post(`${flaskUrl}/spawn`, { json : { droneId: droneKey.key, location: location } },
 	function(error, response, body){
 		console.log(body);
 		callBack(body);
 	})
+}
+
+exports.removeDrone = function(droneId, droneStatus, callBack){
+	if(droneStatus === "FLYING"){
+		callBack({ status : "ERROR", msg : "Drone in flight"});
+		return;
+	}
+
+	var removeFromGroups = function(droneId){
+		Group.update({ drones : { $in : [droneId]}}, { $pull : { drones : droneId }}, { multi : true }, function(err, group){
+			if(err){
+				console.log(err);
+				return;
+			}
+		})
+	}
+
+	request.post(`${flaskUrl}/remove/${droneId}`, {}, function(error, response, body){
+		if(error){
+			callBack({ status : "ERROR", msg : "Connection error"});
+			return;
+		}
+
+		removeFromGroups(droneId);
+		droneRef.child(droneId).remove();
+		callBack(JSON.parse(body));
+	})
+}
+
+exports.createGroup = function(groupName, userId, callBack){
+	if(!groupName || groupName === ""){
+		callBack( { status : "ERROR", msg: "Group name must be specified"});
+		return;
+	}
+
+	Group.find({ name : groupName }, function(err, groups){
+		if(groups.length > 0){
+			callBack({ status : "ERROR", msg : "Group Exists"});
+			return;
+		}
+
+
+		var group = new Group();
+		group.name = groupName;
+		group.userId = userId;
+
+		group.save(function(err, group){
+			if(err){
+				callBack({ status : "ERROR", msg : err })
+				return;
+			}
+
+			callBack({ status : "OK", group : group });
+		})
+	})
+}
+
+exports.removeGroup = function(groupId, callBack){
+	Group.findOneAndRemove({ _id : groupId }, function(err, group){
+		if(err){
+			callBack({ status : "ERROR", msg : err });
+			return;
+		}
+
+		User.update({}, { $pull : { groups : { $in : { groupId : groupId }}}}, function(err, group) {
+			if(err) {
+				callBack({ status : "ERROR", msg : err });
+				return;
+			}
+
+			callBack({ status : "OK", group : group });
+		});
+	});
+}
+
+exports.getGroups = function(userId, callBack){
+	Group.find({ userId : userId }, function(err, groups){
+		if(err){
+			callBack({ status : "ERROR", msg: err });
+			return;
+		}
+		callBack({ status : "OK", groups : groups });
+	});
+}
+
+exports.addToGroup = function(groupId, drones, callBack){
+	Group.findOneAndUpdate({ _id : groupId }, { $push : { drones : { $each : drones }}}, { new : true }, function(err, group){
+		if(err){
+			callBack({ status : "ERROR", msg : err });
+			return;
+		}
+		callBack({ status : "OK", group : group});
+	});
+}
+
+exports.removeFromGroup = function(groupId, droneId, callBack){
+	Group.findOneAndUpdate({ _id : groupId }, { $pull : { drones : droneId }}, { new : true }, function(err, group){
+		if(err){
+			callBack({ status : "ERROR", msg : err });
+			return;
+		}
+		callBack({ status : "OK", group : group });
+
+	});
 }
 
 exports.updateWaypoints = function(id, waypoints, callBack){
@@ -62,12 +191,11 @@ exports.getDroneIds = function(callBack){
 		snapshot.forEach(function(drone){
 			drones.push(drone.key);
 		});
-
 		callBack(drones);
 	});
 }
 
-exports.updateDroneStatus = function(id, status){
+exports.updateDroneStatus = function(id, status, callBack){
 	var timestamp = new Date();
 	status["timestamp"] = timestamp.valueOf();
 	droneRef.child(id).update(status, function(err){
@@ -75,6 +203,7 @@ exports.updateDroneStatus = function(id, status){
 			console.log(err);
 			return;
 		}
+		callBack({ status : "OK", update : status });
 	});
 }
 

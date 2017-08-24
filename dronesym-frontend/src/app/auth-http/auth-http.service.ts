@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/operator/map';
+import 'rxjs/operator/share';
 
 @Injectable()
 export class AuthHttpService {
@@ -18,7 +19,7 @@ export class AuthHttpService {
   }
 
   private checkAuthorization(request: Observable<any>): Observable<any>{
-    request.subscribe((res) => {
+    request.map((res) => {
       let json = res.json();
       if(json === 'Unauthorized'){
         this.router.navigate(['login']);

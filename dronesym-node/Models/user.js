@@ -16,6 +16,13 @@ var userSchema = mongoose.Schema({
 		lowercase: true,
 		required: true,
 		default: 'user'
+	},
+	groups: {
+		type : [{
+			groupId : String,
+			groupName : String
+		}],
+		default : []
 	}
 }, { timestamps: true });
 

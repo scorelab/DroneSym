@@ -1,0 +1,21 @@
+<div id="dialog" class="modal" materialize="modal" [materializeActions]="modalActions">
+    <div class="modal-content">
+      <h5 class=".center-align">{{ message }}</h5>
+    </div>
+
+    <form materialize>
+    	<div class="row">
+	    	<ul  *ngIf="drones.length > 0" class="collection col s8 offset-s2">
+	        	<li *ngFor="let drone of drones" class="collection-item list-item">
+	        		<input (click)="toggleDrone(drone.key)" [id]="drone.name" type="checkbox" class="filled-in" [checked]="isSelected(drone.key)">
+	        		<label [for]="drone.name"> {{ drone.name }} </label>
+	        	</li>
+	        </ul>
+		</div>
+    </form>
+
+	<div class="modal-footer">
+	  <a (click)="confirm()" class="modal-action modal-close waves-effect waves-blue btn-flat">Continue</a>
+	  <a (click)="cancel()" class="modal-action modal-close waves-effect waves-red btn-flat">No</a>
+	</div>
+</div>

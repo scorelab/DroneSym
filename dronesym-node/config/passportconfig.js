@@ -9,7 +9,6 @@ var jwtOptions = {
 }
 
 var jwtAuthenticate = new JwtStrategy(jwtOptions, function(payload, done){
-	console.log(payload);
 
 	User.findById(payload.id, function(err, user){
 		if(err){
