@@ -2,12 +2,17 @@
 
 from dronekit import Vehicle, VehicleMode, connect
 from dronekit_sitl import SITL
+from threading import Lock
 import node, time
 import mavparser
+import threadrunner
 
 drone_pool = {}
 instance_count = 0
 env_test = False
+
+q = None
+mq = None
 
 class Sim(SITL, object):
 	def __init__(self, instance=1, home=None):
@@ -33,6 +38,9 @@ class Sim(SITL, object):
 		return { 'id': self.instance, 'home': self.home }
 
 def initialize():
+	global q, mq, instance_count
+	q = threadrunner.q
+	mq = threadrunner.mq
 
 	drones = node.get_drones()['drones']
 
@@ -43,12 +51,16 @@ def initialize():
 		if drone_id not in drone_pool.keys():
 			drone = node.get_drone_by_id(drone_id)
 			location = drone['location']
-			create_new_drone(db_key=drone_id, home=location)
+			q.put((create_new_drone, { "db_key" : drone_id, "home" : location, "instance_count" : instance_count }))
+			instance_count += 1
 
 			if 'status' in drone.keys() and drone['status'] == 'FLYING':
-				resume_flight(drone_id)
+				while drone_id not in drone_pool.keys():
+					time.sleep(1)
+				q.put((resume_flight, { "drone_id" : drone_id }))
 
-def resume_flight(drone_id):
+def resume_flight(kwargs):
+	drone_id = kwargs.get("drone_id", None)
 	drone = node.get_drone_by_id(drone_id)
 
 	waypoints = []
@@ -59,21 +71,24 @@ def resume_flight(drone_id):
 	next_waypoint = waypoints.index(drone['waypoint'])
 	print next_waypoint
 
-	takeoff_drone(drone_id, waypoints=waypoints[next_waypoint:])
+	q.put((takeoff_drone, { "drone_id" : drone_id, "waypoints" : waypoints[next_waypoint:] }))
 
-def create_new_drone(home=None, db_key=None):
-	global instance_count
+def create_new_drone(kwargs):
+	home = kwargs.get("home", None)
+	db_key = kwargs.get("db_key", None)
+	instance_count = kwargs.get("instance_count", 1)
+
 	drone = Sim(instance_count, home)
 	drone.launch()
 	drone_conn = connect(drone.connection_string(), wait_ready=True)
 
 	drone_pool[db_key] = drone_conn
-	instance_count += 1
 
 	res = { "status" : "OK", "id" : db_key }
 	return res
 
-def remove_drone(drone_id):
+def remove_drone(kwargs):
+	drone_id = kwargs.get("drone_id", None)
 	if drone_id not in drone_pool:
 		return { "status" : "ERROR", "msg" : "Drone instance not found" }
 
@@ -89,6 +104,7 @@ def remove_drone(drone_id):
 
 def run_mission(drone, target_height, waypoints):
 	while True:
+		print "Reaching target alt : " + str(drone.location.global_relative_frame.alt)
 		if drone.location.global_relative_frame.alt >= target_height * 0.9:
 			break
 
@@ -102,7 +118,21 @@ def run_mission(drone, target_height, waypoints):
 
 	print 'in mission'
 
-def takeoff_drone(drone_id, target_height=10, waypoints=None):
+def attach_listener(kwargs):
+	attr = kwargs.get('attr', None)
+	fn = kwargs.get('fn', None)
+	attach_fn = kwargs.get('attach_fn', None)
+
+	if not fn == None and not attr == None and not attach_fn == None:
+		attach_fn(attr, fn)
+
+def takeoff_drone(kwargs):
+	global q
+
+	drone_id = kwargs.get("drone_id", None)
+	target_height = kwargs.get("target_height", 10)
+	waypoints = kwargs.get("waypoints", None)
+
 	try:
 		drone = drone_pool[drone_id]
 	except:
@@ -167,16 +197,17 @@ def takeoff_drone(drone_id, target_height=10, waypoints=None):
 	def update_heading(self, attr_name, value):
 		node.update_drone(drone_id, { "heading": value })
 
-	drone.add_attribute_listener('location', update_location)
-	drone.add_attribute_listener('airspeed', update_airspeed)
-	drone.add_attribute_listener('attitude', udpate_attitude)
-	drone.add_attribute_listener('heading', update_heading)
+	mq.put((attach_listener, { "attach_fn" : drone.add_attribute_listener, "attr" : 'location', "fn" : update_location }))
+	mq.put((attach_listener, { "attach_fn" : drone.add_attribute_listener, "attr" : 'airspeed', "fn" : update_airspeed }))
+	mq.put((attach_listener, { "attach_fn" : drone.add_attribute_listener, "attr" : 'attitude', "fn" : udpate_attitude }))
+	mq.put((attach_listener, { "attach_fn" : drone.add_attribute_listener, "attr" : 'heading', "fn" : update_heading }))
 
 	print 'took off'
 
 	return True
 
-def land_drone(drone_id):
+def land_drone(kwargs):
+	drone_id = kwargs.get("drone_id", None)
 	try:
 		drone = drone_pool[drone_id]
 	except:
@@ -190,5 +221,5 @@ def land_drone(drone_id):
 	cmds.clear()
 
 	drone.mode = VehicleMode('LAND')
-
+	print drone.mode
 	return True
