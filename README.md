@@ -16,6 +16,8 @@
 4. In `db.js` file provide the path to your firebase key file and the database url
 5. Run `npm start` to start the Node server
 
+**Note: Make sure you have an admin account in the database under user collection. (Refer the schema in Models folder)**
+
 
 ### Part 2 - Setting up Python environment
 
