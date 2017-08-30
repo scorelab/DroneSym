@@ -13,6 +13,7 @@ env_test = False
 
 q = None
 mq = None
+lock = Lock()
 
 class Sim(SITL, object):
 	def __init__(self, instance=1, home=None):
@@ -51,12 +52,9 @@ def initialize():
 		if drone_id not in drone_pool.keys():
 			drone = node.get_drone_by_id(drone_id)
 			location = drone['location']
-			q.put((create_new_drone, { "db_key" : drone_id, "home" : location, "instance_count" : instance_count }))
-			instance_count += 1
+			q.put((create_new_drone, { "db_key" : drone_id, "home" : location }))
 
 			if 'status' in drone.keys() and drone['status'] == 'FLYING':
-				while drone_id not in drone_pool.keys():
-					time.sleep(1)
 				q.put((resume_flight, { "drone_id" : drone_id }))
 
 def resume_flight(kwargs):
@@ -74,13 +72,24 @@ def resume_flight(kwargs):
 	q.put((takeoff_drone, { "drone_id" : drone_id, "waypoints" : waypoints[next_waypoint:] }))
 
 def create_new_drone(kwargs):
+	global instance_count
+	instance_count += 1
 	home = kwargs.get("home", None)
 	db_key = kwargs.get("db_key", None)
-	instance_count = kwargs.get("instance_count", 1)
+
+	retries = 3
 
 	drone = Sim(instance_count, home)
 	drone.launch()
-	drone_conn = connect(drone.connection_string(), wait_ready=True)
+
+	while retries > 0:
+		try:
+			drone_conn = connect(drone.connection_string(), wait_ready=True)
+			break
+		except:
+			print "Retrying..."
+			retries -= 1
+
 
 	drone_pool[db_key] = drone_conn
 
@@ -139,9 +148,6 @@ def takeoff_drone(kwargs):
 		raise
 
 	drone.initialize()
-
-	while not drone.is_armable:
-		time.sleep(1)
 
 	drone.mode = VehicleMode('GUIDED')
 	drone.armed = True
