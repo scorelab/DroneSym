@@ -14,7 +14,8 @@
 2. Run `npm install` to pull the dependencies
 3. Create a firebase admin sdk private key following the instructions found here: https://firebase.google.com/docs/admin/setup#add_firebase_to_your_app
 4. In `db.js` file provide the path to your firebase key file and the database url
-5. Run `npm start` to start the Node server
+5. Import the database with `mongorestore --db dronesym dronedb/dronesym`
+6. Run `npm start` to start the Node server
 
 
 ### Part 2 - Setting up Python environment
@@ -48,6 +49,20 @@ Starting the Angular2 development server
 ```sh
 $ npm install
 $ ng serve
+```
+
+### Default login credentials
+
+#### Admin
+```
+username: admin
+password: admin
+```
+
+#### User
+```
+username: icarus
+password: icarus
 ```
 
 ### Part 4 - Running with Docker (Optional)
