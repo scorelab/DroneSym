@@ -1,6 +1,8 @@
 # DroneSym
 [![Build Status](https://travis-ci.org/scorelab/DroneSym.svg?branch=master)](https://travis-ci.org/scorelab/DroneSym)
 
+In memory of [Hasanga Somaratne](https://github.com/hasa93) - Brilliant engineer, caring brother, and most excellent friend. This project is dedicated to you
+
 ### Setting Up the Project
 
 ### Prerequisites
