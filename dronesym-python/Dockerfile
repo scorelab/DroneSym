@@ -5,7 +5,7 @@ COPY requirements.txt /usr/src/app
 RUN pip install -r requirements.txt
 COPY ./flask-api/src /usr/src/app
 EXPOSE 5000
-CMD ["python", "-u", "main.py"LABEL multi.org.label-schema.name = "DroneSym" \
+CMD ["python", "-u",]
       
 LABEL multi.org.label-schema.name = "DroneSym" \
       multi.org.label-schema.description = "Dronesym is a platform enabling users to handle and track their drone fleets in real time. Users can have functionality to add new drones configure their flight paths and monitor their progress through a web dashboard." \
