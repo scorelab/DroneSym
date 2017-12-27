@@ -13,6 +13,6 @@ LABEL multi.org.label-schema.name = "DroneSym" \
       multi.org.label-schema.vcs-url = "https://github.com/scorelab/DroneSym" \
       multi.org.label-schema.vcs-ref = "" \
       multi.org.label-schema.vendor = "Sustainable Computing Research Group" \
-      multi.org.label-schema.version = "09-December-2017" \
+      multi.org.label-schema.version = "" \
       multi.org.label-schema.schema-version = "1.0" \
       multi.org.label-schema.build-date = ""
