@@ -54,7 +54,7 @@
   "description" :"Application For Controlling Drone Systems Remotely",
   "keywords":["npm","nodejs","mongodb","firebase","drone","python","angularjs","googlemaps"],
   "bugs":"https://github.com/scorelab/DroneSym/issues",
-  "author":"iammosespaulr",
+  "author":"SCoRe Community",
   "contributors":["hasa93","rhperera","malithsen","charithccmc","iammosespaulr"],
   "repository":"https://github.com/scorelab/DroneSym",
   "homepage":"http://www.scorelab.org/",
