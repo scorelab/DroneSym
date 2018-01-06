@@ -10,6 +10,14 @@
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
+  "description" :"Application For Controlling Drone Systems Remotely",
+  "keywords":["npm","nodejs","mongodb","firebase","drone","python","angularjs","googlemaps"],
+  "bugs":"https://github.com/scorelab/DroneSym/issues",
+  "author":"SCoRe Community",
+  "contributors":["hasa93","rhperera","malithsen","charithccmc","iammosespaulr"],
+  "repository":"https://github.com/scorelab/DroneSym",
+  "homepage":"http://www.scorelab.org/",
+  "engines":{} ,
   "private": true,
   "dependencies": {
     "@agm/core": "^1.0.0-beta.0",
@@ -50,5 +58,5 @@
     "ts-node": "~3.0.4",
     "tslint": "~5.3.2",
     "typescript": "~2.3.3"
-  }
+  }  
 }
