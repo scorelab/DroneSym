@@ -19,12 +19,20 @@ element(by.css('form>div:nth-of-type(1)>input')).click();
 element(by.css('form>div:nth-of-type(1)>input')).clear().sendKeys('admin'); //use correct login credentials
 element(by.css('form>div:nth-of-type(2)>input')).clear().sendKeys('admin');
 element(by.css('button')).click(); //login button
-element(by.css('nav>div>ul>li:nth-of-type(1)>a>i')).click();
+  });
+});
+describe('Nav Buttons Check', function() {
+it('should check Navigation Buttons i.e Dashboard', function() {
+element(by.css('nav>div>ul>li:nth-of-type(1)>a>i')).click();// Click the Dashboard button
+});
+it('Should Create Test Drone Group', function() {
 element(by.css('div:nth-of-type(4)>a')).click();
-element(by.css('confirm-dialog>div:nth-of-type(1)>form>div:nth-of-type(1)>div>label')).click(); //check all the buttons 
+element(by.css('confirm-dialog>div:nth-of-type(1)>form>div:nth-of-type(1)>div>label')).click(); 
 element(by.css('confirm-dialog>div:nth-of-type(1)>form>div:nth-of-type(1)>div>input')).click();
 element(by.css('confirm-dialog>div:nth-of-type(1)>form>div:nth-of-type(1)>div>input')).clear().sendKeys('Test'); //add drone test
 element(by.css('div:nth-of-type(4)>a:nth-of-type(1)')).click();
+});
+it('should click on manage drones and next click on manage users and create a test user', function() {
 element(by.css('app-user-dashboard>ul:nth-of-type(1)>div:nth-of-type(2)>a:nth-of-type(2)>div')).click();
 element(by.css('a:nth-of-type(3)>div')).click();
 element(by.css('div:nth-of-type(4)>a')).click();
@@ -36,7 +44,9 @@ element(by.css('div:nth-of-type(5)>label')).click();
 element(by.css('div:nth-of-type(5)>input')).click();
 element(by.css('div:nth-of-type(5)>input')).clear().sendKeys('test'); // add confirmation password test
 element(by.css('button')).click();
-element(by.css('div:nth-of-type(36)>div')).click();
+});
+it('should check Navigation Buttons i.e  Map and also check map functionality i.e zoom in, out and also drop a test drone', function() {
+element(by.css('div:nth-of-type(36)>div')).click(); // click on map
 element(by.css('app-user-view>nav:nth-of-type(1)>div>ul>li:nth-of-type(2)>a')).click();     //// Check all the map functionalities
 element(by.css('div:nth-of-type(125)>div:nth-of-type(1)>a:nth-of-type(1)>i')).click();
 element(by.css('button[aria-label="Zoom in"]>div>img')).click();
