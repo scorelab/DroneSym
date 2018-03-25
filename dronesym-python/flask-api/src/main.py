@@ -1,9 +1,7 @@
 #Main entry point for the Flask API. The API will provide
 #an interface to communicate with Dronekit instances
 
-from flask import jsonify, Flask
-from flask import abort, request
-from flask import make_response
+from flask import jsonify, abort, request, make_response, Flask
 import json, dronepool
 
 app = Flask(__name__)
