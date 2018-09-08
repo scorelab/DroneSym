@@ -14,6 +14,7 @@ var sockConn = require('./websocket').init(http);
 
 var droneRouter = require('./Routers/droneRouter');
 var userRouter = require('./Routers/userRouter');
+var authRouter = require('./Routers/authRouter')
 var mongoConfig = require('./config/mongoconfig');
 
 app.use(logger('dev'));
@@ -24,6 +25,7 @@ app.use(cors());
 //passport configuration
 var passportConfig = require('./config/passportconfig')(passport);
 app.use(passport.initialize());
+app.use(passport.session());
 
 //mongodb connection
 mongoose.connect(mongoConfig.dbUri);
@@ -39,6 +41,7 @@ mongoose.connection.on('open', function(){
 
 app.use('/dronesym/api/node', droneRouter);
 app.use('/dronesym/api/node/user', userRouter);
+app.use('/dronesym/api/node/auth', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
