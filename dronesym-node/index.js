@@ -1,6 +1,7 @@
 "use strict"
 
 var express = require('express');
+var session = require('express-session');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var passport = require('passport');
@@ -24,8 +25,14 @@ app.use(cors());
 
 //passport configuration
 var passportConfig = require('./config/passportconfig')(passport);
+var passporthandler = require('./auth/passporthandler')
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(session({
+  secret: 'dronesym',
+  resave: false,
+  saveUninitialized: true
+}))
 
 //mongodb connection
 mongoose.connect(mongoConfig.dbUri);

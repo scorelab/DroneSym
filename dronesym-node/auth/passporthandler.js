@@ -10,7 +10,7 @@ passport.use(facebook)
 passport.use(google)
 
 passport.serializeUser((user, done) => {
-  done(null, user.id)
+  done(null, user)
 })
 
 passport.deserializeUser((id, done) => {
@@ -19,4 +19,6 @@ passport.deserializeUser((id, done) => {
   })
 })
 
-module.exports = passport;
+passport.transformAuthInfo((info, done) => done(null, info))
+
+module.exports = passport

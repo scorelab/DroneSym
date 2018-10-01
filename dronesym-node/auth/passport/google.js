@@ -8,17 +8,16 @@ module.exports = new GoogleStrategy({
   callbackURL: creds.google.callbackURL,
   passReqToCallback: true,
   scope: creds.google.scope
-}, async (req, accessToken, profile, done) => {
+}, async (req, accessToken, refreshToken, profile, done) => {
     
     let data = profile._json    
-    let oldUser = req.user
-    
-    if (oldUser) {
-      //Already logged in user trying to login, check whether already in session
+
+    if (req.user) {
+      //Already logged in user trying to connect, check whether already connected
       const googleaccount = await User.findOne({'google.id': data.id})
       
       if (googleaccount) {
-        console.log('Already logged in, fetching account')
+        throw new Error('Your google account is already connected')
       }
       else {
         const update = await User.findOne({'google.id': data.id})
@@ -33,30 +32,53 @@ module.exports = new GoogleStrategy({
         
         const user = await User.findOne({'google.id': data.id})
         
-        if (err) {
-          return done(err)
-        }
+        // if (err) {
+        //   return done(err)
+        // }
         if (!user) {
-          console.log('Couldn\'t fetch existing user')
-          return done(null, false)
+          return done(null, false, {message:'failure'})
         }
         if (user) {
-          return done(null, user)
+          return done(null, user, {message:'success'})
         }
       }
     }
     else {
-      //New login
-      const user = User.findOne({'google.id': data.id})
+      //New login or signup
       
-      if (err) {
-        return done(err)
-      }
+      const user = User.findOne({'google.id': data.id})
+      //user logged in, if exists
+
+      // if (err) {
+      //   return done(err)
+      // }
       if (!user) {
-        console.log('Register first')
-        return done(null, false)
+        const users = await User.find({'google.email': data.email})
+        
+        if (users && users.length > 0) {
+          return done(null, false, {message:'Account having this email already exists, please log into your account and connect to google there instead'})
+        }
+        
+        let newGGL = new User({
+          google: {
+              id: data.id,
+              username: data.emails[0].value.split('@')[0],
+              email: data.emails[0].value,
+              token: accessToken
+          }
+        })
+        newGGL.save()
+        //new signup
+        const authed = await User.findOne({'google.id': data.id})
+        
+        if(!authed){
+          return done(null, false, {message: 'Authentication failed'})
+        }
+        else {
+          return done(null, authed)
+        }
       }
-      if (user) {
+      else {
         return done(null, user)
       }
     }

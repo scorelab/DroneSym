@@ -7,20 +7,19 @@ module.exports = new GithubStrategy({
   clientSecret: creds.github.clientSecret,
   callbackURL: creds.github.callbackURL,
   passReqToCallback: true
-}, async (req, token, profile, done) => {
+}, async (req, token, tokenSecret, profile, done) => {
     
     let data = profile._json;
-    let oldUser = req.user
     
-      if (oldUser){
-        //Already logged in user trying to login, check whether already in session
+      if (req.user){
+        //Already logged in user trying to connect, check whether already connected
         const ghaccount = await User.findOne({'github.id': data.id})
         
         if (ghaccount) {
-          console.log('Already logged in, fetching account')
+          throw new Error('Your github account is already connected')
         }
         else {
-          const update = await User.findOne({'github.id': data.id})
+          const update = await User.findOne({id: req.user.id})
           
           if (update) {
             update.github.id = data.id;
@@ -32,28 +31,54 @@ module.exports = new GithubStrategy({
           
           const user = await User.findOne({'github.id': data.id})
           
-          if (user) {
-            return done(null, user)
+          // if (err) {
+          //   return done(err)
+          // }
+          if (!user) {
+            return done(null, false, {message:'failure'})
           }
-          else {
-            console.log('Couldn\'t fetch existing user')
-            return done(null, false)
+          if (user) {
+            return done(null, user, {message:'success'})
           }
         }
         
       }
       else {
-        //New login
-        const user = await User.findOne({'github.id': data.id})
+        //New login or signup
         
-        if (err) {
-          return done(err)
-        }
+        const user = User.findOne({'github.id': data.id})
+        //user logged in, if exists
+
+        // if (err) {
+        //   return done(err)
+        // }
         if (!user) {
-          console.log('Register first')
-          return done(null, false)
+          const users = await User.find({'github.email': data.email})
+          
+          if (users && users.length > 0) {
+            return done(null, false, {message:'Account having this email already exists, please log into your account and connect to github there instead'})
+          }
+          
+          let newGH = new User({
+            github: {
+                id: data.id,
+                username: data.name,
+                email: data.email,
+                token: token
+            }
+          })
+          newGH.save()
+          //new signup
+          const authed = await User.findOne({'github.id': data.id})
+          
+          if(!authed){
+            return done(null, false, {message: 'Authentication failed'})
+          }
+          else {
+            return done(null, authed)
+          }
         }
-        if (user) {
+        else {
           return done(null, user)
         }
       }

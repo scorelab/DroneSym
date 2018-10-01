@@ -3,7 +3,7 @@ const credentials = {
     clientID: 'fb-app-id',
     clientSecret: 'fb-app-secret',
     callbackURL: 'your-facebook-app-callbackURL',
-    profileFields: ['id', 'name', 'picture', 'email']
+    profileFields: ['email']
   },
   github: {
     clientID: 'github-app-id',
@@ -14,7 +14,7 @@ const credentials = {
     clientID: 'google-app-id',
     clientSecret: 'google-app-secret',
     callbackURL: 'your-google-app-callbackURL',
-    scope: ['id', 'name', 'email', 'profile']
+    scope: ['profile']
   }
 }
 
