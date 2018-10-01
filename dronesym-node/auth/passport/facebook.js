@@ -33,9 +33,6 @@ module.exports = new FacebookStrategy({
 
         const user = await User.findOne({'facbook.id': data.id})
 
-        // if (err) {
-        //   return done(err)
-        // }
         if (!user) {
           return done(null, false, {message:'failure'})
         }
@@ -50,9 +47,6 @@ module.exports = new FacebookStrategy({
       const user = User.findOne({'facebook.id': data.id})
       //user logged in, if exists
 
-      // if (err) {
-      //   return done(err)
-      // }
       if (!user) {
         const users = await User.find({'facebook.email': data.email})
         

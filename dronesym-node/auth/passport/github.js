@@ -30,10 +30,7 @@ module.exports = new GithubStrategy({
           await update.save()
           
           const user = await User.findOne({'github.id': data.id})
-          
-          // if (err) {
-          //   return done(err)
-          // }
+
           if (!user) {
             return done(null, false, {message:'failure'})
           }
@@ -49,9 +46,6 @@ module.exports = new GithubStrategy({
         const user = User.findOne({'github.id': data.id})
         //user logged in, if exists
 
-        // if (err) {
-        //   return done(err)
-        // }
         if (!user) {
           const users = await User.find({'github.email': data.email})
           

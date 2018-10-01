@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { MaterializeAction } from 'angular2-materialize';
 import { Router } from '@angular/router';
 import { UserService } from '../user-service/user.service';
-import { environment } from '../../environments/environment';
 
 declare var Materialize: any;
 

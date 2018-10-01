@@ -31,10 +31,7 @@ module.exports = new GoogleStrategy({
         await update.save()
         
         const user = await User.findOne({'google.id': data.id})
-        
-        // if (err) {
-        //   return done(err)
-        // }
+
         if (!user) {
           return done(null, false, {message:'failure'})
         }
@@ -49,9 +46,6 @@ module.exports = new GoogleStrategy({
       const user = User.findOne({'google.id': data.id})
       //user logged in, if exists
 
-      // if (err) {
-      //   return done(err)
-      // }
       if (!user) {
         const users = await User.find({'google.email': data.email})
         

@@ -27,7 +27,7 @@ export class UserService {
          })
         .toPromise();
   }
-  
+
   public createUser(username, password, role){
     let user = { 'uname': username, 'password': password, 'role': role }
     return this.http.post(`${this.baseUrl}/create`,  user)
