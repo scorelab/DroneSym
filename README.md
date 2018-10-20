@@ -3,7 +3,7 @@
 
 ### Setting Up the Project
 
-### Prerequisites
+### Prerequisites for the project
 
 1. Install Node.js 6.x (or higher)
 2. Python version 2.7
