@@ -2,6 +2,16 @@
   "name": "drone-sym",
   "version": "1.0.0",
   "description": "DroneSym NodeJS API",
+  "keywords": [
+    "npm",
+    "nodejs",
+    "mongodb",
+    "firebase",
+    "drone",
+    "python",
+    "angularjs",
+    "googlemaps"
+  ],
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,12 +21,20 @@
     "type": "git",
     "url": "git+https://github.com/hasa93/DroneSym.git"
   },
-  "author": "",
+  "author": "SCoRe Community",
+  "contributors": [
+    "hasa93",
+    "rhperera",
+    "malithsen",
+    "charithccmc",
+    "iammosespaulr"
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/hasa93/DroneSym/issues"
   },
   "homepage": "https://github.com/hasa93/DroneSym#readme",
+  "engines": {},
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.1",
