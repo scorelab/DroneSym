@@ -1,9 +1,9 @@
 var firebase = require('firebase-admin');
-var creds = require('FIREBASE_CRED_FILE');
+var creds = require('./dronesym-key.json');
 require('firebase/database');
 
 firebase.initializeApp({
-	databaseURL: "FIREBASE_URL",
+	databaseURL: "https://dronesym-66bd5.firebaseio.com",
 	credential: firebase.credential.cert(creds)
 });
 
