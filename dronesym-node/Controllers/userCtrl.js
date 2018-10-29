@@ -2,7 +2,7 @@ var User = require('../Models/user');
 var Group = require('../Models/group');
 var jwt = require('jsonwebtoken');
 var jwtConfig = require('../config/jwtconfig');
-var db = require('../db.js');
+var db = require('../example.db');
 
 
 var updateFirebase = function(droneId, userInfo, insert=true) {
