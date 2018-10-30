@@ -32,7 +32,7 @@ var sendSnapsot = function(snapshot,socket){
   socket.emit('SOCK_FEED_UPDATE', array);
 }
 
-if(process.env.NODE_ENV !== 'test'){
+if(process.env.NODE_ENV !== "test"){
 	io.on('connection', function(socket){
 		console.log('FEED_SUBSCRIPTION');
 		var userId = socket.decoded_token.id;
@@ -56,10 +56,11 @@ exports.createDrone = function(name, location, userId, callBack){
 		callBack({ status : "ERROR", msg: "Drone name is required"});
 		return;
 	}
+	
 	if(!location || Object.keys(location).length !== 2){
 		callBack({ status: "ERROR", msg: "Drone location is required"});
 		return;
-	};
+	}
 
 	console.log("Creating new drone");
 
