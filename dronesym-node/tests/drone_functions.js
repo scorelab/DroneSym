@@ -2,6 +2,7 @@ let mocha = require("mocha");
 let assert = require("assert");
 let randomstring = require("randomstring");
 let randomlocation = require("random-location");
+var ref = require('../example.db').ref('/drones');
 
 let {createDrone, getDroneIds, removeDrone, getDroneById} = require("../Controllers/droneCtrl");
 
@@ -35,11 +36,24 @@ function getLastDroneId(callBack) {
 describe("DRONE CONTROLLER", () => {
     describe("Create drone", () => {
         describe("Happy path", () => {
+            let name, loc;
+            before( () => {
+                name = generateDroneName();
+                loc = generateDroneLoc();
+            })
             it("Contains all needed params", (done) => {
-                const name = generateDroneName();
-                const loc = generateDroneLoc();
                 createDrone(name, loc, "597073ad587a6615c459e2bf", function(response){
                     assert.strictEqual(response.status, "OK");
+                    done();
+                });
+            });
+            it("Creates entry in firebase database", (done) => {
+                ref.orderByKey().once("value")
+                .then(function(snapshot){
+                    snapshot = snapshot.val();
+                    snapshot = Object.values(snapshot);
+                    let names = snapshot.map(drone => drone.name);
+                    assert(names.includes(name));
                     done();
                 });
             });
@@ -70,9 +84,9 @@ describe("DRONE CONTROLLER", () => {
         });
     });
     describe("Remove drone", () => {
-        let droneId;
+        let droneId, name;
         beforeEach( (done) => {
-            const name = generateDroneName();
+            name = generateDroneName();
             const loc = generateDroneLoc();
             createDrone(name, loc, "597073ad587a6615c459e2bf", function(response){
                 getLastDroneId((result) => {
@@ -88,6 +102,17 @@ describe("DRONE CONTROLLER", () => {
                     done();
                 });
             });
+            /* it('Deletes drone fron firebase', (done) => {
+                ref.orderByKey().once("value")
+                .then(function(snapshot){
+                    snapshot = snapshot.val();
+                    snapshot = Object.values(snapshot);
+                    let names = snapshot.map(drone => drone.name);
+                    console.log(name, names);
+                    assert(!names.includes(name));
+                    done();
+                });
+            }) */
         });
         describe("Should throw errors", () => {
             it("Drone is flying", (done) => {
