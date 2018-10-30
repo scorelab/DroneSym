@@ -36,7 +36,7 @@ describe("User Control", function() {
             });
             it("Missing Password", function(done) {
                 const name = generateName();
-                createDrone(name, [], 'User', function(response){
+                createUser(name, [], 'User', function(response){
                     assert.strictEqual(response.status, 'ERROR');
                     done();
                 });
