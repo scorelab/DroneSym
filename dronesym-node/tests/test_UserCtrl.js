@@ -29,7 +29,7 @@ describe("User Control", function() {
         describe("Errors", function() {
             it("Missing Name", function(done) {
                 const pass = generateName();
-                createDrone('', pass, 'User', function(response){
+                createUser('', pass, 'User', function(response){
                     assert.strictEqual(response.status, 'ERROR');
                     done();
                 });
