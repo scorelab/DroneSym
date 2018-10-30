@@ -14,7 +14,7 @@ var sockConn = require('./websocket').init(http);
 
 var droneRouter = require('./Routers/droneRouter');
 var userRouter = require('./Routers/userRouter');
-var mongoConfig = require('./config/mongoconfig');
+var mongoConfig = require('./config/example.mongoconfig');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());

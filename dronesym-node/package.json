@@ -14,7 +14,7 @@
   ],
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "export NODE_ENV=test && mocha ./tests",
     "start": "nodemon index.js"
   },
   "repository": {
@@ -53,5 +53,10 @@
     "request": "^2.81.0",
     "socket.io": "^2.0.3",
     "socketio-jwt": "^4.5.0"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0",
+    "random-location": "^1.0.12",
+    "randomstring": "^1.1.5"
   }
 }
