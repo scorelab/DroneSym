@@ -78,7 +78,7 @@ exports.removeDrone = function(droneId, droneStatus, callBack){
 		callBack({ status : "ERROR", msg : "Drone in flight"});
 		return;
 	}
-	
+
 	if(!droneId || droneId === ""){
 		callBack({ status : "ERROR", msg : "Drone ID not provided"});
 		return;
@@ -219,6 +219,11 @@ exports.updateDroneStatus = function(id, status, callBack){
 }
 
 exports.getDroneById = function(id, callBack){
+	if(!id || id === ""){
+		callBack({ status : "ERROR", msg : "Id must be specified"});
+		return;
+	}
+	
 	droneRef.orderByKey().equalTo(id)
 	.once("value", function(snapshot){
 		callBack(snapshot.child(id));
