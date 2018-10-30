@@ -78,6 +78,11 @@ exports.removeDrone = function(droneId, droneStatus, callBack){
 		callBack({ status : "ERROR", msg : "Drone in flight"});
 		return;
 	}
+	
+	if(!droneId || droneId === ""){
+		callBack({ status : "ERROR", msg : "Drone ID not provided"});
+		return;
+	}
 
 	var removeFromGroups = function(droneId){
 		Group.update({ drones : { $in : [droneId]}}, { $pull : { drones : droneId }}, { multi : true }, function(err, group){
