@@ -3,7 +3,7 @@ let assert = require("assert");
 let randomstring = require("randomstring");
 let randomlocation = require("random-location");
 
-let {createDrone, getDroneIds, removeDrone} = require("../Controllers/droneCtrl");
+let {createDrone, getDroneIds, removeDrone, getDroneById} = require("../Controllers/droneCtrl");
 
 function generateDroneName() {
     return randomstring.generate(10);
@@ -23,6 +23,13 @@ function generateDroneLoc() {
         lat: location.latitude,
         lon: location.longitude
     };
+}
+
+function getLastDroneId(callBack) {
+    getDroneIds((result) => {
+        droneId = result[result.length - 1];
+        callBack(droneId);
+    });
 }
 
 describe("DRONE CONTROLLER", () => {
@@ -68,8 +75,8 @@ describe("DRONE CONTROLLER", () => {
             const name = generateDroneName();
             const loc = generateDroneLoc();
             createDrone(name, loc, "597073ad587a6615c459e2bf", function(response){
-                getDroneIds((result) => {
-                    droneId = result[result.length - 1];
+                getLastDroneId((result) => {
+                    droneId = result;
                     done();
                 });
             });
@@ -97,4 +104,39 @@ describe("DRONE CONTROLLER", () => {
             });
         });
     });    
+    describe("Get all drones", () => {
+        describe("Happy path", () => {
+            it("Returns all drones", (done) => {
+                getDroneIds((result) => {
+                    assert(result);
+                    done();
+                });
+            });
+        });
+    });
+    describe("Get drone by id", () => {
+        describe("Happy path", () => {
+            let droneId;
+            before( (done) => {
+                getLastDroneId((result) => {
+                    droneId = result;
+                    done();
+                });
+            });
+            it("Returns a drone", (done) => {
+                getDroneById(droneId, (result) => {
+                    assert(result);
+                    done();
+                });
+            });
+        });
+        describe("Should throw errors", () => {
+            it("Doesn't contain droneId", (done) => {
+                getDroneById("", (result) => {
+                    assert.strictEqual(result.status, "ERROR");
+                    done();
+                });
+            });
+        });
+    });
 })
