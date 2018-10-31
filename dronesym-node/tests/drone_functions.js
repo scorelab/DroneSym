@@ -94,7 +94,7 @@ describe("DRONE CONTROLLER", () => {
                     done();
                 });
             });
-        })
+        });
         describe("Happy path", () => {
             it("Contains all needed params and drone not flying", (done) => {
                 removeDrone(droneId, "IDLE", (result) => {
