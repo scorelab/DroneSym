@@ -228,7 +228,7 @@ dronesym-frontend/src/environments/environment.ts
 dronesym-node/db.js
 dronesym-node/config/mongoconfig.js
 dronesym-node/config/credentials.js
-dronesym-node/dronedb-213c3-firebase-adminsdk-7u7ke-14febae0d1.json
+dronesym-node/dronesym-5f7ef-firebase-adminsdk-ucw8h-ca27a44b1e.json
 
 #py.test caches
 dronesym-python/flask-api/tests/__pycache__
