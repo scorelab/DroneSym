@@ -2,7 +2,7 @@ var request = require('request');
 var io = require('../websocket').connection;
 var Group = require('../Models/group');
 var User = require('../Models/user');
-var db = require('../db');
+var db = require('../example.db');
 
 var droneRef = db.ref('/drones');
 
@@ -32,27 +32,33 @@ var sendSnapsot = function(snapshot,socket){
   socket.emit('SOCK_FEED_UPDATE', array);
 }
 
-io.on('connection', function(socket){
-	console.log('FEED_SUBSCRIPTION');
-	var userId = socket.decoded_token.id;
+if(process.env.NODE_ENV !== "test"){
+	io.on('connection', function(socket){
+		console.log('FEED_SUBSCRIPTION');
+		var userId = socket.decoded_token.id;
 
-	socket.emit('hello', userId);
+		socket.emit('hello', userId);
 
-  	//Initial drone data sent to client on first connection
-	droneRef.once("value", function(snapshot){
-    	sendSnapsot(snapshot, socket);
-  	})
+		//Initial drone data sent to client on first connection
+		droneRef.once("value", function(snapshot){
+			sendSnapsot(snapshot, socket);
+		})
 
-	droneRef.on("value", function(snapshot){
-		sendSnapsot(snapshot, socket);
-	})
-});
-
+		droneRef.on("value", function(snapshot){
+			sendSnapsot(snapshot, socket);
+		})
+	});
+}
 //Send update drone data upon change to firebase
 
 exports.createDrone = function(name, location, userId, callBack){
 	if(!name  || name === ''){
 		callBack({ status : "ERROR", msg: "Drone name is required"});
+		return;
+	}
+	
+	if(!location || Object.keys(location).length !== 2){
+		callBack({ status: "ERROR", msg: "Drone location is required"});
 		return;
 	}
 
@@ -70,6 +76,11 @@ exports.createDrone = function(name, location, userId, callBack){
 exports.removeDrone = function(droneId, droneStatus, callBack){
 	if(droneStatus === "FLYING"){
 		callBack({ status : "ERROR", msg : "Drone in flight"});
+		return;
+	}
+
+	if(!droneId || droneId === ""){
+		callBack({ status : "ERROR", msg : "Drone ID not provided"});
 		return;
 	}
 
@@ -208,6 +219,11 @@ exports.updateDroneStatus = function(id, status, callBack){
 }
 
 exports.getDroneById = function(id, callBack){
+	if(!id || id === ""){
+		callBack({ status : "ERROR", msg : "Id must be specified"});
+		return;
+	}
+	
 	droneRef.orderByKey().equalTo(id)
 	.once("value", function(snapshot){
 		callBack(snapshot.child(id));
