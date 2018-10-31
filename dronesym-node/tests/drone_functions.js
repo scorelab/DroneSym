@@ -2,7 +2,7 @@ let mocha = require("mocha");
 let assert = require("assert");
 let randomstring = require("randomstring");
 let randomlocation = require("random-location");
-var ref = require('../example.db').ref('/drones');
+var ref = require("../example.db").ref("/drones");
 
 let {createDrone, getDroneIds, removeDrone, getDroneById} = require("../Controllers/droneCtrl");
 
@@ -28,7 +28,7 @@ function generateDroneLoc() {
 
 function getLastDroneId(callBack) {
     getDroneIds((result) => {
-        droneId = result[result.length - 1];
+        let droneId = result[result.length - 1];
         callBack(droneId);
     });
 }
@@ -40,7 +40,7 @@ describe("DRONE CONTROLLER", () => {
             before( () => {
                 name = generateDroneName();
                 loc = generateDroneLoc();
-            })
+            });
             it("Contains all needed params", (done) => {
                 createDrone(name, loc, "597073ad587a6615c459e2bf", function(response){
                     assert.strictEqual(response.status, "OK");
@@ -52,7 +52,7 @@ describe("DRONE CONTROLLER", () => {
                 .then(function(snapshot){
                     snapshot = snapshot.val();
                     snapshot = Object.values(snapshot);
-                    let names = snapshot.map(drone => drone.name);
+                    let names = snapshot.map((drone) => drone.name);
                     assert(names.includes(name));
                     done();
                 });
