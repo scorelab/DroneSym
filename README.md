@@ -1,5 +1,10 @@
 # DroneSym
-[![Build Status](https://travis-ci.org/scorelab/DroneSym.svg?branch=develop)](https://travis-ci.org/scorelab/DroneSym)
+[![Build Status](https://travis-ci.org/scorelab/DroneSym.svg?branch=master)](https://travis-ci.org/scorelab/DroneSym)
+
+In memory of [Hasanga Somaratne](https://github.com/hasa93) - Brilliant engineer, caring brother, and most excellent friend. This project is dedicated to you
+
+### About DroneSym
+Dronesym is a platform enabling users to handle and track their drone fleets in real time. Users can have functionality to add new drones configure their flight paths and monitor their progress through a web dashboard.
 
 ### Setting Up the Project
 
@@ -16,8 +21,6 @@
 4. In `db.js` file provide the path to your firebase key file and the database url
 5. Import the database with `mongorestore --db dronesym dronedb/dronesym`
 6. Run `npm start` to start the Node server
-
-**Note: Make sure you have an admin account in the database under user collection. (Refer the schema in Models folder)**
 
 
 ### Part 2 - Setting up Python environment
