@@ -14,12 +14,9 @@ function generateName() {
 describe("USER CONTROLLER", () => {
     describe("Create user", () => {
         describe("All Okay", () => {
-            let name, loc;
-            before( () => {
-                name = generateName();
-                pass = generateName();
-            });
             it("Contains all needed params", (done) => {
+                const name = generateName();
+                const pass = generateName();
                 createUser(name, pass, "User", function(response){
                     assert.strictEqual(response.status, "OK");
                     done();
@@ -35,7 +32,7 @@ describe("USER CONTROLLER", () => {
                 });
             });
             it("Doesn't contain Password", (done) => {
-                const name = generateDroneName();
+                const name = generateName();
                 createUser(name, "", "User", function(response){
                     assert.strictEqual(response.status, "ERROR");
                     done();
