@@ -103,16 +103,16 @@ describe("DRONE CONTROLLER", () => {
                     done();
                 });
             });
-            it('Deletes drone from firebase', (done) => {
+            it("Deletes drone from firebase", (done) => {
                 ref.orderByKey().once("value")
                 .then(function(snapshot){
                     snapshot = snapshot.val();
                     snapshot = Object.values(snapshot);
-                    let names = snapshot.map(drone => drone.name);
+                    let names = snapshot.map((drone) => drone.name);
                     assert(!names.includes(deletedDroneName));
                     done();
                 });
-            })
+            });
         });
         describe("Should throw errors", () => {
             it("Drone is flying", (done) => {
