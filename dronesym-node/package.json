@@ -59,6 +59,8 @@
     "passport": "^0.3.2",
     "passport-jwt": "^2.2.1",
     "request": "^2.81.0",
+    "sinon": "^7.1.1",
+    "sinon-mongoose": "^2.2.1",
     "socket.io": "^2.0.3",
     "socketio-jwt": "^4.5.0"
   },
