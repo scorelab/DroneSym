@@ -100,8 +100,14 @@ exports.removeDrone = function(droneId, droneStatus, callBack){
 		}
 
 		removeFromGroups(droneId);
-		droneRef.child(droneId).remove();
-		callBack(JSON.parse(body));
+		droneRef.child(droneId).remove((error) => {
+			if(error) {
+				callBack({ status: "ERROR", msg: "Removal error"});
+				return;
+			}
+
+			callBack(JSON.parse(body));
+		});
 	})
 }
 

@@ -84,7 +84,7 @@ describe("DRONE CONTROLLER", () => {
         });
     });
     describe("Remove drone", () => {
-        let droneId, name;
+        let droneId, name, deletedDroneName;
         beforeEach( (done) => {
             name = generateDroneName();
             const loc = generateDroneLoc();
@@ -97,22 +97,22 @@ describe("DRONE CONTROLLER", () => {
         });
         describe("Happy path", () => {
             it("Contains all needed params and drone not flying", (done) => {
+                deletedDroneName = droneId;
                 removeDrone(droneId, "IDLE", (result) => {
                     assert.strictEqual(result.status, "OK");
                     done();
                 });
             });
-            /* it('Deletes drone fron firebase', (done) => {
+            it("Deletes drone from firebase", (done) => {
                 ref.orderByKey().once("value")
                 .then(function(snapshot){
                     snapshot = snapshot.val();
                     snapshot = Object.values(snapshot);
-                    let names = snapshot.map(drone => drone.name);
-                    console.log(name, names);
-                    assert(!names.includes(name));
+                    let names = snapshot.map((drone) => drone.name);
+                    assert(!names.includes(deletedDroneName));
                     done();
                 });
-            }) */
+            });
         });
         describe("Should throw errors", () => {
             it("Drone is flying", (done) => {
