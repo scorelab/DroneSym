@@ -16,7 +16,7 @@ function generateUserData() {
         password: randomstring.generate(5), 
         role: "user"
     };
-};
+}
 
 describe("USER CONTROLLER", () => {
     describe("Create user", () => {
@@ -57,8 +57,8 @@ describe("USER CONTROLLER", () => {
                     assert.strictEqual(res.status, "ERROR");
                     assert.strictEqual(res.msg, "Username already taken");
                     done();
-                })
-            })
+                });
+            });
         });
     });
     describe("Login user", () => {
