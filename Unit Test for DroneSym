@@ -1,0 +1,32 @@
+1) Here is the base directory of the multi-root functional data that return the assert test1 and test2. 
+If the test got passed there will be print of "Passed" otherwise "Failed".
+As NodeSym is in the private class we use underscroll before the name and place test1 and test2 btw those system's root directory.
+
+`var assert = require('assert');`
+`function testDirectory(test1, test2){`
+ ` return  _NodeSym(test1*&test2);`
+`}`
+`function testDirectory(_Exception = rootBase){`
+  `var test1;`
+  `var test2;`
+  `var Equivlant = test1.&test2(NodeSym);`
+  `var BaseNum = testDirectory(test1,test2);`
+  `console.log('Expect ' + Root1+ ' to equal ' + Root2 + '.');` 
+  `try {`
+    `assert.equal(Root1, Root2);`
+    `console.log('Passed.');`
+  `} catch (error) {`
+    `console.error('Failed.');`
+  `}`
+`}`
+`testDirectory();`
+
+2) Now the testing tools can be used in order to get the fetch process.
+
+3) Unit Tests to be used : 
+ `npm init`
+`npm install --save-dev<directory>`
+`> test`
+ `- test.js`
+`- testDirectory.js`
+`npm test`
