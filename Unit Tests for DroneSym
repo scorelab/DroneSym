@@ -1,0 +1,13 @@
+These are the unit test which can be used as End To End Test:
+
+npm init // Create package json before installing.
+
+npm install --save-dev<directory>
+
+> test
+
+- test.js //file name which has the directory root.
+
+- testDirectory.js // container which will hold the merged file.
+
+npm test // Then test for working condition.
