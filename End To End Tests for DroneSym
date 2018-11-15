@@ -1,0 +1,51 @@
+1) First get the components to the directory associated with the file by using the Test
+  - curl -o- <Link>
+  
+2) Second, is to set the Values from the "src" to the destination folder. For this go to "gulpfile" and change the root to the destination required.
+  
+  gulp.task("http-server", function(){
+  return connect.server;
+  
+  root = "<Destination>";
+  port = <8.0.8.0>; // change the port according to your server establishment.
+
+  })
+  
+3) Now, change the "setFile" to the particular destination of the file.
+
+  'Form Test' : function(browser){
+  
+  .url : <Name(including PortNumber>);
+  .waitForElement : (<Display Port>, 1000); // set between the user's handler.
+  .setFile(Directory1 = <Destination1>, FileName1 = <Name1>);
+  .setFile(Directory2 = <Destination2>, FileName2 = <Name2>); // Do this for multiple files and save the directory location in the "src".
+  
+4) Now do the test for the server check response.
+ 
+ npm init // Create package json before installing.
+ npm install --save-dev<directory>
+ > test
+ - test.js //file name which has the directory root.
+ - testDirectory.js // container which will hold the merged file.
+ npm test // Then test for working condition.
+ 
+5) Now to get the fetch process Test.
+ 
+ - npm install express --save // save will add all dependencies to the package.js
+ - mkdir test // this will create the new directory in the home directory and use this to store the fetch.
+ - fetch express --save<directory> // In place of directory use the test folder created in the home directory.
+ 
+6) Now add the first testing file in the "test" folder created in the home directory.
+
+ - touch test/test-pages.js
+ - It will create the following test setup in the test directory.
+ 
+ var expect  = require('chai').expect;
+ var request = require('request');
+ it('Main page content', function(done) {
+    request('http://localhost:8080' , function(error, response, body) { // Give a response that will be fetch by the process.
+        expect(body).to.equal('Access Denied'); // Access Denied will be prompt if the user has a low or don't have a connection with the base Port.
+        done();
+    });
+ });
+ 
