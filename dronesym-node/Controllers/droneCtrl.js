@@ -67,7 +67,7 @@ exports.createDrone = function(name, location, userId, callBack){
 	var droneKey = droneRef.push({'name': name, 'users' : [ { userId : userId, groupId : "creator" }], 'location': location, 'waypoints': [location] })
 
 	request.post(`${flaskUrl}/spawn`, { json : { droneId: droneKey.key, location: location } },
-	function(error, response, body){
+	function(error, response, body) {
 		console.log(body);
 		callBack(body);
 	})
@@ -215,7 +215,7 @@ exports.getDroneIds = function(callBack){
 exports.updateDroneStatus = function(id, status, callBack){
 	var timestamp = new Date();
 	status["timestamp"] = timestamp.valueOf();
-	droneRef.child(id).update(status, function(err){
+	droneRef.child(id).update({status: status}, function(err){
 		if(err){
 			console.log(err);
 			return;
