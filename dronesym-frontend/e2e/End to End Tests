@@ -1,0 +1,94 @@
+1) First is to get with the Protractort API and choose the default location.
+
+  it('Directory Location', () => {
+    expect(addRoot.isDirectoryPresent(input INT)).toBeTruth(<Message>);
+    expect(addRoot.isCreatePasteModal(input FLOAT)).toBeFalse(<Message>);
+    predir - {addLocation.isDirectoryPresent()};
+    expect(addRoot.isCreatePasteModal()).toBeTruth(<Message>);  
+});
+
+2) Now, to get the directory structure, type the command "ng new".
+
+3) To get the src as the root use following Test to unify the location directory.
+
+  describe(<addRoot>, function() {
+         beforeEach(function() {
+           browser.get('http://Your Application URL');
+            ptor = protractor.getInstance(intput INT,FLOAT); // input can be of interger or float.
+           });
+ 
+        it(<isDirectoryPresent>, function() {
+               element(by.xpath('//a[contains(text(),"Grid")]')).click();
+           expect(element(by.xpath('//h1')).getText()).toEqual(<DirectoryModalPresent>);
+           });
+           
+        it(<isCreatePasteModal>, function() {
+                   ptor.actions().sendKeys(protractor.Key.HOME).perform();
+          element(by.model(input _INT, _DOUBLE)).sendKeys(Counter); // counter varies from 1 to 100 with the random generator which generates a random number with a given range.
+          results = element.all(by.repeater('value in testValues'));
+               expect(results.count(testValues)).toEqual(5);
+           element(by.model('Model.ID')).clear();
+          ptor.actions().sendKeys(protractor.Key.SPACE).perform();
+        });
+           
+        it(<addRoot>, function(){
+           element(by.xpath('//select')).click();
+            element(by.css('option[value=Counter]')).click();
+            results1 = element.all(by.repeater(testValues[Value_input]));
+          expect(results1.count(Loop)).toEqual(Counter);
+        });
+  });
+  
+4) Following are required to get the process started in Protractor:
+  - Selenium server details
+  - Location of our spec files
+  - Browser capabilities for spec files
+  - Jasmine node configuration options
+  
+5) In the e2e.js, the directory is not associated with the root one. To make this one associated change the src to Directory of your choice.
+    
+    gulp.task("http-server", function(){
+    return connect.server;
+    root = "<Destination>";
+    port = <8.0.8.0>; // change the port according to your server establishment.
+    })
+    
+6) Inside the e2e directory the following file will be there and configuration file will be imported automatically.
+
+  import testCaseInput.js;
+  const { SpecReporter } = require('jasmine-spec-reporter') 
+  exports.config = {
+    allScriptsTimeout: 11000,
+    specs: [
+      './e2e/**/*.e2e-spec.ts'
+    ],
+    capabilities: {
+      'browserName': <Browser>
+    },
+    directConnect: true,
+    baseUrl: 'http://localhost:4200/',
+    framework: 'jasmine',
+    jasmineNodeOpts: {
+      showColors: true,
+      defaultTimeoutInterval: _Counter,
+      print: function() {}
+    },
+    onPrepare() {
+      require('ts-node').register({
+        project: 'e2e/tsconfig.e2e.json'
+      });
+      jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: false } }));
+    }
+  };
+
+7) If you want to do it manually, do it with the following command : 
+   java -jar selenium/selenium-server-standalone-2.35.0.jar -Dwebdriver.chrome.driver=./selenium/chromedriver
+   
+   And to run the test type : 
+   protractor Conf.js
+   
+   Run the command if you are using Angular CLI: 
+   ng e2e
+   
+   Now open the new console and run : 
+   ng e2e -s false
