@@ -8,7 +8,8 @@
   }
   
 2) Create the Application Based Notification to get the fetch when some update or something like that is necessary.
-
+  
+  import DroneSym.library.fetch.notification;
   package com.DroneSym.Directory<_SOURCE>;
   import android.support.v7.app.AppCompatActivity;
   import android.os.Bundle;
