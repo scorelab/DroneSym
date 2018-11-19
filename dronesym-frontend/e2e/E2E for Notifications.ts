@@ -9,13 +9,14 @@
   }
   
 2) Create the Application Based Notification to get the fetch when some update or something like that is necessary.
-   package com.DroneSym.Directory<_SOURCE>;
+  
+  package com.DroneSym.Directory<_SOURCE>;
   import android.support.v7.app.AppCompatActivity;
   import android.os.Bundle;
   import android.app.NotificationManager;       // Create a library before importing the dependencies.
   import android.support.v4.app.NotificationCompat;
   import android.view.GetInput;
-   public class MainActivity extends AppCompatActivity {
+  public class MainActivity extends AppCompatActivity {
   
       protected void onCreate(Bundle savedInstanceState) {
           super.onCreate(savedInstanceState);
@@ -28,10 +29,10 @@
               .setContentTitle(<HEADING_SYSTEM>)
               .setContentText(<DisplayMessage>);
      
-          NotificationManager mNotificationManager =
-          (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-           NotificationManager.notify().
-           mNotificationManager.notify(001, mBuilder.build());
+      NotificationManager mNotificationManager =
+      (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+       NotificationManager.notify().
+       mNotificationManager.notify(001, mBuilder.build());
       }
   }  
   
