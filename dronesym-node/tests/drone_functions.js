@@ -15,14 +15,12 @@ function waypointsSame(arr1, arr2) {
         return false;
     }
     for(var i = 0; i < arr1.length; i++) {
-        if(arr1[i].lat !== arr2[i].lat) {
-            return false;
-        }
-        if(arr1[i].lon !== arr2[i].lon) {
+        //Disabling eslint here because the issue - Generic Object Injection Sink, does not apply as i is not set by userinput
+        // eslint-disable-next-line
+        if(arr1[i].lat !== arr2[i].lat || arr1[i].lon !== arr2[i].lon) { 
             return false;
         }
     }
-
     return true;
 }
 
@@ -213,19 +211,18 @@ describe("DRONE CONTROLLER", () => {
             });
         });
         it("Update waypoints - check database", (done) => { 
-            ref.child(droneId).child('waypoints').once('value').then(function(snapshot) {
+            ref.child(droneId).child("waypoints").once("value").then(function(snapshot) {
                 assert(waypointsSame(snapshot.val(), waypoints));
                 done();
             }).catch((error) => {
-                console.log(error);
-                assert.isNotOk(error,'Promise error');
+                assert.fail("Failed to check database" + error);
                 done();
             });
         });
     });
     describe("Update Drone Status", () => {
         let droneStatus, droneId;
-        let possible_status = ['FLYING','IDLE'];
+        let possibleStatus = ["FLYING","IDLE"];
         before( (done) => {
             name = generateDroneName();
             const loc = generateDroneLoc();
@@ -235,7 +232,7 @@ describe("DRONE CONTROLLER", () => {
                     done();
                 });
             });
-            droneStatus = possible_status[Math.floor(Math.random() * possible_status.length)];
+            droneStatus = possibleStatus[Math.floor(Math.random() * possibleStatus.length)];
         });
         it("Update drone status - check response", (done) => {
             updateDroneStatus(droneId, droneStatus, (result) => {
@@ -244,7 +241,7 @@ describe("DRONE CONTROLLER", () => {
             });
         });
         it("Update drone status - check database", (done) => {
-            ref.child(droneId).child('status').once('value').then(function(snapshot) {
+            ref.child(droneId).child("status").once("value").then(function(snapshot) {
                 assert.strictEqual(snapshot.val(), droneStatus);
                 done();
             });
