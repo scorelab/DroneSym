@@ -11,11 +11,7 @@ function generateDroneName() {
 }   
 
 function waypointsSame(arr1, arr2) {
-    if(arr1.length !== arr2.length) {
-        return false;
-    }
-    
-    else {
+    if(arr1.length === arr2.length) {
         for(var i = 0; i < arr1.length; i++) {
             //Disabling eslint here because the issue - Generic Object Injection Sink, does not apply as i is not set by userinput
             // eslint-disable-next-line
@@ -23,8 +19,9 @@ function waypointsSame(arr1, arr2) {
                 return false;
             }
         }
+        return true;
     }
-    return true;
+    return false;
 }
 
 function generateDroneLoc() {
