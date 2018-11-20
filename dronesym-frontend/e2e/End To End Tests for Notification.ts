@@ -1,5 +1,3 @@
-1) First is to install the dependencies required to get the test running.
-  
   dependencies => sync {
   
   REQUIRE_INSTALL = {API_SERVICE};
@@ -7,14 +5,14 @@
   
   }
   
-2) Create the Application Based Notification to get the fetch when some update or something like that is necessary.
-   package com.DroneSym.Directory<_SOURCE>;
+  package com.DroneSym.Directory<_SOURCE>;
   import android.support.v7.app.AppCompatActivity;
   import android.os.Bundle;
   import android.app.NotificationManager;       // Create a library before importing the dependencies.
   import android.support.v4.app.NotificationCompat;
   import android.view.GetInput;
-   public class MainActivity extends AppCompatActivity {
+  
+  public class MainActivity extends AppCompatActivity {
   
       protected void onCreate(Bundle savedInstanceState) {
           super.onCreate(savedInstanceState);
@@ -33,23 +31,22 @@
            mNotificationManager.notify(001, mBuilder.build());
       }
   }  
-  
-  3) Now to Test the existing Run of the Application. It can be done with the help of available Testers but in this we will do this manually.
-     This will be the required End To End Test for the Notification system in the application.
-    
-    const webpush = require('web-push');
-    const vapidKeys = {
-        "publicKey":<PUBLIC_KEY>,
-        "privateKey":<PRIVATE_KEY>;
-    };
-     webpush.setVapidDetails(
+   
+  const webpush = require('web-push');
+  const vapidKeys = {
+      "publicKey":<PUBLIC_KEY>,
+      "privateKey":<PRIVATE_KEY>;
+  };
+     
+  webpush.setVapidDetails(
         vapidKeys.publicKey,
         vapidKeys.privateKey
-    );
-     const app: Application = express();
+  );
+    
+    const app: Application = express();
     app.route('/api/<DirectoryRoot>').post(DirectoryRoot);
     export function DirectoryRoot(req_is, res) {
-         const allVapid = <MESSAGE_INPUT> 
+        const allVapid = <MESSAGE_INPUT> 
         console.log(<MESSAGE_INPUT, allAssignedUser>);
         const notificationPayload = {
             "notification": {
@@ -67,12 +64,12 @@
                 }]
             }
         };
-         export.all(ValidUser.map(sub => webpush.sendNotification(
-            sub, JSON.stringify(notificationPayload) )))
-            .then(() => res.status(200).json({message: <MESSAGE_SENT[ _SUCCESFULL ]>}))
-            .catch(err => {
-                console.error("Error sending notification, reason: ", err);
-                res.sendStatus(ValidAPI);
-            });
+    export.all(ValidUser.map(sub => webpush.sendNotification(
+          sub, JSON.stringify(notificationPayload) )))
+          .then(() => res.status(200).json({message: <MESSAGE_SENT[ _SUCCESFULL ]>}))
+          .catch(err => {
+              console.error("Error sending notification, reason: ", err);
+              res.sendStatus(ValidAPI);
+          });
     }
     
