@@ -36,7 +36,7 @@
   const vapidKeys = {
       "publicKey":<PUBLIC_KEY>,
       "privateKey":<PRIVATE_KEY>;
-  };
+  }; 
      
   webpush.setVapidDetails(
         vapidKeys.publicKey,
