@@ -17,6 +17,10 @@ describe('SwitchConstantControl', function () {
     page.navigateTo();
     page.CounterListActions().click();
 
+  it('Get some process', () =>{
+    page.navigateTo(Counter);
+    page.Get.actions();
+    
     expect(page.getOpenModalElement()).toBeTruthy();
     expect(page.getOpenModalHeadingElement().getText()).toBe();
   });
