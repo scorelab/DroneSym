@@ -82,3 +82,10 @@ Run
 ```sh
 $ docker-compose up
 ```
+
+### Run Unit Tests Node
+
+For node unit tests - **both the flask server and node server have to be running.**
+
+Navigate to `dronesym-node`
+Run `npm test`
