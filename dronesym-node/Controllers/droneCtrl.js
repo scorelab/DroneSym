@@ -62,13 +62,10 @@ exports.createDrone = function(name, location, userId, callBack){
 		return;
 	}
 
-	console.log("Creating new drone");
-
 	var droneKey = droneRef.push({'name': name, 'users' : [ { userId : userId, groupId : "creator" }], 'location': location, 'waypoints': [location] })
 
 	request.post(`${flaskUrl}/spawn`, { json : { droneId: droneKey.key, location: location } },
 	function(error, response, body){
-		console.log(body);
 		callBack(body);
 	})
 }

@@ -184,6 +184,11 @@ exports.updateUserGroups = function(userId, groupId, insert=true, callBack) {
 }
 
 exports.getUserList = function(userId, callBack) {
+	if(!userId){
+		callBack({ status: "ERROR", msg: "User ID can't be null"});
+		return;
+	}
+
 	User.find({ _id : { $ne : userId }}, function(err, users) {
 		if(err) {
 			callBack({ status : "ERROR", msg : err });
