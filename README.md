@@ -15,8 +15,8 @@
 
 1. After cloning the repo navigate to `dronesym-node` folder
 2. Run `npm install` to pull the dependencies
-3. Create a firebase admin sdk private key following the instructions found here: https://firebase.google.com/docs/admin/setup#add_firebase_to_your_app
-4. In `db.js` file provide the path to your firebase key file and the database url
+3. Create a *Firebase Admin sdk private key* following the instructions in the **Generating Firebase Key File and Database URL** section below
+4. In `example.db.js` file provide the path to your firebase key file and the database url
 5. Import the database with `mongorestore --db dronesym dronedb/dronesym`
 6. Run `npm start` to start the Node server
 
@@ -92,3 +92,17 @@ For node unit tests - **both the flask server and node server have to be running
 
 Navigate to `dronesym-node`
 Run `npm test`
+
+
+### Generating Firebase Key File and Database URL
+
+1. Sign into your google account and go to the [Firebase Console](https://console.firebase.google.com/) page.
+2. Click on *Add Project*. Add the project name and select all the checkboxes.
+![Add Project](https://i.imgur.com/ErZF6Mu.png)
+3. Click on the *Settings* button on the left, then select *Project Settings*. Click on the *Service Accounts* tab.
+![Service Accounts](https://i.imgur.com/YcbII59.png)
+4. Click on *Generate new private key* at the bottom of the page. Click on *Generate key* in the popup and move it to the same directory as the *example.db.js* file.
+![Generate Private Key](https://i.imgur.com/5uxstiX.png)
+![Paste in Directory](https://i.imgur.com/OZqg8F5.png)
+5. Open *example.db.js* and paste the name of the downloaded file into the *creds = require* line, as shown. Also, copy the database URL (looks like *https://<database_name>.firebaseio.com*) from the Service Accounts tab and paste it in the *databaseURL* line, as shown.
+![Edit Database File](https://i.imgur.com/3OISbKN.png)
