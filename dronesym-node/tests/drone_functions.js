@@ -165,3 +165,75 @@ describe("DRONE CONTROLLER", () => {
         });
     });
 });
+import Dronesym from '../../src/js/cli/DroneCLI';
+
+const cli = new Dronesym();
+
+test('Dronesym executes basic help', () => {
+  sym.run('help').then(result => expect(result).toMatchSnapshot());
+});
+
+test('Dronesym shows help for help command', () => {
+  sym.run('help help').then(result => expect(result).toMatchSnapshot());
+});
+
+test('Dronesym shows help for invalid command', () => {
+  sym.run('fake').then(result => expect(result).toMatchSnapshot());
+});
+
+test('Dronesym shows help for invalid help option', () => {
+  sym.run('help fake').then(result => expect(result).toMatchSnapshot());
+});
+
+const customsym = new Dronesym();
+customsym.command(
+  'restart [project]', 'Restarts a given build for a project'
+)
+.option(
+  'buildNumber',
+  'Optional. Number of the build to restart. Defaults to the last build'
+)
+.option(
+  'anotherOption',
+  'Optional. Fake description'
+)
+.action(() => {
+  Promise.resolve('test');
+});
+
+test('Dronesym adds a custom command', () => {
+  customsym.run('help').then(result => expect(result).toMatchSnapshot());
+});
+
+test('Dronesym shows help for a custom command', () => {
+  customsym.run('help restart').then(result => expect(result).toMatchSnapshot());
+});
+
+test('Dronesym executes action from a custom command', () => {
+  const customActionsym = new Dronesym();
+  customActionsym.command(
+    'restart [project]', 'Restarts a given build for a project'
+  ).action(() => Promise.resolve('abc'));
+
+  customActionsym.run('restart').then(result => expect(result).toBe('abc'));
+});
+
+test('Dronesym fails for invalid args', () => {
+  const customActionsym = new Dronesym();
+  customActionsym.command(
+    'restart [project]', 'Restarts a given build for a project'
+  ).validate(() => 'Invalid');
+
+  customActionsym.run('restart').then(
+    () => {}, result => expect(result).toBe('Invalid')
+  );
+});
+
+test('Dronesym fails for invalid args', () => {
+  const customActionsym = new Dronesym();
+  customActionsym.command(
+    'restart [project]', 'Restarts a given build for a project'
+  ).validate(() => true).action(() => Promise.resolve('abc'));
+
+  customActionsym.run('restart').then(result => expect(result).toBe('abc'));
+});
