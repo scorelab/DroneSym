@@ -1,5 +1,8 @@
+![dronesym_logo](https://user-images.githubusercontent.com/17242746/47440055-18d8e280-d7cb-11e8-984c-8a495e281275.png)
 # DroneSym
 [![Build Status](https://travis-ci.org/scorelab/DroneSym.svg?branch=develop)](https://travis-ci.org/scorelab/DroneSym)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f21c3a60c4ec4c0caaf4ebdf60df0b26)](https://www.codacy.com/app/hcktheheaven/DroneSym?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=scorelab/DroneSym&amp;utm_campaign=Badge_Grade)
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/scorelab/DroneSym)
 
 ### Setting Up the Project
 
@@ -82,3 +85,10 @@ Run
 ```sh
 $ docker-compose up
 ```
+
+### Run Unit Tests Node
+
+For node unit tests - **both the flask server and node server have to be running.**
+
+Navigate to `dronesym-node`
+Run `npm test`
