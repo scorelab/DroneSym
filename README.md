@@ -42,6 +42,11 @@ $ npm install -g @angular/cli
 ```
 Set environmental variable in `./dronesym-frontend/src/environments/environment.ts`
 
+***Note:*** You will have to rename the `example.environment.ts` to `environment.ts` or create new file, for example by copying the example file:
+```sh
+$ cp src/environments/example.environment.ts src/environments/environment.ts`
+```
+
 ```sh
 mapsApiKey: 'YOUR_GOOGLE_MAPS_API_KEY',
 nodeApiURL: 'http://localhost:3000/dronesym/api/node',
