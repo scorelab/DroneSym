@@ -3,6 +3,13 @@ let assert = require("assert");
 let randomstring = require("randomstring");
 let randomlocation = require("random-location");
 var ref = require("../example.db").ref("/drones");
+import 'mocha';
+
+describe('my test', () => {
+  it('does something', () => {
+    //  test
+  });
+});
 
 let {createDrone, getDroneIds, removeDrone, getDroneById, updateWaypoints, updateDroneStatus} = require("../Controllers/droneCtrl");
 
