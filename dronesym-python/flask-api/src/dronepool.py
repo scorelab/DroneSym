@@ -67,7 +67,7 @@ def resume_flight(kwargs):
 		waypoints.append(drone['waypoints'][wp])
 
 	next_waypoint = waypoints.index(drone['waypoint'])
-	print next_waypoint
+	print (next_waypoint)
 
 	q.put((takeoff_drone, { "drone_id" : drone_id, "waypoints" : waypoints[next_waypoint:] }))
 
@@ -87,7 +87,7 @@ def create_new_drone(kwargs):
 			drone_conn = connect(drone.connection_string(), wait_ready=True)
 			break
 		except:
-			print "Retrying..."
+			print ("Retrying...")
 			retries -= 1
 
 
@@ -113,19 +113,19 @@ def remove_drone(kwargs):
 
 def run_mission(drone, target_height, waypoints):
 	while True:
-		print "Reaching target alt : " + str(drone.location.global_relative_frame.alt)
+		print ("Reaching target alt : " + str(drone.location.global_relative_frame.alt))
 		if drone.location.global_relative_frame.alt >= target_height * 0.9:
 			break
 
-	print 'target alt reached'
+	print ('target alt reached')
 
 	mavparser.create_mission(drone, waypoints)
-	print 'mission acquired'
+	print ('mission acquired')
 
 	drone.mode = VehicleMode('AUTO')
-	print 'initiating sequence'
+	print ('initiating sequence')
 
-	print 'in mission'
+	print ('in mission')
 
 def attach_listener(kwargs):
 	attr = kwargs.get('attr', None)
@@ -157,7 +157,7 @@ def takeoff_drone(kwargs):
 
 	drone.simple_takeoff(target_height)
 
-	print waypoints
+	print (waypoints)
 
 	if waypoints:
 		run_mission(drone, target_height, waypoints)
@@ -208,7 +208,7 @@ def takeoff_drone(kwargs):
 	mq.put((attach_listener, { "attach_fn" : drone.add_attribute_listener, "attr" : 'attitude', "fn" : udpate_attitude }))
 	mq.put((attach_listener, { "attach_fn" : drone.add_attribute_listener, "attr" : 'heading', "fn" : update_heading }))
 
-	print 'took off'
+	print ('took off')
 
 	return True
 
@@ -227,5 +227,5 @@ def land_drone(kwargs):
 	cmds.clear()
 
 	drone.mode = VehicleMode('LAND')
-	print drone.mode
+	print (drone.mode)
 	return True

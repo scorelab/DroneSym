@@ -13,9 +13,10 @@
 1. After cloning the repo navigate to `dronesym-node` folder
 2. Run `npm install` to pull the dependencies
 3. Create a firebase admin sdk private key following the instructions found here: https://firebase.google.com/docs/admin/setup#add_firebase_to_your_app
-4. In `db.js` file provide the path to your firebase key file and the database url
-5. Import the database with `mongorestore --db dronesym dronedb/dronesym`
-6. Run `npm start` to start the Node server
+4. In `example.db.js` file provide the path to your firebase key file and the database url
+5. Run ```mongod``` to start running Mongo
+6. Open another terminal without disturbing the terminal running mongod, then import the database with `mongorestore --db dronesym dronedb/dronesym`
+7. Run `npm start` to start the Node server
 
 **Note: Make sure you have an admin account in the database under user collection. (Refer the schema in Models folder)**
 
