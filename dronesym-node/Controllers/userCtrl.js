@@ -4,7 +4,12 @@ var jwt = require('jsonwebtoken');
 var jwtConfig = require('../config/jwtconfig');
 var db = require('../example.db');
 
-
+/**
+ * Updates firebase db, in this case when user groups change
+ * @param {string} droneId - id of drone
+ * @param {object} userInfo - object containing userId, groupId and groupName
+ * @param {boolean} insert - boolean informing whether users of given drone changed
+ */
 var updateFirebase = function(droneId, userInfo, insert=true) {
 
 	let droneRef = db.ref('drones/' + droneId + '/users');
@@ -24,7 +29,10 @@ var updateFirebase = function(droneId, userInfo, insert=true) {
 		droneRef.set(users);
 	})
 }
-
+/**
+ * Creates a JWT token out of given user object
+ * @param {object} user - object containing params of user 
+ */
 var tokenizeUserInfo = function(user){
 	var userInfo = {};
 	userInfo.id = user._id;
@@ -38,6 +46,10 @@ var tokenizeUserInfo = function(user){
 	return token;
 }
 
+/**
+ * Extracts important informations out of user object
+ * @param {object} user - object containing params of user 
+ */
 var filterUser = function(user) {
 	return {
 		id : user._id,
@@ -46,6 +58,13 @@ var filterUser = function(user) {
 	}
 }
 
+/**
+ * Creates user with given parameters, and saves it in DB
+ * @param {string} uname - username of user we want to create
+ * @param {string} password - password of user we want to create, is later encrypted
+ * @param {string} role - role of user we want to create, default is 'user', other is 'admin'
+ * @param {function} callBack - function to return result of creating an user to
+ */
 exports.createUser = function(uname, password, role, callBack){
 	if(!uname || !password){
 		callBack({ status: "ERROR", msg: "Username and password must be specified"})
@@ -80,7 +99,12 @@ exports.createUser = function(uname, password, role, callBack){
 		})
 	})
 }
-
+/**
+ * Logs in given user
+ * @param {string} uname - username of given user
+ * @param {string} password - password of given user
+ * @param {string} callBack - function to return result of user login to
+ */
 exports.loginUser = function(uname, password, callBack){
 	if(!uname || !password){
 		callBack({ status: "ERROR", msg: "Username and password must be specified" });
@@ -116,6 +140,10 @@ exports.loginUser = function(uname, password, callBack){
 	});
 }
 
+/**
+ * Function that authorizes user (IDK where it is used)
+ * @param {array} roles - array of roles
+ */
 exports.authorizeUser = function(roles){
 	return function(req, res, next){
 		var user = req.user;
@@ -130,6 +158,13 @@ exports.authorizeUser = function(roles){
 	}
 }
 
+/**
+ * Function to update groups array of user, as well as users array of his/her drones
+ * @param {string} userId - id of user
+ * @param {string} groupId - id of group
+ * @param {boolean} insert - boolean informing whether users of given drone changed
+ * @param {function} callBack - function to return result of updating user groups to
+ */
 exports.updateUserGroups = function(userId, groupId, insert=true, callBack) {
 
 	Group.findOne({ _id : groupId }, function(err, group) {
@@ -183,6 +218,11 @@ exports.updateUserGroups = function(userId, groupId, insert=true, callBack) {
 	})
 }
 
+/**
+ * Admin function to get list of all users
+ * @param {string} userId - id of user
+ * @param {function} callBack - function to return result of getting user list to
+ */
 exports.getUserList = function(userId, callBack) {
 	if(!userId){
 		callBack({ status: "ERROR", msg: "User ID can't be null"});
