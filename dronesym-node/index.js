@@ -59,6 +59,7 @@ app.use(function(err, req, res, next) {
 
 
 http.listen(port, function(){
+	// eslint-disable-next-line no-console
 	console.log("Listening on " + port + "..");
 });
 
