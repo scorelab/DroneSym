@@ -8,6 +8,8 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var app = express();
 var http = require('http');
+// You can change the port to any other, if 3000 is busy or being used by any other service.
+var port = 3000; 
 
 http = http.Server(app);
 var sockConn = require('./websocket').init(http);
@@ -26,7 +28,7 @@ var passportConfig = require('./config/passportconfig')(passport);
 app.use(passport.initialize());
 
 //mongodb connection
-mongoose.connect(mongoConfig.dbUri);
+mongoose.connect(mongoConfig.dbUri, {useMongoClient: true});
 
 mongoose.connection.on('error', function(err){
   console.log(err);
@@ -56,8 +58,9 @@ app.use(function(err, req, res, next) {
 });
 
 
-http.listen(3000, function(){
-	console.log("Listening on 3000..");
+http.listen(port, function(){
+	// eslint-disable-next-line no-console
+	console.log("Listening on " + port + "..");
 });
 
 module.exports = app;

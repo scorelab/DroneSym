@@ -1,6 +1,5 @@
 #Main entry point for the Flask API. The API will provide
 #an interface to communicate with Dronekit instances
-from Queue import Queue
 from flask import jsonify, Flask
 from flask import abort, request
 from flask import make_response
@@ -9,8 +8,6 @@ import threadrunner
 
 app = Flask(__name__)
 api_base_url = '/dronesym/api/flask'
-
-q = Queue(maxsize=0)
 
 @app.errorhandler(404)
 def send_not_found(error):
