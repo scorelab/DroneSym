@@ -109,9 +109,6 @@ Run `npm test`
 
 1. Sign into your google account and go to the [Firebase Console](https://console.firebase.google.com/) page.
 2. Add your project on then go to the settings panel for user credentials.
-   ![Service Accounts](https://i.imgur.com/YcbII59.png)
 3. Generate and Download a new private key and move it to the same directory as the _example.db.js_ file.
-   ![Generate Private Key](https://i.imgur.com/5uxstiX.png)
-   ![Paste in Directory](https://i.imgur.com/OZqg8F5.png)
 4. Open _example.db.js_ and paste the name of the downloaded file into the _creds = require_ line, as shown. Also, copy the database URL (looks like _https://<database_name>.firebaseio.com_) from the console and paste it in the _databaseURL_ line, as shown.
-   ![Edit Database File](https://i.imgur.com/3OISbKN.png)
+   ![Edit Database File](https://i.imgur.com/DxNTFZZ.png)
