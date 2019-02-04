@@ -17,3 +17,28 @@ body{
 	display: inline-block;
 	height: 2px;
 }
+.breadcrumb {
+        margin-bottom:-3px;
+        list-style: none ;
+        list-style-type: none;
+        background-color: #eee;
+    }
+    .breadcrumb li {
+        display: inline;
+        font-size: 16px;
+        padding-left:2px;
+    }
+    .breadcrumb li+li:before {
+        padding: 8px;
+        color:#22459C;
+        content: ">\00a0";
+    }
+    .breadcrumb li a {
+        color: #0275d8;
+        text-decoration: none;
+    }
+    ol.breadcrumb li a:hover {
+        color: #01447e;
+        text-decoration: underline;
+    }
+    
