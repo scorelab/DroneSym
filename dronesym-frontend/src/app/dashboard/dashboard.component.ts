@@ -44,7 +44,7 @@ export class DashboardComponent{
   constructor(private droneFeed: DroneDataService, private _zone: NgZone, private router: Router, private userService: UserService) {
     this.droneFeed.getDroneFeed()
         .subscribe((data) => {
-          if(data.length != this.droneIndices.length){
+          if (data.length != this.droneIndices.length){
             this.droneIndices = Array(data.length).fill(0).map((x, i) => i);
           }
 
@@ -75,7 +75,7 @@ export class DashboardComponent{
       });
 
       this.map.addListener('click', (e) => {
-        if(this.createMode === this.createModes.DRONES){
+        if (this.createMode === this.createModes.DRONES){
           this._zone.run(() => {
             this.dialogParams.droneDialog.show = true;
             this.centerCoords.lat = e.latLng.lat();
@@ -84,14 +84,14 @@ export class DashboardComponent{
           })
         }
 
-        else if(this.createMode === this.createModes.WAYPOINTS){
+        else if (this.createMode === this.createModes.WAYPOINTS){
           this._zone.run(() => {
             this.currDrone.waypoints.push({ 'lat': e.latLng.lat(), 'lon': e.latLng.lng() })
             console.log(this.currDrone.waypoints);
           })
         }
 
-        else if(this.createMode === this.createModes.NONE){
+        else if (this.createMode === this.createModes.NONE){
           this._zone.run(() => {
             this.currDrone = {};
             console.log(this.currDrone);
@@ -104,7 +104,7 @@ export class DashboardComponent{
   private switchCreateMode(mode: number){
     this.createMode = mode;
 
-    if(mode != this.createModes.NONE){
+    if (mode != this.createModes.NONE){
       this.map.setOptions({ draggableCursor: 'crosshair' });
     }
     else{
@@ -114,18 +114,18 @@ export class DashboardComponent{
   }
 
   private updateCurrDrone(){
-    if(!this.currDrone){
+    if (!this.currDrone){
       return;
     }
 
-    let drone = this.drones.filter((drone) => {
+    const drone = this.drones.filter((drone) => {
       return drone.key === this.currDrone.key;
     })[0];
 
-    if(!drone){
+    if (!drone){
       return;
     }
-    
+
     this.currDrone.status = drone.status;
     this.currDrone.location.alt = drone.location.alt;
     this.currDrone.airspeed = drone.airspeed;
@@ -139,7 +139,7 @@ export class DashboardComponent{
 
   public goToCreateDroneMode() {
     this.switchCreateMode(this.createModes.DRONES);
-    Materialize.toast("Click on map to put drones", 4000);
+    Materialize.toast('Click on map to put drones', 4000);
   }
 
   public goToSignup(){
@@ -169,7 +169,7 @@ export class DashboardComponent{
 
   public cancelAddingWaypoints(){
     this.switchCreateMode(this.createModes.NONE);
-    let currPosition = { 'lat': this.currDrone.location.lat, 'lon': this.currDrone.location.lon };
+    const currPosition = { 'lat': this.currDrone.location.lat, 'lon': this.currDrone.location.lon };
     this.currDrone.waypoints = [currPosition]
     this.droneFeed.updateDroneWaypoints(this.currDrone.key, this.currDrone.waypoints)
         .then((status) => console.log(status));
@@ -178,7 +178,7 @@ export class DashboardComponent{
   public createDrone(name, location){
     this.droneFeed.createDrone(name, location)
         .then((res) => {
-          if(res.status === "ERROR"){
+          if (res.status === 'ERROR'){
             console.log(res);
             Materialize.toast(res.msg, 4000);
           }
@@ -187,8 +187,8 @@ export class DashboardComponent{
 
   public processDialogResponse($data){
     console.log($data);
-    if(this.createMode === this.createModes.DRONES){
-      if($data.message === 'DIALOG_CONFIRM'){
+    if (this.createMode === this.createModes.DRONES){
+      if ($data.message === 'DIALOG_CONFIRM'){
         this.createDrone($data.name, this.centerCoords);
       }
     }
@@ -199,39 +199,39 @@ export class DashboardComponent{
   }
 
    public processDroneBox($data){
-     if($data === "SELECT_WAYPOINTS"){
+     if ($data === 'SELECT_WAYPOINTS'){
         this.switchCreateMode(this.createModes.WAYPOINTS);
-        Materialize.toast("Click on map to put waypoints", 4000);
+        Materialize.toast('Click on map to put waypoints', 4000);
      }
 
-     else if($data === "SELECT_TAKEOFF"){
+     else if ($data === 'SELECT_TAKEOFF'){
        this.takeOffDrone();
-       console.log("Taking off");
+       console.log('Taking off');
      }
 
-     else if($data === "SELECT_RESUME"){
+     else if ($data === 'SELECT_RESUME'){
        this.resumeFlight();
-       console.log("Resuming...");
+       console.log('Resuming...');
 
      }
 
-     else if($data === "SELECT_CANCEL"){
+     else if ($data === 'SELECT_CANCEL'){
        this.cancelFlight();
-       console.log("Cancelling...");
+       console.log('Cancelling...');
      }
   }
 
   public deleteWaypoint(index){
-    if(this.createMode === this.createModes.WAYPOINTS){
+    if (this.createMode === this.createModes.WAYPOINTS){
         this.currDrone.waypoints.splice(index, 1);
         this.droneFeed.updateDroneWaypoints(this.currDrone.key, this.currDrone.waypoints)
-            .then((status) => console.log("Deleted"));
+            .then((status) => console.log('Deleted'));
     }
   }
 
   public toggleAllTrails(){
     console.log('Trail toggle...');
-    if(this.droneIndices.length > 0 && this.trailIndices.length == 0){
+    if (this.droneIndices.length > 0 && this.trailIndices.length == 0){
       this.droneIndices.forEach((droneIndex) => {
         this.trailIndices.push(droneIndex);
       })
@@ -251,11 +251,11 @@ export class DashboardComponent{
   }
 
   public changeWaypointIcon(isMouseOver){
-    if(this.createMode === this.createModes.NONE){
+    if (this.createMode === this.createModes.NONE){
       return;
     }
 
-    if(isMouseOver){
+    if (isMouseOver){
       this.waypointIcon = './assets/img/red.png';
     }
     else{

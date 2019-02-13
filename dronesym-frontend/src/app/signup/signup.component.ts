@@ -6,37 +6,27 @@ import { MaterializeAction } from 'angular2-materialize';
 declare var Materialize;
 
 @Component({
-  selector: 'user-signup',
-  templateUrl: './user-signup.component.html',
-  styleUrls: ['./user-signup.component.css']
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.css']
 })
-export class UserSignupComponent implements OnInit {
-
-  modalActions = new EventEmitter<string|MaterializeAction>();
-
-  @Output('onResponse') onResponse = new EventEmitter<any>();
-  @Input()
-  set show(show: boolean){
-    if (show){
-      this.modalActions.emit({ action: 'modal', params: ['open']});
-    }
-    else{
-      this.modalActions.emit({ action: 'modal', params: ['close']});
-      this.onResponse.emit({ status : 'CLOSED' });
-    }
-  }
-
+export class SignupComponent implements OnInit {
 
   private user: any;
+  /** Regular expression for email validation */
+  regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
   constructor(private userService: UserService, private router: Router) {
-    this.user = { uname: '', password: '', retype: '', role: '' };
+    this.user = { uname: '', email: '', password: '', retype: '', role: '' };
   }
 
-  ngOnInit() { }
-
+  ngOnInit() {
+  }
   public setUsername($event){
     this.user.uname = $event.target.value;
+  }
+  public setEmail($event){
+    this.user.email = $event.target.value;
   }
 
   public setPassword($event){
@@ -46,12 +36,20 @@ export class UserSignupComponent implements OnInit {
   public setRetype($event){
     this.user.retype = $event.target.value;
   }
-
+  public onRoleSelect($event){
+    const role = $event.target.value.toLowerCase();
+    this.user.role = role;
+  }
   public onSignup($event){
     $event.preventDefault();
 
     if (this.user.uname === '' || this.user.password === '' || this.user.retype === ''){
       Materialize.toast('All fields must be specified', 3000);
+      return;
+    }
+
+    if (!this.regexp.test(this.user.email)){
+      Materialize.toast('Please enter a valid Email Address', 3000);
       return;
     }
 
@@ -65,33 +63,21 @@ export class UserSignupComponent implements OnInit {
       return;
     }
 
-    this.userService.createUser(this.user.uname, this.user.password, this.user.role)
+    this.userService.createUserFromSignup(this.user.uname, this.user.password, this.user.role, this.user.email)
         .then((status) => {
           if (status.status === 'OK'){
             Materialize.toast('User created successfully', 4000);
-            this.modalActions.emit({ action: 'modal', params: ['close']});
-            this.onResponse.emit({ status : 'CLOSED' });
+
           }
           else if (status.status === 'ERROR'){
             Materialize.toast(status.msg, 4000);
-            this.onResponse.emit({ status : 'ERROR', msg : status.msg });
           }
         }, (err) => {
           Materialize.toast('Oops something went wrong...', 4000);
-          this.onResponse.emit({ status : 'ERROR', msg : err });
           console.log(err);
         })
     console.log(this.user);
   }
 
-  public onRoleSelect($event){
-    const role = $event.target.value.toLowerCase();
-    this.user.role = role;
-    console.log(this.user);
-  }
-
-  public cancel() {
-    this.onResponse.emit({ status : 'CANCEL' });
-  }
-
 }
+

@@ -12,11 +12,16 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
 import { DroneGroupsComponent } from './drone-groups/drone-groups.component';
 import { DroneListComponent } from './drone-list/drone-list.component';
 import { UserManagementComponent } from './user-management/user-management.component';
+import { SignupComponent } from './signup/signup.component';
 
 const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'signup',
+    component: SignupComponent
   },
   {
     path: 'dashboard',

@@ -17,6 +17,11 @@ router.post('/create', authenticate, authorize(['admin']), function(req, res){
 		res.json(status);
 	})
 })
+router.post("/createuser", function(req, res){
+	userCtrl.createUserFromSignup(req.body.uname, req.body.password, req.body.role, req.body.email, function(status){
+		res.json(status);
+	})
+})
 
 router.get('/role', authenticate, function(req, res){
 	res.json({ status: 'OK', role: req.user.role});

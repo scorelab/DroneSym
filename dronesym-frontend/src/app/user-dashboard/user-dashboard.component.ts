@@ -8,9 +8,9 @@ import { UserService } from '../user-service/user.service';
 })
 export class UserDashboardComponent implements OnInit {
 
-  public userRole : string;
+  public userRole: string;
 
-  constructor(private userService :UserService) {
+  constructor(private userService: UserService) {
   	userService.getUserRole().then((role) => {
   		this.userRole = role;
   	})

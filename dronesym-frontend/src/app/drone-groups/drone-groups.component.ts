@@ -11,7 +11,7 @@ declare var Materialize: any;
   styleUrls: ['./drone-groups.component.css']
 })
 export class DroneGroupsComponent {
-	userRole :string;
+	userRole: string;
 	groups: any;
 	showGroupDialog: boolean;
 	showDronesDialog: boolean;
@@ -19,7 +19,7 @@ export class DroneGroupsComponent {
 	currGroup: string;
 
 	constructor(private droneFeed: DroneDataService, private userService: UserService) {
-		this.userRole = "";
+		this.userRole = '';
 		this.showGroupDialog = false;
 		this.showDronesDialog = false;
 		this.drones = [];
@@ -45,10 +45,10 @@ export class DroneGroupsComponent {
 
 
 	createGroup($event){
-		if($event.message === 'DIALOG_CONFIRM'){
+		if ($event.message === 'DIALOG_CONFIRM'){
 			this.droneFeed.createGroup($event.name)
 				.then((res) => {
-					if(res.status === "ERROR"){
+					if (res.status === 'ERROR'){
 						Materialize.toast(res.msg, 4000);
 						return;
 					}
@@ -68,16 +68,16 @@ export class DroneGroupsComponent {
 	}
 
 	addDronesToGroup($event){
-		if($event.action === "DRONES_BOX_CONFIRM" && $event.items.length > 0){
+		if ($event.action === 'DRONES_BOX_CONFIRM' && $event.items.length > 0){
 			this.droneFeed.addToGroup(this.currGroup, $event.items)
 				.then((res) => {
 					console.log(res.group);
-					let newGroup = res.group;
+					const newGroup = res.group;
 					this.groups = this.groups.map((group) => group._id === newGroup._id ? newGroup : group);
 				});
 		}
 		this.showDronesDialog = false;
-		this.currGroup = "";
+		this.currGroup = '';
 	}
 
 	removeGroup(groupId){
@@ -96,7 +96,7 @@ export class DroneGroupsComponent {
 		this.droneFeed.removeFromGroup(groupId, droneId)
 			.then((res) => {
 				console.log(res);
-				let newGroup = res.group;
+				const newGroup = res.group;
 				this.groups = this.groups.map((group) => group._id === newGroup._id ? newGroup : group);
 			})
 	}

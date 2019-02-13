@@ -16,16 +16,16 @@ export class ConfirmDialogComponent implements OnInit {
   @Input('inputEnabled') inputEnabled: boolean;
   @Input()
   set show(show: boolean){
-    if(show){
-      this.modalActions.emit({ action: 'modal', params:['open']});
+    if (show){
+      this.modalActions.emit({ action: 'modal', params: ['open']});
     }
     else{
-      this.modalActions.emit({ action: 'modal', params:['close']});
+      this.modalActions.emit({ action: 'modal', params: ['close']});
     }
   }
 
   constructor() {
-    this.name = "";
+    this.name = '';
   }
 
   ngOnInit() {

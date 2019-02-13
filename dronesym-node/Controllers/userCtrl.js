@@ -100,6 +100,48 @@ exports.createUser = function(uname, password, role, callBack){
 	})
 }
 /**
+ * Creates user from signup page with given parameters, and saves it in DB
+ * @param {string} uname - username of user we want to create
+ * @param {string} password - password of user we want to create, is later encrypted
+ * @param {string} role - role of user we want to create, default is 'user'
+ * @param {string} email - email of user we want to create
+ * @param {function} callBack - function to return result of creating an user to
+ */
+exports.createUserFromSignup = function(uname, password,role,email,callBack){
+	if(!uname || !password){
+		callBack({ status: "ERROR", msg: "Username and password must be specified"})
+		return;
+	}
+
+	User.findOne({ uname: uname }, function(err, user){
+		if(err){
+			callBack({ status: "ERROR", msg: err });
+			return;
+		}
+
+		if(user){
+			callBack({ status: "ERROR", msg: "Username already taken"});
+			return;
+		}
+
+		var user = new User();
+
+		user.uname = uname;
+		user.password = password;
+		user.role = role;
+		user.email=email;
+		user.save(function(err, status){
+			if(err){
+				callBack({ status: "ERROR", msg: err });
+				return;
+			}
+
+			var token = tokenizeUserInfo(status);
+			callBack({ status: "OK", token: "JWT " + token });
+		})
+	})
+}
+/**
  * Logs in given user
  * @param {string} uname - username of given user
  * @param {string} password - password of given user

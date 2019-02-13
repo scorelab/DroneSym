@@ -9,15 +9,15 @@ import { MaterializeAction } from 'angular2-materialize';
 export class DronesBoxComponent {
 
   modalActions = new EventEmitter<string|MaterializeAction>();
-  selectedItems :any;
+  selectedItems: any;
 
   @Input()
   set show(show: boolean){
-    if(show){
-      this.modalActions.emit({ action: 'modal', params:['open']});
+    if (show){
+      this.modalActions.emit({ action: 'modal', params: ['open']});
     }
     else{
-      this.modalActions.emit({ action: 'modal', params:['close']});
+      this.modalActions.emit({ action: 'modal', params: ['close']});
     }
   }
 
@@ -30,7 +30,7 @@ export class DronesBoxComponent {
   }
 
   toggleDrone(droneId){
-    if(this.selectedItems.indexOf(droneId) == -1){
+    if (this.selectedItems.indexOf(droneId) == -1){
       this.selectedItems.push(droneId);
     }
     else{
