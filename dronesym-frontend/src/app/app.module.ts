@@ -26,6 +26,7 @@ import { DroneGroupsComponent } from './drone-groups/drone-groups.component';
 import { DroneListComponent } from './drone-list/drone-list.component';
 import { DronesBoxComponent } from './drones-box/drones-box.component';
 import { UserManagementComponent } from './user-management/user-management.component';
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { UserManagementComponent } from './user-management/user-management.compo
     DroneGroupsComponent,
     DroneListComponent,
     DronesBoxComponent,
-    UserManagementComponent
+    UserManagementComponent,
+    BreadcrumbComponent
   ],
   imports: [
     BrowserModule,

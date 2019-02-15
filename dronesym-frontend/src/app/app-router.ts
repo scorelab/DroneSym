@@ -20,6 +20,9 @@ const appRoutes: Routes = [
   },
   {
     path: 'dashboard',
+    data: {
+      breadcrumb: 'Dashboard'
+    },
     component: UserViewComponent,
     canActivate: [
       RouteGuardService
@@ -27,29 +30,44 @@ const appRoutes: Routes = [
     children: [
       {
         path: 'map',
+        data: {
+          breadcrumb: 'Map'
+      },
         component: DashboardComponent,
-        canActivate: [ RouteGuardService ]
+        canActivate: [RouteGuardService]
       },
       {
         path: 'user',
+        data: {
+          breadcrumb: 'User'
+      },
         component: UserDashboardComponent,
-        canActivate: [ RouteGuardService ],
+        canActivate: [RouteGuardService],
         children: [
-            {
-              path: 'groups',
-              component: DroneGroupsComponent,
-              canActivate: [ RouteGuardService ]
-            },
-            {
-              path: 'list',
-              component: DroneListComponent,
-              canActivate: [ RouteGuardService ]
-            },
-            {
-              path: 'users',
-              component: UserManagementComponent,
-              canActivate: [ RouteGuardService ]
-            }
+          {
+            path: 'groups',
+            data: {
+              breadcrumb: 'Manage Groups'
+          },
+            component: DroneGroupsComponent,
+            canActivate: [RouteGuardService]
+          },
+          {
+            path: 'list',
+            data: {
+              breadcrumb: 'Manage Drones'
+          },
+            component: DroneListComponent,
+            canActivate: [RouteGuardService]
+          },
+          {
+            path: 'users',
+            data: {
+              breadcrumb: 'Manage Users'
+          },
+            component: UserManagementComponent,
+            canActivate: [RouteGuardService]
+          }
         ]
       }
     ]
@@ -65,12 +83,12 @@ const appRoutes: Routes = [
 ]
 
 @NgModule({
-	imports: [
-		RouterModule.forRoot(appRoutes)
-	],
-	exports: [
-		RouterModule
-	]
+  imports: [
+    RouterModule.forRoot(appRoutes)
+  ],
+  exports: [
+    RouterModule
+  ]
 })
 
-export class AppRouter {}
+export class AppRouter { }
