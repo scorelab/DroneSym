@@ -1,5 +1,5 @@
 from threading import Thread, Lock
-from Queue import Queue
+from queue import Queue
 import threading
 
 q = Queue(maxsize=0)
