@@ -9,7 +9,7 @@ def update_drone(id, status):
 		response = requests.post(apiUrl + '/update/' + str(id), json=status, headers={ 'Content-Type' : 'application/json' })
 		return response.json()
 	except requests.ConnectionError:
-		print("Retrying...")
+		print "Retrying..."
 		time.sleep(0.1)
 		return update_drone(id, status)
 
@@ -18,7 +18,7 @@ def get_drone_by_id(id):
 		response = requests.get(apiUrl + '/get/' + id)
 		return response.json()
 	except requests.ConnectionError:
-		print("Retrying...")
+		print "Retrying..."
 		time.sleep(1)
 		return get_drone_by_id(id)
 
@@ -27,6 +27,6 @@ def get_drones():
 		response = requests.get(apiUrl + '/get')
 		return response.json()
 	except requests.ConnectionError:
-		print("Retrying...")
+		print "Retrying..."
 		time.sleep(1)
 		return get_drones()

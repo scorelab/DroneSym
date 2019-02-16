@@ -49,12 +49,12 @@ def initialize():
 		return
 
 	for drone_id in drones:
-		if drone_id not in list(drone_pool.keys()):
+		if drone_id not in drone_pool.keys():
 			drone = node.get_drone_by_id(drone_id)
 			location = drone['location']
 			q.put((create_new_drone, { "db_key" : drone_id, "home" : location }))
 
-			if 'status' in list(drone.keys()) and drone['status'] == 'FLYING':
+			if 'status' in drone.keys() and drone['status'] == 'FLYING':
 				q.put((resume_flight, { "drone_id" : drone_id }))
 
 def resume_flight(kwargs):
@@ -113,7 +113,7 @@ def remove_drone(kwargs):
 
 def run_mission(drone, target_height, waypoints):
 	while True:
-		print(("Reaching target alt : " + str(drone.location.global_relative_frame.alt)))
+		print ("Reaching target alt : " + str(drone.location.global_relative_frame.alt))
 		if drone.location.global_relative_frame.alt >= target_height * 0.9:
 			break
 
@@ -179,7 +179,7 @@ def takeoff_drone(kwargs):
 
 		if command_len >= wp_len :
 			diff = command_len - wp_len
-			next_wp = max(drone.commands.__next__ - diff, 0) % len(waypoints)
+			next_wp = max(drone.commands.next - diff, 0) % len(waypoints)
 			waypoint = waypoints[next_wp]
 			# print "df: " + `diff`
 			# print next_wp
@@ -189,7 +189,7 @@ def takeoff_drone(kwargs):
 			detach_event_listeners(drone, value, "HALTED")
 			return
 
-		if drone.commands.__next__ == len(drone.commands):
+		if drone.commands.next == len(drone.commands):
 			detach_event_listeners(drone, value, "FINISHED")
 			return
 
@@ -227,5 +227,5 @@ def land_drone(kwargs):
 	cmds.clear()
 
 	drone.mode = VehicleMode('LAND')
-	print((drone.mode))
+	print (drone.mode)
 	return True
