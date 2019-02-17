@@ -44,7 +44,7 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
     DroneListComponent,
     DronesBoxComponent,
     UserManagementComponent,
-    SignupComponent
+    SignupComponent,
     BreadcrumbComponent
   ],
   imports: [

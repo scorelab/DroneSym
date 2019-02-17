@@ -28,8 +28,8 @@ export class UserService {
         .toPromise();
   }
 
-  public createUser(username, password, role){
-    const user = { 'uname': username, 'password': password, 'role': role }
+  public createUser(username, email, password, role){
+    let user = { 'uname': username, 'email':email, 'password': password, 'role': role }
     return this.http.post(`${this.baseUrl}/create`,  user)
            .map((res) => res.json())
            .toPromise();

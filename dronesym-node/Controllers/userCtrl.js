@@ -65,7 +65,7 @@ var filterUser = function(user) {
  * @param {string} role - role of user we want to create, default is 'user', other is 'admin'
  * @param {function} callBack - function to return result of creating an user to
  */
-exports.createUser = function(uname, password, role, callBack){
+exports.createUser = function(uname, email, password, role, callBack){
 	if(!uname || !password){
 		callBack({ status: "ERROR", msg: "Username and password must be specified"})
 		return;
@@ -85,6 +85,7 @@ exports.createUser = function(uname, password, role, callBack){
 		var user = new User();
 
 		user.uname = uname;
+		user.email=email;
 		user.password = password;
 		user.role = role;
 
