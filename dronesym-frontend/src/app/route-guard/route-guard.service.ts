@@ -14,7 +14,7 @@ export class RouteGuardService implements CanActivate{
   private isAuthenticated(): Promise<boolean>{
   	return this.userService.isAuthenticated()
   		.then((res) => {
-  			if(res) {
+  			if (res) {
   				return true;
   			}
   			else{

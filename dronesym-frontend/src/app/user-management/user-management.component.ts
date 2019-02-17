@@ -11,19 +11,19 @@ import { DronesBoxComponent } from '../drones-box/drones-box.component';
 })
 export class UserManagementComponent implements OnInit {
 
-  public showUserSignUpDialog :boolean;
+  public showUserSignUpDialog: boolean;
   public showDroneGroupsDialog: boolean;
   public userRole;
   public users;
   public groups;
   public currUser;
 
-  constructor(private userService :UserService, private droneService :DroneDataService) {
+  constructor(private userService: UserService, private droneService: DroneDataService) {
   	this.showUserSignUpDialog = false;
     this.showDroneGroupsDialog = false;
     this.groups = [];
     this.users = [];
-    this.currUser = "";
+    this.currUser = '';
 
   	userService.getUserRole().then((role) => {
   		this.userRole = role;
@@ -49,7 +49,7 @@ export class UserManagementComponent implements OnInit {
 
   private updateUser(userData) {
     this.users = this.users.map((user) => {
-      if(user.id === userData.id) {
+      if (user.id === userData.id) {
         return userData;
       }
       else {
@@ -68,7 +68,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   public onDronesBoxResponse($event) {
-    let groups = $event.items;
+    const groups = $event.items;
     console.log(groups);
 
     groups.forEach((groupId) => {
@@ -79,7 +79,7 @@ export class UserManagementComponent implements OnInit {
     });
 
      this.showDroneGroupsDialog = false;
-     this.currUser = "";
+     this.currUser = '';
   }
 
   public onUserSignupResponse() {

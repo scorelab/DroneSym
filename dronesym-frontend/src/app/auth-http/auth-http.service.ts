@@ -11,8 +11,8 @@ export class AuthHttpService {
   constructor(private http: Http, private router: Router) { }
 
   private getAuthHeader(): Headers{
-  	let token = localStorage.getItem('token');
-  	let headers = new Headers();
+  	const token = localStorage.getItem('token');
+  	const headers = new Headers();
   	headers.append('Authorization', token);
 
   	return headers;
@@ -20,8 +20,8 @@ export class AuthHttpService {
 
   private checkAuthorization(request: Observable<any>): Observable<any>{
     request.map((res) => {
-      let json = res.json();
-      if(json === 'Unauthorized'){
+      const json = res.json();
+      if (json === 'Unauthorized'){
         this.router.navigate(['login']);
         return request;
       }
@@ -38,14 +38,14 @@ export class AuthHttpService {
   }
 
   public get(url: string): Observable<any>{
-  	let authHeader = this.getAuthHeader();
-  	let request = this.http.get(url, { 'headers': authHeader });
+  	const authHeader = this.getAuthHeader();
+  	const request = this.http.get(url, { 'headers': authHeader });
     return this.checkAuthorization(request);
   }
 
-  public post(url: string, data :any): Observable<any>{
-  	let authHeader = this.getAuthHeader();
-  	let request = this.http.post(url, data, { 'headers': authHeader });
+  public post(url: string, data: any): Observable<any>{
+  	const authHeader = this.getAuthHeader();
+  	const request = this.http.post(url, data, { 'headers': authHeader });
     return this.checkAuthorization(request);
   }
 

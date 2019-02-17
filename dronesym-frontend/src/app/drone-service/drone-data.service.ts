@@ -34,8 +34,8 @@ export class DroneDataService {
   }
 
   public getDroneFeed(): Observable<any>{
-    let feedObservable = new Observable((observer) => {
-        let token = localStorage.getItem('token').slice(4);
+    const feedObservable = new Observable((observer) => {
+        const token = localStorage.getItem('token').slice(4);
         this.feed = io(environment.feedURL, { 'query' : `token=${token}`});
         this.droneObserver = observer;
 

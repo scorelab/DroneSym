@@ -13,13 +13,13 @@ export class CursorTooltipComponent implements OnInit {
 
   @Input()
   set x(x: number){
-  	let el = this.tooltip.nativeElement;
+  	const el = this.tooltip.nativeElement;
   	el.style.left = `${x + 5}px`;
   }
 
   @Input()
   set y(y: number){
-  	let el = this.tooltip.nativeElement;
+  	const el = this.tooltip.nativeElement;
   	el.style.top = `${y + 5}px`;
   }
 

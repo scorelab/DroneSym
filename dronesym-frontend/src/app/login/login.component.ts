@@ -14,8 +14,8 @@ export class LoginComponent {
   private user: any = {};
 
   constructor(private router: Router, private userService: UserService) {
-    this.user.username = "";
-    this.user.password = "";
+    this.user.username = '';
+    this.user.password = '';
   }
 
   setUsername($event){
@@ -30,7 +30,7 @@ export class LoginComponent {
     $event.preventDefault();
     this.userService.login(this.user.username, this.user.password)
         .then((res) => {
-          if(res.status === "OK"){
+          if (res.status === 'OK'){
             this.router.navigate(['dashboard/map']);
           }
           else{

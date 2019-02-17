@@ -26,7 +26,7 @@ export class DroneListComponent {
 
   	this.droneFeed.getDroneFeed()
   		.subscribe((drones) => {
-        if(this.drones.length != drones.length){
+        if (this.drones.length != drones.length){
   			  this.drones = drones;
         }
   		})
@@ -43,16 +43,16 @@ export class DroneListComponent {
   }
 
   deleteResponse($event){
-    if($event.message === 'DIALOG_CONFIRM'){
+    if ($event.message === 'DIALOG_CONFIRM'){
       this.droneFeed.removeDrone(this.currDrone.key, this.currDrone.status)
           .then((res) => {
             console.log(res);
 
-            if(res.status === "ERROR"){
+            if (res.status === 'ERROR'){
               Materialize.toast(`Can't Delete : ${res.msg}`, 4000);
               return;
             }
-            else if(res.status === "OK"){
+            else if (res.status === 'OK'){
               Materialize.toast('Drone removed from fleet', 4000);
             }
           })
@@ -66,7 +66,7 @@ export class DroneListComponent {
   }
 
   renameResponse($event){
-    if($event.message === 'DIALOG_CONFIRM'){
+    if ($event.message === 'DIALOG_CONFIRM'){
       this.droneFeed.updateName(this.currDrone.key, $event.name)
          .then((res) => {
                  console.log(res);

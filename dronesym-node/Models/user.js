@@ -6,6 +6,7 @@ var userSchema = mongoose.Schema({
 		type: String,
 		required: true
 	},
+	
 	password: {
 		type: String,
 		required: true
@@ -17,13 +18,18 @@ var userSchema = mongoose.Schema({
 		required: true,
 		default: 'user'
 	},
+	email:{
+		type: String,
+		required: true
+	},
 	groups: {
 		type : [{
 			groupId : String,
 			groupName : String
 		}],
 		default : []
-	}
+	},
+	
 }, { timestamps: true });
 
 userSchema.pre('save', function(next){

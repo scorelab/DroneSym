@@ -11,7 +11,7 @@ export class AdminAuthorizeService implements CanActivate {
   canActivate(){
   	return this.userService.getUserRole()
                .then((role) => {
-                 if(role === 'admin'){
+                 if (role === 'admin'){
                    return true;
                  }
                  else{
