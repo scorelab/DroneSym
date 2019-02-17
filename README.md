@@ -11,7 +11,7 @@
 ### Prerequisites
 
 1. Install Node.js 6.x (or higher)
-2. Python version 2.7
+2. Python version 2.7 (or higher)
 
 ### Part 1 - Setting up the Node environment
 
