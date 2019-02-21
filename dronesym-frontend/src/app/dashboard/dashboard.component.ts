@@ -175,8 +175,8 @@ export class DashboardComponent{
         .then((status) => console.log(status));
   }
 
-  public createDrone(name, location){
-    this.droneFeed.createDrone(name, location)
+  public createDrone(name,description,flying_time, location){
+    this.droneFeed.createDrone(name,description,flying_time, location)
         .then((res) => {
           if (res.status === 'ERROR'){
             console.log(res);
@@ -189,7 +189,7 @@ export class DashboardComponent{
     console.log($data);
     if (this.createMode === this.createModes.DRONES){
       if ($data.message === 'DIALOG_CONFIRM'){
-        this.createDrone($data.name, this.centerCoords);
+        this.createDrone($data.name,$data.description,$data.flying_time, this.centerCoords);
       }
     }
 

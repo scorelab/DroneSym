@@ -26,6 +26,7 @@ export class DroneListComponent {
 
   	this.droneFeed.getDroneFeed()
   		.subscribe((drones) => {
+        //console.log(drones);
         if (this.drones.length != drones.length){
   			  this.drones = drones;
         }
