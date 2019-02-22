@@ -63,7 +63,7 @@ if(process.env.NODE_ENV !== "test"){
  * @param {string} userId - id of person who is owner of that drone
  * @param {function} callBack - function to return result of creating drone
  */
-exports.createDrone = function(name,description,flying_time, location, userId, callBack){
+exports.createDrone = function(name,description,flyingtime, location, userId, callBack){
 	if(!name  || name === ''){
 		callBack({ status : "ERROR", msg: "Drone name is required"});
 		return;
@@ -74,7 +74,7 @@ exports.createDrone = function(name,description,flying_time, location, userId, c
 		return;
 	}
 
-	var droneKey = droneRef.push({'name': name,'description':description,'flying_time':flying_time, 'users' : [ { userId : userId, groupId : "creator" }], 'location': location, 'waypoints': [location] })
+	var droneKey = droneRef.push({'name': name,'description':description,'flying_time':flyingtime, 'users' : [ { userId : userId, groupId : "creator" }], 'location': location, 'waypoints': [location] })
 
 	request.post(`${flaskUrl}/spawn`, { json : { droneId: droneKey.key, location: location } },
 	function(error, response, body){
