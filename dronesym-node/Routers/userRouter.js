@@ -13,7 +13,7 @@ router.post('/login', function(req, res){
 })
 
 router.post('/create', authenticate, authorize(['admin']), function(req, res){
-	userCtrl.createUser(req.body.uname, req.body.password, req.body.role, function(status){
+	userCtrl.createUser(req.body.uname, req.body.email, req.body.password, req.body.role, function(status){
 		res.json(status);
 	})
 })
