@@ -4,6 +4,9 @@ var jwt = require('jsonwebtoken');
 var jwtConfig = require('../config/jwtconfig');
 var db = require('../example.db');
 
+/** Regular expression for email validation */
+  regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+
 /**
  * Updates firebase db, in this case when user groups change
  * @param {string} droneId - id of drone
@@ -154,6 +157,35 @@ exports.loginUser = function(uname, password, callBack){
 		return;
 	}
 
+	if(regexp.test(uname)){
+	User.findOne({ email: uname}, function(err, user){
+		if(err){
+			callBack({ status: "ERROR", msg: err });
+			return;
+		}
+
+		if(!user){
+			callBack({ status: "ERROR", msg: "Invalid Email-Id"});
+			return;
+		}
+
+		user.comparePassword(password, function(err, isMatched){
+			if(err){
+				callBack({ status: "ERROR", msg: err });
+				return;
+			}
+
+			if(isMatched){
+				var token = tokenizeUserInfo(user);
+				callBack({ status: "OK", token: "JWT " + token, role: user.role });
+			}
+			else{
+				callBack({ status: "ERROR", msg: "Invalid password"});
+			}
+		})
+
+	});
+}   else{
 	User.findOne({ uname: uname}, function(err, user){
 		if(err){
 			callBack({ status: "ERROR", msg: err });
@@ -181,6 +213,8 @@ exports.loginUser = function(uname, password, callBack){
 		})
 
 	});
+
+}
 }
 
 /**
