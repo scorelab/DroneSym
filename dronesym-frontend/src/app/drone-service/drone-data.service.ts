@@ -21,8 +21,8 @@ export class DroneDataService {
     this.drones = [];
   }
 
-  public createDrone(name: string, location: any): Promise<any>{
-    return this.http.post(`${this.baseUrl}/create`, { 'location' : location, 'name' : name})
+  public createDrone(name: string,description:string,flying_time:string, location: any): Promise<any>{
+    return this.http.post(`${this.baseUrl}/create`, { 'location' : location, 'name' : name,'description':description,'flying_time':flying_time})
         .map((res) => res.json())
         .toPromise();
   }
