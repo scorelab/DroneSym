@@ -8,7 +8,7 @@
 	</agm-polyline>
 
 	<agm-marker *ngFor="let i of droneIndices" [latitude]="drones[i].location.lat"
-		[longitude]="drones[i].location.lon" (markerClick)="setCurrentDrone(drones[i])">
+		[longitude]="drones[i].location.lon" (markerClick)="setCurrentDrone(drones[i])" [label]="{text:drones[i].name}" >
 		<agm-info-window [isOpen]="currDrone?.key === drones[i].key">
 			<drone-option-box [name]="currDrone?.name ? currDrone.name : 'Unnamed'" [state]="currDrone?.status" [airspeed]="currDrone?.airspeed" [altitude]="currDrone?.location?.alt" [heading]="currDrone?.heading" (onSelected)="processDroneBox($event)"></drone-option-box>
 		</agm-info-window>
