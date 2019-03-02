@@ -37,6 +37,12 @@ router.post('/:groupId/add', authenticate, authorize(['admin']), function(req, r
 	});
 });
 
+router.post('/:groupId/updategroup', authenticate, authorize(['admin']), function(req, res) {
+	userCtrl.updateUserInGroup(req.body.userId, req.params.groupId, insert=true, function(status) {
+		res.json(status);
+	});
+});
+
 router.post('/:groupId/remove', authenticate, authorize(['admin']), function(req, res) {
 	userCtrl.updateUserGroups(req.body.userId, req.params.groupId, insert=false, function(status) {
 		res.json(status);

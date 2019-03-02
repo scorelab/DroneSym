@@ -14,7 +14,10 @@ var groupSchema = mongoose.Schema({
 		default: []
 	},
 	users: {
-		type: [String],
+		type : [{
+			userId : String,
+			userName : String
+		}],
 		default : []
 	}
 })
