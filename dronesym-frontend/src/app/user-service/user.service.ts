@@ -109,6 +109,12 @@ export class UserService {
                .toPromise();
   }
 
+  public updateUserToGroup(userId, groupId): Promise<any> {
+    return this.http.post(`${this.baseUrl}/${groupId}/updategroup`, { userId : userId })
+               .map((res) => res.json())
+               .toPromise();
+  }
+
   public removeUserFromGroup(userId, groupId): Promise<any> {
     return this.http.post(`${this.baseUrl}/${groupId}/remove`, { userId : userId })
                .map((res) => res.json())

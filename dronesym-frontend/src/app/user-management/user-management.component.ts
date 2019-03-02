@@ -57,6 +57,16 @@ export class UserManagementComponent implements OnInit {
       }
     });
   }
+  private updateGroup(groupData) {
+    this.groups = this.groups.map((groups) => {
+      if (groups.id === groupData.id) {
+        return groupData;
+      }
+      else {
+        return groups;
+      }
+    });
+  }
 
   public showCreateUserDialog() {
   	this.showUserSignUpDialog = true;
@@ -74,7 +84,15 @@ export class UserManagementComponent implements OnInit {
     groups.forEach((groupId) => {
       this.userService.addUserToGroup(this.currUser, groupId)
           .then((res) => {
+            console.log(res)
             this.updateUser(res.user);
+          })
+    });
+    groups.forEach((groupId) => {
+      this.userService.updateUserToGroup(this.currUser, groupId)
+          .then((res) => {
+            console.log(res)
+            // this.updateGroup(res.user);
           })
     });
 
