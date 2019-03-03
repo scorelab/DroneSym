@@ -61,6 +61,7 @@ var filterUser = function(user) {
 	}
 }
 
+
 /**
  * Creates user with given parameters, and saves it in DB
  * @param {string} uname - username of user we want to create
@@ -233,6 +234,64 @@ exports.authorizeUser = function(roles){
 			return;
 		}
 	}
+}
+/**
+ * Function to update user array of groups
+ * @param {string} userId - id of user
+ * @param {string} groupId - id of group
+ * @param {boolean} insert - boolean informing whether users of given drone changed
+ * @param {function} callBack - function to return result of updating user groups to
+ */
+exports.updateUserInGroup=function(userId, groupId, insert=true, callBack){
+
+	User.findOne({ _id : userId }, function(err, user) {
+
+		if(err) {
+			callBack({ status : "ERROR", msg : err });
+			return;
+		}
+		console.log(user)
+		
+		let userInfo = {userId: userId, userName: user.uname}
+		console.log(groupId)
+
+		Group.findOne({ _id : groupId }, function(err, group) {
+
+			if(err) {
+				callBack({ status : "ERROR", msg : err });
+				return;
+			}
+	
+			if(!group) {
+				callBack({ status : "ERROR", msg : "Group not found" });
+				return;
+			}
+			console.log(group)
+			if(insert) {
+				Group.findOneAndUpdate({ _id : groupId }, { $push : { users : userInfo }} , { new : true }, function(err, user) {
+					console.log(user)
+					if(err) {
+						console.log(1)
+						callBack({ status : "ERROR", msg : err });
+						return;
+					}
+
+					callBack({ status : "OK", user : filterUser(user)});
+				});
+			}
+			else {
+				User.findOneAndUpdate({ _id : groupId }, { $pull : { users : { $in : [{ userId : userId }]}}}, { new : true }, function(err, user) {
+					if(err) {
+						callBack({ status : "ERROR" });
+						return;
+					}
+
+					callBack({ status : "OK", group : filterUser(user) });
+				});
+			}
+		})
+	})
+	
 }
 
 /**
