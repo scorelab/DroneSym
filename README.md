@@ -65,6 +65,10 @@ Starting the Angular2 development server
 $ npm install
 $ ng serve
 ```
+### Runing tests
+1.Navigate to `dronesym-node` folder and run `npm install http`
+
+2.Then run yarn test
 
 ### Default login credentials
 
