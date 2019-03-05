@@ -14,19 +14,20 @@ function generateUserData() {
     return {
         username: randomstring.generate(10), 
         password: randomstring.generate(5), 
+        email: "test@test.com",
         role: "user"
     };
 }
 
 describe("USER CONTROLLER", () => {
     describe("Create user", () => {
-        let username, password, role;
+        let username, password, role,email;
         before(() => {
-            ({ username, password, role } = generateUserData());
+            ({ username, password, email,role } = generateUserData());
         });
         describe("Happy path", () => {
             it("Contains all needed params", (done) => {
-                createUser(username, password, role, (res) => {
+                createUser(username,email, password, role, (res) => {
                     assert.strictEqual(res.status, "OK");
                     assert(res.token);
                     done();
@@ -39,21 +40,21 @@ describe("USER CONTROLLER", () => {
         });
         describe("Should throw errors", () => {
             it("Username is null", (done) => {
-                createUser("", password, role, (res) => {
+                createUser("",email,password, role, (res) => {
                     assert.strictEqual(res.status, "ERROR");
                     assert.strictEqual(res.msg, "Username and password must be specified");
                     done();
                 });
             });
             it("Password is null", (done) => {
-                createUser(username, "", role, (res) => {
+                createUser(username,email, "", role, (res) => {
                     assert.strictEqual(res.status, "ERROR");
                     assert.strictEqual(res.msg, "Username and password must be specified");
                     done();
                 });
             });
             it("There is already user with given username", (done) => {
-                createUser(username, password, role, (res) => {
+                createUser(username, email,password, role, (res) => {
                     assert.strictEqual(res.status, "ERROR");
                     assert.strictEqual(res.msg, "Username already taken");
                     done();
@@ -62,11 +63,11 @@ describe("USER CONTROLLER", () => {
         });
     });
     describe("Login user", () => {
-        let username, password, role;
+        let username, password, role,email;
         before((done) => {
             //creating user for tests
-            ({ username, password, role } = generateUserData());
-            createUser(username, password, role, (res) => {
+            ({ username, password,email, role } = generateUserData());
+            createUser(username,email, password, role, (res) => {
                 done();
             });
         });
@@ -84,7 +85,7 @@ describe("USER CONTROLLER", () => {
             it("User doesn't exist", (done) => {
                 loginUser("a@a.pl", "a", (res) => {
                     assert.strictEqual(res.status, "ERROR");
-                    assert.strictEqual(res.msg, "Invalid username");
+                    assert.strictEqual(res.msg, "Invalid Email-Id");
                     done();
                 });
             });
