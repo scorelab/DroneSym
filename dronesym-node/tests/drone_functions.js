@@ -36,13 +36,15 @@ function getLastDroneId(callBack) {
 describe("DRONE CONTROLLER", () => {
     describe("Create drone", () => {
         describe("Happy path", () => {
-            let name, loc;
+            let name, loc,des,flying;
             before( () => {
                 name = generateDroneName();
                 loc = generateDroneLoc();
+                des = "Test Description";
+                flying = "1H";
             });
             it("Contains all needed params", (done) => {
-                createDrone(name, loc, "597073ad587a6615c459e2bf", function(response){
+                createDrone(name,des,flying, loc, "597073ad587a6615c459e2bf", function(response){
                     assert.strictEqual(response.status, "OK");
                     done();
                 });
@@ -61,14 +63,14 @@ describe("DRONE CONTROLLER", () => {
         describe("Should throw errors", () => {
             it("Doesn't contain name", (done) => {
                 const loc = generateDroneLoc();
-                createDrone("", loc, "597073ad587a6615c459e2bf", function(response){
+                createDrone("","Test Description","1H",loc, "597073ad587a6615c459e2bf", function(response){
                     assert.strictEqual(response.status, "ERROR");
                     done();
                 });
             });
             it("Doesn't contain location", (done) => {
                 const name = generateDroneName();
-                createDrone(name, [], "597073ad587a6615c459e2bf", function(response){
+                createDrone(name,"Test Description","1H", [], "597073ad587a6615c459e2bf", function(response){
                     assert.strictEqual(response.status, "ERROR");
                     done();
                 });
@@ -76,11 +78,12 @@ describe("DRONE CONTROLLER", () => {
             it("Location has only one dimension", (done) => {
                 const name = generateDroneName();
                 const loc = {"lat": 52.237049};
-                createDrone(name, loc, "597073ad587a6615c459e2bf", function(response){
+                createDrone(name,"Test Description","1H", loc, "597073ad587a6615c459e2bf", function(response){
                     assert.strictEqual(response.status, "ERROR");
                     done();
                 });
             });
+            
         });
     });
     describe("Remove drone", () => {
@@ -88,7 +91,7 @@ describe("DRONE CONTROLLER", () => {
         beforeEach( (done) => {
             name = generateDroneName();
             const loc = generateDroneLoc();
-            createDrone(name, loc, "597073ad587a6615c459e2bf", function(response){
+            createDrone(name,"Test Description","1H",loc, "597073ad587a6615c459e2bf", function(response){
                 getLastDroneId((result) => {
                     droneId = result;
                     done();
