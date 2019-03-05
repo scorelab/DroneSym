@@ -22,6 +22,6 @@ matrix:
         directories:
           - "node_modules"
       script:
-        - npm start & python3 ../dronesym-python/flask-api/src/main.py & npm test
+        - ((npm start;python3 ../dronesym-python/flask-api/src/main.py)&);(sleep 5 && npm test --timeout 10000 --exit)&
       services:
         - mongodb
