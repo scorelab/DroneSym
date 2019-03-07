@@ -57,7 +57,7 @@
     "mongoose": "^4.11.3",
     "morgan": "^1.8.1",
     "nodemon": "^1.11.0",
-    "passport": "^0.3.2",
+    "passport": "^0.4.0",
     "passport-jwt": "^2.2.1",
     "request": "^2.81.0",
     "socket.io": "^2.0.3",
