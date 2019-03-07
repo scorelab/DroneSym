@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Http, Headers, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs';
-import 'rxjs/operator/map';
+import { Observable , Operator } from 'rxjs';
+// import 'rxjs/operator/map';
 import 'rxjs/operator/share';
-
+import { map, filter, catchError, mergeMap } from 'rxjs/operators';
+import { from } from 'rxjs';
 @Injectable()
 export class AuthHttpService {
 
@@ -18,8 +19,8 @@ export class AuthHttpService {
   	return headers;
   }
 
-  private checkAuthorization(request: Observable<any>): Observable<any>{
-    request.map((res) => {
+  private checkAuthorization(request: Observable<any>): Observable<any> {
+    request.pipe(map((res) => {
       const json = res.json();
       if (json === 'Unauthorized'){
         this.router.navigate(['login']);
@@ -32,7 +33,7 @@ export class AuthHttpService {
       console.log(err)
       this.router.navigate(['login']);
       return request;
-    });
+    }));
 
     return request;
   }

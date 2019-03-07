@@ -28,7 +28,7 @@ var passportConfig = require('./config/passportconfig')(passport);
 app.use(passport.initialize());
 
 //mongodb connection
-mongoose.connect(mongoConfig.dbUri, {useMongoClient: true});
+mongoose.connect(mongoConfig.dbUri,{useNewUrlParser:true});
 
 mongoose.connection.on('error', function(err){
   console.log(err);

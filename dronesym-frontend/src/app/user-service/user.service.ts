@@ -3,7 +3,10 @@ import { AuthHttpService } from '../auth-http/auth-http.service';
 import { environment } from '../../environments/environment';
 
 import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/map';
+// import 'rxjs/add/operator/map';
+import { map } from 'rxjs/operators';
+
+
 
 @Injectable()
 export class UserService {
@@ -17,31 +20,31 @@ export class UserService {
 
   public login(username, password){
     return this.http.post(`${this.baseUrl}/login`, { 'uname': username, 'password': password })
-        .map((res) => {
+        .pipe(map((res) => {
           const status = res.json();
           if (status.status === 'OK'){
             localStorage.setItem('token', status.token);
             this.userRole = status.role;
           }
           return status;
-         })
+         }))
         .toPromise();
   }
 
   public createUser(username, email, password, role){
     let user = { 'uname': username, 'email':email, 'password': password, 'role': role }
     return this.http.post(`${this.baseUrl}/create`,  user)
-           .map((res) => res.json())
+           .pipe(map((res) => res.json()))
            .toPromise();
   }
   public createUserFromSignup(username, password, role, email){
     const user = { 'uname': username, 'password': password, 'role': role, 'email': email }
     return this.http.post(`${this.baseUrl}/createuser`, user)
-           .map((res) => res.json())
+           .pipe(map((res) => res.json()))
            .toPromise();
   }
 
-  public isAuthenticated(): Promise<boolean>{
+  public isAuthenticated(): Promise<any>{
     const headers = new Headers();
     const token = localStorage.getItem('token');
 
@@ -72,7 +75,7 @@ export class UserService {
     this.userRole = '';
   }
 
-  public getUserRole(): Promise<string>{
+  public getUserRole(): Promise<any>{
     const promise = new Promise((resolve, reject) => {
       if (this.userRole){
         resolve(this.userRole);
@@ -99,25 +102,25 @@ export class UserService {
 
   public getUserList(): Promise<any> {
     return this.http.get(`${this.baseUrl}/list`)
-               .map((res) => res.json())
+               .pipe(map((res) => res.json()))
                .toPromise();
   }
 
   public addUserToGroup(userId, groupId): Promise<any> {
     return this.http.post(`${this.baseUrl}/${groupId}/add`, { userId : userId })
-               .map((res) => res.json())
+               .pipe(map((res) => res.json()))
                .toPromise();
   }
 
   public updateUserToGroup(userId, groupId): Promise<any> {
     return this.http.post(`${this.baseUrl}/${groupId}/updategroup`, { userId : userId })
-               .map((res) => res.json())
+               .pipe(map((res) => res.json()))
                .toPromise();
   }
 
   public removeUserFromGroup(userId, groupId): Promise<any> {
     return this.http.post(`${this.baseUrl}/${groupId}/remove`, { userId : userId })
-               .map((res) => res.json())
+               .pipe(map((res) => res.json()))
                .toPromise();
   }
 
