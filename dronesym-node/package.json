@@ -54,7 +54,7 @@
     "http": "0.0.0",
     "is-ci": "^2.0.0",
     "jsonwebtoken": "^7.4.1",
-    "mongoose": "^4.11.3",
+    "mongoose": "^5.4.17",
     "morgan": "^1.8.1",
     "nodemon": "^1.11.0",
     "passport": "^0.3.2",
