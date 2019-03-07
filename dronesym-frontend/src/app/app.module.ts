@@ -1,7 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { environment } from '../environments/environment';
-import { MaterializeModule } from 'angular2-materialize';
+
+import { MaterializeModule  } from 'angular2-materialize';
 import { HttpModule } from '@angular/http';
 import { AuthHttpService } from './auth-http/auth-http.service';
 import { RouterModule, Routes} from '@angular/router';
@@ -13,7 +14,6 @@ import { DroneDataService } from './drone-service/drone-data.service';
 import { UserService } from './user-service/user.service';
 import { RouteGuardService } from './route-guard/route-guard.service';
 import { AdminAuthorizeService } from './admin-authorize/admin-authorize.service';
-
 import { CursorTooltipComponent } from './cursor-tooltip/cursor-tooltip.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { DroneOptionBoxComponent } from './drone-option-box/drone-option-box.component';

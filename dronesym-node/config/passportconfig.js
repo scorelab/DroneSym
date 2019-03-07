@@ -4,7 +4,7 @@ var jwtConfig = require('./jwtconfig');
 var User = require('../Models/user');
 
 var jwtOptions = {
-	jwtFromRequest: ExtractJwt.fromAuthHeader(),
+	jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("jwt"),
 	secretOrKey:jwtConfig.secret
 }
 
