@@ -49,7 +49,7 @@
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "express": "^4.16.4",
-    "firebase": "^5.8.5",
+    "firebase": "^5.9.2",
     "firebase-admin": "^7.0.0",
     "http": "0.0.0",
     "is-ci": "^2.0.0",
