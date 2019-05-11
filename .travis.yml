@@ -10,7 +10,7 @@ matrix:
       
     - language: node_js
       node_js:
-        - "stable"
+        - "10"
       before_script:
         - cd dronesym-node
         - npm install

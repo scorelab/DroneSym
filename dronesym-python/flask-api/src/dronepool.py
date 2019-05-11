@@ -72,29 +72,30 @@ def resume_flight(kwargs):
 	q.put((takeoff_drone, { "drone_id" : drone_id, "waypoints" : waypoints[next_waypoint:] }))
 
 def create_new_drone(kwargs):
-	global instance_count
-	instance_count += 1
-	home = kwargs.get("home", None)
-	db_key = kwargs.get("db_key", None)
+    global instance_count
+    instance_count += 1
+    home = kwargs.get("home", None)
+    db_key = kwargs.get("db_key", None)
 
-	retries = 3
+    retries = 3
 
-	drone = Sim(instance_count, home)
-	drone.launch()
+    drone = Sim(instance_count, home)
+    drone.launch()
 
-	while retries > 0:
-		try:
-			drone_conn = connect(drone.connection_string(), wait_ready=True)
-			break
-		except:
-			print ("Retrying...")
-			retries -= 1
+    while retries > 0:
+        try:
+            drone_conn = connect(drone.connection_string(), wait_ready=True)
+            drone_conn.wait_ready(True,timeout=300)
+            break
+        except:
+            print ("Retrying...")
+            retries -= 1
 
 
-	drone_pool[db_key] = drone_conn
+    drone_pool[db_key] = drone_conn
 
-	res = { "status" : "OK", "id" : db_key }
-	return res
+    res = { "status" : "OK", "id" : db_key }
+    return res
 
 def remove_drone(kwargs):
 	drone_id = kwargs.get("drone_id", None)

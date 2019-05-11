@@ -37,7 +37,7 @@ def create_new_drone():
 def remove_drone(drone_id):
 	global q
 	q.put((dronepool.remove_drone, { "drone_id" : drone_id }))
-	return jsonify({ "status" : "OK", "message" : "Removed drone" });
+	return jsonify({ "status" : "OK", "message" : "Removed drone" })
 
 @app.route(api_base_url + '/<string:drone_id>/takeoff', methods=['POST'])
 def send_takeoff(drone_id):
