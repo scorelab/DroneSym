@@ -8,13 +8,12 @@ export class AdminAuthorizeService implements CanActivate {
   constructor(private router: Router, private userService: UserService) { }
 
 
-  canActivate(){
-  	return this.userService.getUserRole()
+  canActivate() {
+  return this.userService.getUserRole()
                .then((role) => {
-                 if (role === 'admin'){
+                 if (role === 'admin') {
                    return true;
-                 }
-                 else{
+                 } else {
                    this.router.navigate(['dashboard']);
                    return false;
                  }
@@ -22,6 +21,6 @@ export class AdminAuthorizeService implements CanActivate {
                  console.log(err);
                  this.router.navigate(['dashboard']);
                  return false;
-               })
+               });
   }
 }

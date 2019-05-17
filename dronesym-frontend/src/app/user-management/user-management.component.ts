@@ -19,29 +19,29 @@ export class UserManagementComponent implements OnInit {
   public currUser;
 
   constructor(private userService: UserService, private droneService: DroneDataService) {
-  	this.showUserSignUpDialog = false;
+  this.showUserSignUpDialog = false;
     this.showDroneGroupsDialog = false;
     this.groups = [];
     this.users = [];
     this.currUser = '';
 
-  	userService.getUserRole().then((role) => {
-  		this.userRole = role;
-  	})
+  userService.getUserRole().then((role) => {
+  this.userRole = role;
+  });
 
     userService.getUserList().then((users) => {
       this.users = users.users;
       console.log(this.users);
-    })
+    });
 
     droneService.getGroups().then((groups) => {
       this.groups = groups.groups.map((group) => {
         return {
           name : group.name,
           key : group._id
-        }
+        };
       });
-    })
+    });
   }
 
   ngOnInit() {
@@ -51,8 +51,7 @@ export class UserManagementComponent implements OnInit {
     this.users = this.users.map((user) => {
       if (user.id === userData.id) {
         return userData;
-      }
-      else {
+      } else {
         return user;
       }
     });
@@ -61,15 +60,14 @@ export class UserManagementComponent implements OnInit {
     this.groups = this.groups.map((groups) => {
       if (groups.id === groupData.id) {
         return groupData;
-      }
-      else {
+      } else {
         return groups;
       }
     });
   }
 
   public showCreateUserDialog() {
-  	this.showUserSignUpDialog = true;
+  this.showUserSignUpDialog = true;
   }
 
   public showGroupsDialog(userId) {
@@ -84,16 +82,16 @@ export class UserManagementComponent implements OnInit {
     groups.forEach((groupId) => {
       this.userService.addUserToGroup(this.currUser, groupId)
           .then((res) => {
-            console.log(res)
+            console.log(res);
             this.updateUser(res.user);
-          })
+          });
     });
     groups.forEach((groupId) => {
       this.userService.updateUserToGroup(this.currUser, groupId)
           .then((res) => {
-            console.log(res)
+            console.log(res);
             // this.updateGroup(res.user);
-          })
+          });
     });
 
      this.showDroneGroupsDialog = false;
@@ -104,13 +102,13 @@ export class UserManagementComponent implements OnInit {
     this.userService.getUserList().then((users) => {
       this.users = users.users;
     });
-  	this.showUserSignUpDialog = false;
+  this.showUserSignUpDialog = false;
   }
 
   public removeFromGroup(userId, groupId) {
     this.userService.removeUserFromGroup(userId, groupId)
         .then((res) => {
           this.updateUser(res.user);
-        })
+        });
   }
 }

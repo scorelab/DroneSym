@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, OnChanges } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
 @Component({
-  selector: 'cursor-tooltip',
+  selector: 'app-cursor-tooltip',
   templateUrl: './cursor-tooltip.component.html',
   styleUrls: ['./cursor-tooltip.component.css']
 })
@@ -12,15 +12,15 @@ export class CursorTooltipComponent implements OnInit {
   @Input('longitude') longitude: number;
 
   @Input()
-  set x(x: number){
-  	const el = this.tooltip.nativeElement;
-  	el.style.left = `${x + 5}px`;
+  set x(x: number) {
+    const el = this.tooltip.nativeElement;
+    el.style.left = `${x + 5}px`;
   }
 
   @Input()
-  set y(y: number){
-  	const el = this.tooltip.nativeElement;
-  	el.style.top = `${y + 5}px`;
+  set y(y: number) {
+    const el = this.tooltip.nativeElement;
+    el.style.top = `${y + 5}px`;
   }
 
 

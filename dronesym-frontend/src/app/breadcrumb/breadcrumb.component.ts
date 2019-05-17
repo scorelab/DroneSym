@@ -21,14 +21,14 @@ const routeAddBreadcrumbLink = 'addBreadcrumbLink';
   selector: 'app-breadcrumb',
   templateUrl: './breadcrumb.component.html',
   styleUrls: ['./breadcrumb.component.css'],
-  
+
 })
 export class BreadcrumbComponent implements OnInit {
 
   /** Array of breadcrumbs. */
   breadcrumbs: Breadcrumb[];
 
-  
+
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router) {
     this.generateBreadcrumbs();
@@ -76,7 +76,8 @@ export class BreadcrumbComponent implements OnInit {
               route.snapshot.data[routeResolveBreadcrumb].forEach((property: any) => {
                 breadcrumbLabel = breadcrumbLabel[property];
               });
-            } else if (route.snapshot.data.hasOwnProperty(routeParamBreadcrumb) && route.snapshot.paramMap.get(route.snapshot.data[routeParamBreadcrumb])) {
+            } else if (route.snapshot.data.hasOwnProperty(routeParamBreadcrumb) &&
+            route.snapshot.paramMap.get(route.snapshot.data[routeParamBreadcrumb])) {
               breadcrumbLabel = route.snapshot.paramMap.get(route.snapshot.data[routeParamBreadcrumb]);
             } else if (route.snapshot.data.hasOwnProperty(routeDataBreadcrumb)) {
               breadcrumbLabel = route.snapshot.data[routeDataBreadcrumb];

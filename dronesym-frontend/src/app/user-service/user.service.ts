@@ -18,11 +18,11 @@ export class UserService {
     this.baseUrl = `${environment.nodeApiURL}/user`;
   }
 
-  public login(username, password){
+  public login(username, password) {
     return this.http.post(`${this.baseUrl}/login`, { 'uname': username, 'password': password })
         .pipe(map((res) => {
           const status = res.json();
-          if (status.status === 'OK'){
+          if (status.status === 'OK') {
             localStorage.setItem('token', status.token);
             this.userRole = status.role;
           }
@@ -31,53 +31,52 @@ export class UserService {
         .toPromise();
   }
 
-  public createUser(username, email, password, role){
-    let user = { 'uname': username, 'email':email, 'password': password, 'role': role }
+  public createUser(username, email, password, role) {
+    const user = { 'uname': username, 'email': email, 'password': password, 'role': role };
     return this.http.post(`${this.baseUrl}/create`,  user)
            .pipe(map((res) => res.json()))
            .toPromise();
   }
-  public createUserFromSignup(username, password, role, email){
-    const user = { 'uname': username, 'password': password, 'role': role, 'email': email }
+  public createUserFromSignup(username, password, role, email) {
+    const user = { 'uname': username, 'password': password, 'role': role, 'email': email };
     return this.http.post(`${this.baseUrl}/createuser`, user)
            .pipe(map((res) => res.json()))
            .toPromise();
   }
 
-  public isAuthenticated(): Promise<any>{
+  public isAuthenticated(): Promise<any> {
     const headers = new Headers();
     const token = localStorage.getItem('token');
 
     const authPromise = new Promise((resolve, reject) => {
-      if (!token || token === ''){
+      if (!token || token === '') {
         resolve(false);
       }
 
       this.http.get(`${this.baseUrl}/authenticate`)
           .subscribe((res) => {
             const status = res.json();
-            if (status === 'Authorized'){
+            if (status === 'Authorized') {
               resolve(true);
-            }
-            else if (status === 'Unauthorized'){
+            } else if (status === 'Unauthorized') {
               resolve(false);
             }
           }, (err) => {
             reject(err);
-          })
-    })
+          });
+    });
 
     return authPromise;
   }
 
-  public logout(){
+  public logout() {
     localStorage.setItem('token', '');
     this.userRole = '';
   }
 
-  public getUserRole(): Promise<any>{
+  public getUserRole(): Promise<any> {
     const promise = new Promise((resolve, reject) => {
-      if (this.userRole){
+      if (this.userRole) {
         resolve(this.userRole);
         return;
       }
@@ -85,17 +84,16 @@ export class UserService {
       this.http.get(`${this.baseUrl}/role`)
           .subscribe((res) => {
             const status = res.json();
-            if (status.status === 'OK'){
+            if (status.status === 'OK') {
               this.userRole = status.role;
               resolve(status.role);
-            }
-            else{
+            } else {
               reject('ERROR');
             }
           }, (err) => {
             reject(err);
-          })
-    })
+          });
+    });
 
     return promise;
   }

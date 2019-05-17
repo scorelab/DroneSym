@@ -16,7 +16,7 @@ declare var Materialize: any;
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent{
+export class DashboardComponent {
 
   @ViewChild('map') mapRef;
 
@@ -39,12 +39,12 @@ export class DashboardComponent{
   dialogParams = {
     droneDialog: { show: false },
     waypointDialog: { show: false }
-  }
+  };
 
   constructor(private droneFeed: DroneDataService, private _zone: NgZone, private router: Router, private userService: UserService) {
     this.droneFeed.getDroneFeed()
         .subscribe((data) => {
-          if (data.length != this.droneIndices.length){
+          if (data.length !== this.droneIndices.length) {
             this.droneIndices = Array(data.length).fill(0).map((x, i) => i);
           }
 
@@ -61,7 +61,7 @@ export class DashboardComponent{
     this.waypointIcon = './assets/img/blue.png';
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.mapRef.mapReady.subscribe((map) => {
       this.map = map;
 
@@ -71,58 +71,53 @@ export class DashboardComponent{
            this.cursor.lon = e.latLng.lng();
            this.cursor.x = e.pixel.x;
            this.cursor.y = e.pixel.y;
-         })
+         });
       });
 
       this.map.addListener('click', (e) => {
-        if (this.createMode === this.createModes.DRONES){
+        if (this.createMode === this.createModes.DRONES) {
           this._zone.run(() => {
             this.dialogParams.droneDialog.show = true;
             this.centerCoords.lat = e.latLng.lat();
             this.centerCoords.lon = e.latLng.lng();
             console.log('Create Drone Mode');
-          })
-        }
-
-        else if (this.createMode === this.createModes.WAYPOINTS){
+          });
+        } else if (this.createMode === this.createModes.WAYPOINTS) {
           this._zone.run(() => {
-            this.currDrone.waypoints.push({ 'lat': e.latLng.lat(), 'lon': e.latLng.lng() })
+            this.currDrone.waypoints.push({ 'lat': e.latLng.lat(), 'lon': e.latLng.lng() });
             console.log(this.currDrone.waypoints);
-          })
-        }
-
-        else if (this.createMode === this.createModes.NONE){
+          });
+        } else if (this.createMode === this.createModes.NONE) {
           this._zone.run(() => {
             this.currDrone = {};
             console.log(this.currDrone);
           });
         }
-      })
+      });
     });
   }
 
-  private switchCreateMode(mode: number){
+  private switchCreateMode(mode: number) {
     this.createMode = mode;
 
-    if (mode != this.createModes.NONE){
+    if (mode !== this.createModes.NONE) {
       this.map.setOptions({ draggableCursor: 'crosshair' });
-    }
-    else{
+    } else {
       this.map.setOptions({ draggableCursor: null });
       this.waypointIcon = './assets/img/blue.png';
     }
   }
 
-  private updateCurrDrone(){
-    if (!this.currDrone){
+  private updateCurrDrone() {
+    if (!this.currDrone) {
       return;
     }
 
-    const drone = this.drones.filter((drone) => {
-      return drone.key === this.currDrone.key;
+    const drone = this.drones.filter((dron) => {
+      return dron.key === this.currDrone.key;
     })[0];
 
-    if (!drone){
+    if (!drone) {
       return;
     }
 
@@ -132,7 +127,7 @@ export class DashboardComponent{
     this.currDrone.heading = drone.heading;
   }
 
-  public setCurrentDrone(drone){
+  public setCurrentDrone(drone) {
     this.currDrone = drone;
     console.log(this.currDrone);
   }
@@ -142,54 +137,54 @@ export class DashboardComponent{
     Materialize.toast('Click on map to put drones', 4000);
   }
 
-  public goToSignup(){
+  public goToSignup() {
     this.router.navigate(['signup']);
   }
 
-  public finishAddingWaypoints(){
+  public finishAddingWaypoints() {
     this.switchCreateMode(this.createModes.NONE);
     this.droneFeed.updateDroneWaypoints(this.currDrone.key, this.currDrone.waypoints)
         .then((status) => console.log(status));
   }
 
-  public takeOffDrone(){
+  public takeOffDrone() {
     this.droneFeed.takeOffDrone(this.currDrone.key, this.currDrone.waypoints)
         .then((status) => console.log(status));
   }
 
-  public cancelFlight(){
+  public cancelFlight() {
     this.droneFeed.landDrone(this.currDrone.key)
         .then((status) => console.log(status));
   }
 
-  public resumeFlight(){
+  public resumeFlight() {
     this.droneFeed.resumeFlight(this.currDrone.key)
         .then((status) => console.log(status));
   }
 
-  public cancelAddingWaypoints(){
+  public cancelAddingWaypoints() {
     this.switchCreateMode(this.createModes.NONE);
     const currPosition = { 'lat': this.currDrone.location.lat, 'lon': this.currDrone.location.lon };
-    this.currDrone.waypoints = [currPosition]
+    this.currDrone.waypoints = [currPosition];
     this.droneFeed.updateDroneWaypoints(this.currDrone.key, this.currDrone.waypoints)
         .then((status) => console.log(status));
   }
 
-  public createDrone(name,description,flying_time, location){
-    this.droneFeed.createDrone(name,description,flying_time, location)
+  public createDrone(name, description, flying_time, location) {
+    this.droneFeed.createDrone(name, description, flying_time, location)
         .then((res) => {
-          if (res.status === 'ERROR'){
+          if (res.status === 'ERROR') {
             console.log(res);
             Materialize.toast(res.msg, 4000);
           }
         });
   }
 
-  public processDialogResponse($data){
+  public processDialogResponse($data) {
     console.log($data);
-    if (this.createMode === this.createModes.DRONES){
-      if ($data.message === 'DIALOG_CONFIRM'){
-        this.createDrone($data.name,$data.description,$data.flying_time, this.centerCoords);
+    if (this.createMode === this.createModes.DRONES) {
+      if ($data.message === 'DIALOG_CONFIRM') {
+        this.createDrone($data.name, $data.description, $data.flying_time, this.centerCoords);
       }
     }
 
@@ -198,72 +193,64 @@ export class DashboardComponent{
     this.createMode = this.createModes.NONE;
   }
 
-   public processDroneBox($data){
-     if ($data === 'SELECT_WAYPOINTS'){
+   public processDroneBox($data) {
+     if ($data === 'SELECT_WAYPOINTS') {
         this.switchCreateMode(this.createModes.WAYPOINTS);
         Materialize.toast('Click on map to put waypoints', 4000);
-     }
-
-     else if ($data === 'SELECT_TAKEOFF'){
+     } else if ($data === 'SELECT_TAKEOFF') {
        this.takeOffDrone();
        console.log('Taking off');
-     }
-
-     else if ($data === 'SELECT_RESUME'){
+     } else if ($data === 'SELECT_RESUME') {
        this.resumeFlight();
        console.log('Resuming...');
 
-     }
-
-     else if ($data === 'SELECT_CANCEL'){
+     } else if ($data === 'SELECT_CANCEL') {
        this.cancelFlight();
        console.log('Cancelling...');
      }
   }
 
-  public deleteWaypoint(index){
-    if (this.createMode === this.createModes.WAYPOINTS){
+  public deleteWaypoint(index) {
+    if (this.createMode === this.createModes.WAYPOINTS) {
         this.currDrone.waypoints.splice(index, 1);
         this.droneFeed.updateDroneWaypoints(this.currDrone.key, this.currDrone.waypoints)
             .then((status) => console.log('Deleted'));
     }
   }
 
-  public toggleAllTrails(){
+  public toggleAllTrails() {
     console.log('Trail toggle...');
-    if (this.droneIndices.length > 0 && this.trailIndices.length == 0){
+    if (this.droneIndices.length > 0 && this.trailIndices.length === 0) {
       this.droneIndices.forEach((droneIndex) => {
         this.trailIndices.push(droneIndex);
-      })
-    }
-    else{
+      });
+    } else {
       this.trailIndices = [];
     }
   }
 
-  public logout(){
+  public logout() {
     this.userService.logout();
     this.router.navigate(['login']);
   }
 
-  public isAuthorized(roles){
+  public isAuthorized(roles) {
     this.userService.getUserRole();
   }
 
-  public changeWaypointIcon(isMouseOver){
-    if (this.createMode === this.createModes.NONE){
+  public changeWaypointIcon(isMouseOver) {
+    if (this.createMode === this.createModes.NONE) {
       return;
     }
 
-    if (isMouseOver){
+    if (isMouseOver) {
       this.waypointIcon = './assets/img/red.png';
-    }
-    else{
+    } else {
       this.waypointIcon = './assets/img/blue.png';
     }
   }
 
-  public landDrone(){
+  public landDrone() {
     this.droneFeed.landDrone(this.currDrone.key)
         .then((res) => console.log(res));
   }

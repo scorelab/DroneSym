@@ -54,6 +54,7 @@
     "rxjs-compat": "^6.4.0",
     "socket.io-client": "^2.2.0",
     "tslib": "^1.9.3",
+    "tslint": "^5.16.0",
     "zone.js": "^0.8.29"
   },
   "devDependencies": {
@@ -74,7 +75,6 @@
     "karma-jasmine-html-reporter": "^1.4.0",
     "protractor": "^5.4.2",
     "ts-node": "^8.0.3",
-    "tslint": "^5.13.1",
     "typescript": "3.1.6"
   }
 }

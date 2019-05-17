@@ -1,5 +1,5 @@
 {
-  "compileOnSave": false,
+  "compileOnSave": true,
   "compilerOptions": {
     "importHelpers": true,
     "outDir": "./dist/out-tsc",

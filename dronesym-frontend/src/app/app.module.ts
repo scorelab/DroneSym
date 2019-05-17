@@ -52,7 +52,7 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
     MaterializeModule,
     HttpModule,
     AgmCoreModule.forRoot({
-    	apiKey: environment.mapsApiKey
+      apiKey: environment.mapsApiKey
     }),
     AppRouter
   ],
