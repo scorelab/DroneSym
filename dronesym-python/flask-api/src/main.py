@@ -2,7 +2,6 @@
 Main entry point for the Flask API. The API will provide
 """
 # an interface to communicate with Dronekit instances
-import json
 from flask import jsonify, Flask
 from flask import abort, request
 from flask import make_response
