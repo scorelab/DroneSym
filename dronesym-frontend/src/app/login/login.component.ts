@@ -19,22 +19,21 @@ export class LoginComponent {
     this.user.password = '';
   }
 
-  setUsername($event){
+  setUsername($event) {
     this.user.username = $event.target.value;
   }
 
-  setPassword($event){
+  setPassword($event) {
     this.user.password = $event.target.value;
   }
 
-  onLogin($event){
+  onLogin($event) {
     $event.preventDefault();
     this.userService.login(this.user.username, this.user.password)
         .then((res) => {
-          if (res.status === 'OK'){
+          if (res.status === 'OK') {
             this.router.navigate(['dashboard/map']);
-          }
-          else{
+          } else {
             Materialize.toast(res.msg, 4000);
           }
         });

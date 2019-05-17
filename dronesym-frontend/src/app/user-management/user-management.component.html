@@ -10,8 +10,8 @@
 		<a (click)="showCreateUserDialog()" class="waves-effect waves-light blue btn"><i class="material-icons medium left">gamepad</i> Create User </a>
 	</div>
 
-	<user-signup [show]="showUserSignUpDialog" (onResponse)="onUserSignupResponse()"> </user-signup>
-	<drones-box [show]="showDroneGroupsDialog" [drones]="groups" [message]="'Select drone groups'" (onResponse)="onDronesBoxResponse($event)"> </drones-box>
+	<app-user-signup [show]="showUserSignUpDialog" (onResponse)="onUserSignupResponse()"> </app-user-signup>
+	<app-drones-box [show]="showDroneGroupsDialog" [drones]="groups" [message]="'Select drone groups'" (onResponse)="onDronesBoxResponse($event)"> </app-drones-box>
 
 	<div class="row">
 		<ul materialize="collapsible" class="collapsible col s10" data-collapsible="accordion">

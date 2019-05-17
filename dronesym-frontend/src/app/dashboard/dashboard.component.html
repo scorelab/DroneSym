@@ -10,7 +10,7 @@
 	<agm-marker *ngFor="let i of droneIndices" [latitude]="drones[i].location.lat"
 		[longitude]="drones[i].location.lon" (markerClick)="setCurrentDrone(drones[i])" [label]="{text:drones[i].name}" >
 		<agm-info-window [isOpen]="currDrone?.key === drones[i].key">
-			<drone-option-box [name]="currDrone?.name ? currDrone.name : 'Unnamed'" [description]="currDrone?.description ? currDrone.description : 'None'" [state]="currDrone?.status" [airspeed]="currDrone?.airspeed" [altitude]="currDrone?.location?.alt" [heading]="currDrone?.heading" (onSelected)="processDroneBox($event)"></drone-option-box>
+			<app-drone-option-box [name]="currDrone?.name ? currDrone.name : 'Unnamed'" [description]="currDrone?.description ? currDrone.description : 'None'" [state]="currDrone?.status" [airspeed]="currDrone?.airspeed" [altitude]="currDrone?.location?.alt" [heading]="currDrone?.heading" (onSelected)="processDroneBox($event)"></app-drone-option-box>
 		</agm-info-window>
 	</agm-marker>
 
@@ -20,9 +20,9 @@
 
 </agm-map>
 
-<cursor-tooltip *ngIf="createMode == createModes.DRONES || createMode == createModes.WAYPOINTS" [latitude]="cursor.lat" [longitude]="cursor.lon" [x]="cursor.x" [y]="cursor.y"></cursor-tooltip>
+<app-cursor-tooltip *ngIf="createMode == createModes.DRONES || createMode == createModes.WAYPOINTS" [latitude]="cursor.lat" [longitude]="cursor.lon" [x]="cursor.x" [y]="cursor.y"></app-cursor-tooltip>
 
-<confirm-dialog [message]="'Create New Drone'" [show]="this.dialogParams.droneDialog.show" (onResponse)="processDialogResponse($event)" [inputEnabled]="true" [newDrone]="true"></confirm-dialog>
+<app-confirm-dialog [message]="'Create New Drone'" [show]="this.dialogParams.droneDialog.show" (onResponse)="processDialogResponse($event)" [inputEnabled]="true" [newDrone]="true"></app-confirm-dialog>
 
 
 <div class="control-buttons">

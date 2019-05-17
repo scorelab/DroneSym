@@ -24,55 +24,54 @@ export class DroneListComponent {
 
     this.drones = [];
 
-  	this.droneFeed.getDroneFeed()
-  		.subscribe((drones) => {
-        //console.log(drones);
-        if (this.drones.length != drones.length){
-  			  this.drones = drones;
+    this.droneFeed.getDroneFeed()
+    .subscribe((drones) => {
+        // console.log(drones);
+        if (this.drones.length !== drones.length) {
+          this.drones = drones;
         }
-  		})
+      });
   }
 
-  showDeleteConfirmationDialog(drone){
+  showDeleteConfirmationDialog(drone) {
     this.currDrone = drone;
     this.showDeleteConfirmation = true;
   }
 
-  showRenameConfirmationDialog(drone){
+  showRenameConfirmationDialog(drone) {
     this.currDrone = drone;
     this.showRenameConfirmation = true;
   }
 
-  deleteResponse($event){
-    if ($event.message === 'DIALOG_CONFIRM'){
+  deleteResponse($event) {
+    if ($event.message === 'DIALOG_CONFIRM') {
       this.droneFeed.removeDrone(this.currDrone.key, this.currDrone.status)
           .then((res) => {
             console.log(res);
 
-            if (res.status === 'ERROR'){
+            if (res.status === 'ERROR') {
               Materialize.toast(`Can't Delete : ${res.msg}`, 4000);
               return;
-            }
-            else if (res.status === 'OK'){
+            } else if (res.status === 'OK') {
               Materialize.toast('Drone removed from fleet', 4000);
             }
           })
           .catch((err) => {
             console.log(err);
-          })
+          });
     }
 
 
     this.showDeleteConfirmation = false;
   }
 
-  renameResponse($event){
-    if ($event.message === 'DIALOG_CONFIRM'){
+  renameResponse($event) {
+    if ($event.message === 'DIALOG_CONFIRM') {
       this.droneFeed.updateName(this.currDrone.key, $event.name)
          .then((res) => {
                  console.log(res);
                  this.currDrone.name = res.update.name;
-          })
+          });
     }
 
     this.showRenameConfirmation = false;

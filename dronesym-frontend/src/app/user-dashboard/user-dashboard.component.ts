@@ -11,9 +11,9 @@ export class UserDashboardComponent implements OnInit {
   public userRole: string;
 
   constructor(private userService: UserService) {
-  	userService.getUserRole().then((role) => {
-  		this.userRole = role;
-  	})
+  userService.getUserRole().then((role) => {
+  this.userRole = role;
+  });
   }
 
   ngOnInit() {

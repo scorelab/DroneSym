@@ -1,8 +1,8 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MaterializeAction } from 'angular2-materialize';
 
 @Component({
-  selector: 'confirm-dialog',
+  selector: 'app-confirm-dialog',
   templateUrl: './confirm-dialog.component.html',
   styleUrls: ['./confirm-dialog.component.css']
 })
@@ -18,7 +18,7 @@ export class ConfirmDialogComponent implements OnInit {
   @Input('inputEnabled') inputEnabled: boolean;
   @Input('newDrone') newDrone: boolean;
   @Input()
-  set show(show: boolean){
+  set show(show: boolean) {
     if (show) {
       this.modalActions.emit({ action: 'modal', params: ['open']});
     } else {
@@ -49,6 +49,7 @@ export class ConfirmDialogComponent implements OnInit {
   }
 
   public confirm() {
-    this.onResponse.emit({'message' : 'DIALOG_CONFIRM', 'name' : this.name , 'description': this.description,'flying_time':this.flying_time});
+    this.onResponse.emit({'message' : 'DIALOG_CONFIRM', 'name' :
+    this.name , 'description': this.description, 'flying_time': this.flying_time});
   }
 }
