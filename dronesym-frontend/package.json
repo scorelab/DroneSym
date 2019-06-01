@@ -54,7 +54,7 @@
     "rxjs-compat": "^6.4.0",
     "socket.io-client": "^2.2.0",
     "tslib": "^1.9.3",
-    "tslint": "^5.16.0",
+    "tslint": "^5.17.0",
     "zone.js": "^0.8.29"
   },
   "devDependencies": {
