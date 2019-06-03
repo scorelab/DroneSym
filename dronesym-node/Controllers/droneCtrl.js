@@ -3,6 +3,7 @@ const request = require('request');
 const io = require('../websocket').connection;
 const Group = require('../Models/group');
 const User = require('../Models/user');
+const Drone = require('../Models/drone');
 const db = require('../example.db');
 
 const droneRef = db.ref('/drones');
@@ -15,12 +16,16 @@ const flaskUrl = 'http://localhost:5000/dronesym/api/flask';
  * @param {string} socket - id of socket
  */
 const sendSnapsot = function(snapshot, socket) {
+  //console.log(snapshot);
   const array = [];
   const userId = socket.decoded_token.id;
 
   snapshot.forEach(function(item) {
-    const drone = item.val();
-
+    // console.log(item);
+    // Firebase
+    // const drone = item.val();
+    const drone = item;
+    // console.log('Val ', drone);
     const droneUsers = drone.users.map(function(user) {
       return user.userId;
     });
@@ -29,7 +34,8 @@ const sendSnapsot = function(snapshot, socket) {
       return;
     }
 
-    drone['key'] = item.key;
+    drone['key'] = item._id;
+    console.log(drone['key']);
     delete drone['users'];
 
     array.push(drone);
@@ -46,13 +52,20 @@ if (process.env.NODE_ENV !== 'test') {
     socket.emit('hello', userId);
 
     // Initial drone data sent to client on first connection
-    droneRef.once('value', function(snapshot) {
-      sendSnapsot(snapshot, socket);
+    Drone.find().then((response) => {
+      sendSnapsot(response, socket);
+    }).catch((err) => {
+      console.error(err);
     });
 
-    droneRef.on('value', function(snapshot) {
-      sendSnapsot(snapshot, socket);
-    });
+    // Firebase
+    // droneRef.once('value', function(snapshot) {
+    //   sendSnapsot(snapshot, socket);
+    // });
+
+    // droneRef.on('value', function(snapshot) {
+    //   sendSnapsot(snapshot, socket);
+    // });
   });
 }
 // Send update drone data upon change to firebase
@@ -75,7 +88,23 @@ function(name, description, flyingtime, location, userId, callBack) {
     callBack({status: 'ERROR', msg: 'Drone location is required'});
     return;
   }
+  //  Adding drone to mongoDB
+  var drone = new Drone();
+  drone.name = name;
+  drone.description=description;
+  drone.flying_time = flyingtime;
+  drone.users = [{userId: userId, groupId: 'creator'}];
+  drone.location = location;
+  drone.waypoints = [location];
 
+
+  drone.save(function(err, status) {
+    if (err) {
+      callBack({status: 'ERROR', msg: err});
+      return;
+    }
+  });
+  //  Adding drone to Firebase
   const droneKey =
   droneRef.push({'name': name, 'description': description,
     'flying_time': flyingtime, 'users': [{userId: userId, groupId: 'creator'}],
@@ -84,6 +113,7 @@ function(name, description, flyingtime, location, userId, callBack) {
   request.post(`${flaskUrl}/spawn`,
       {json: {droneId: droneKey.key, location: location}},
       function(error, response, body) {
+        console.log(body);
         callBack(body);
       });
 };
@@ -126,6 +156,12 @@ exports.removeDrone = function(droneId, droneStatus, callBack) {
         }
 
         removeFromGroups(droneId);
+        // Removing Drone From mongoDB
+        Drone.findOneAndDelete({_id: droneId}).then((response) => {
+          console.log(response);
+        }).catch((err) => {
+          console.error(err);
+        });
         droneRef.child(droneId).remove((error) => {
           if (error) {
             callBack({status: 'ERROR', msg: 'Removal error'});
@@ -275,6 +311,7 @@ exports.getDroneIds = function(callBack) {
         snapshot.forEach(function(drone) {
           drones.push(drone.key);
         });
+        // console.log(drones);
         callBack(drones);
       });
 };

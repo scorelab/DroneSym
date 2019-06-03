@@ -26,7 +26,7 @@ export class DroneListComponent {
 
     this.droneFeed.getDroneFeed()
     .subscribe((drones) => {
-        // console.log(drones);
+       console.log(drones);
         if (this.drones.length !== drones.length) {
           this.drones = drones;
         }
@@ -35,6 +35,7 @@ export class DroneListComponent {
 
   showDeleteConfirmationDialog(drone) {
     this.currDrone = drone;
+    // console.log(drone._id);
     this.showDeleteConfirmation = true;
   }
 
@@ -45,7 +46,7 @@ export class DroneListComponent {
 
   deleteResponse($event) {
     if ($event.message === 'DIALOG_CONFIRM') {
-      this.droneFeed.removeDrone(this.currDrone.key, this.currDrone.status)
+      this.droneFeed.removeDrone(this.currDrone._id, this.currDrone.status)
           .then((res) => {
             console.log(res);
 
@@ -67,7 +68,7 @@ export class DroneListComponent {
 
   renameResponse($event) {
     if ($event.message === 'DIALOG_CONFIRM') {
-      this.droneFeed.updateName(this.currDrone.key, $event.name)
+      this.droneFeed.updateName(this.currDrone._id, $event.name)
          .then((res) => {
                  console.log(res);
                  this.currDrone.name = res.update.name;

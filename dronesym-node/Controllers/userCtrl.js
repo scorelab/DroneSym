@@ -4,7 +4,9 @@ const Group = require('../Models/group');
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../config/jwtconfig');
 const db = require('../example.db');
-
+// ChangeStream Watch for User
+User.watch().
+    on('change', (data) => console.log(data));
 /** Regular expression for email validation */
 // eslint-disable-next-line max-len
 regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
