@@ -68,10 +68,10 @@ def initialize():
     for drone_id in drones:
         if drone_id not in list(drone_pool.keys()):
             drone = node.get_drone_by_id(drone_id)
-            location = drone['location']
+            location = drone[0]['location']
             q.put((create_new_drone, {"db_key": drone_id, "home": location}))
 
-            if 'status' in list(drone.keys()) and drone['status'] == 'FLYING':
+            if 'status' in list(drone[0].keys()) and drone[0]['status'] == 'FLYING':
                 q.put((resume_flight, {"drone_id": drone_id}))
 
 
