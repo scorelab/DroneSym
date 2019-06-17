@@ -28,6 +28,6 @@ const groupSchema = new mongoose.Schema({
     lon: Number,
   }],
 
-});
+},{strict: false});
 
 module.exports = mongoose.model('Drone', groupSchema);

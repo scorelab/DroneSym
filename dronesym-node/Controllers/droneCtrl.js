@@ -16,7 +16,7 @@ const flaskUrl = 'http://localhost:5000/dronesym/api/flask';
  * @param {string} socket - id of socket
  */
 const sendSnapsot = function(snapshot, socket) {
-  //console.log(snapshot);
+  // console.log(snapshot);
   const array = [];
   const userId = socket.decoded_token.id;
 
@@ -35,7 +35,7 @@ const sendSnapsot = function(snapshot, socket) {
     }
 
     drone['key'] = item._id;
-    console.log(drone['key']);
+    // console.log(drone['key']);
     delete drone['users'];
 
     array.push(drone);
@@ -96,7 +96,6 @@ function(name, description, flyingtime, location, userId, callBack) {
   drone.users = [{userId: userId, groupId: 'creator'}];
   drone.location = location;
   drone.waypoints = [location];
-
 
   drone.save(function(err, status) {
     if (err) {
@@ -306,14 +305,24 @@ exports.updateWaypoints = function(id, waypoints, callBack) {
 exports.getDroneIds = function(callBack) {
   const drones = [];
 
-  droneRef.orderByKey().once('value')
-      .then(function(snapshot) {
-        snapshot.forEach(function(drone) {
-          drones.push(drone.key);
-        });
-        // console.log(drones);
-        callBack(drones);
-      });
+  Drone.find({}, {_id: 1}).then((response) => {
+    response.forEach(function(drone) {
+      drones.push(drone._id);
+    });
+    callBack(drones);
+    console.log(response);
+  }).catch((err) => {
+    console.error(err);
+  });
+
+  // droneRef.orderByKey().once('value')
+  //     .then(function(snapshot) {
+  //       snapshot.forEach(function(drone) {
+  //         drones.push(drone.key);
+  //       });
+  //       // console.log(drones);
+  //       callBack(drones);
+  //     });
 };
 
 /**
@@ -329,13 +338,16 @@ exports.getDroneIds = function(callBack) {
 exports.updateDroneStatus = function(id, status, callBack) {
   const timestamp = new Date();
   status['timestamp'] = timestamp.valueOf();
-  droneRef.child(id).update(status, function(err) {
-    if (err) {
-      console.log(err);
-      return;
-    }
+  Drone.findByIdAndUpdate(id, {status: status}, {new: true}).then((response) => {
     callBack({status: 'OK', update: status});
   });
+  // droneRef.child(id).update(status, function(err) {
+  //   if (err) {
+  //     console.log(err);
+  //     return;
+  //   }
+  //   callBack({status: 'OK', update: status});
+  // });
 };
 
 /**
@@ -350,11 +362,15 @@ exports.getDroneById = function(id, callBack) {
     callBack({status: 'ERROR', msg: 'Id must be specified'});
     return;
   }
-
-  droneRef.orderByKey().equalTo(id)
-      .once('value', function(snapshot) {
-        callBack(snapshot.child(id));
-      });
+  Drone.find({_id: id}).then((response) => {
+    callBack(response);
+  }).catch((err) => {
+    console.error(err);
+  });
+  // droneRef.orderByKey().equalTo(id)
+  //     .once('value', function(snapshot) {
+  //       callBack(snapshot.child(id));
+  //     });
 };
 
 /**
