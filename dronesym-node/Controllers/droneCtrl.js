@@ -57,6 +57,12 @@ if (process.env.NODE_ENV !== 'test') {
     }).catch((err) => {
       console.error(err);
     });
+    // Send snapshot using changeStreams upon data change
+
+    // Drone.watch().on('change', (data) => {
+    //   // console.log(data);
+    //   sendSnapsot(data, socket);
+    // });
 
     // Firebase
     // droneRef.once('value', function(snapshot) {
@@ -102,19 +108,18 @@ function(name, description, flyingtime, location, userId, callBack) {
       callBack({status: 'ERROR', msg: err});
       return;
     }
+    request.post(`${flaskUrl}/spawn`,
+        {json: {droneId: status._id, location: location}},
+        function(error, response, body) {
+          console.log(body);
+          callBack(body);
+        });
   });
   //  Adding drone to Firebase
-  const droneKey =
-  droneRef.push({'name': name, 'description': description,
-    'flying_time': flyingtime, 'users': [{userId: userId, groupId: 'creator'}],
-    'location': location, 'waypoints': [location]});
-
-  request.post(`${flaskUrl}/spawn`,
-      {json: {droneId: droneKey.key, location: location}},
-      function(error, response, body) {
-        console.log(body);
-        callBack(body);
-      });
+  // const droneKey =
+  // droneRef.push({'name': name, 'description': description,
+  //   'flying_time': flyingtime, 'users': [{userId: userId, groupId: 'creator'}],
+  //   'location': location, 'waypoints': [location]});
 };
 
 /**
@@ -161,14 +166,14 @@ exports.removeDrone = function(droneId, droneStatus, callBack) {
         }).catch((err) => {
           console.error(err);
         });
-        droneRef.child(droneId).remove((error) => {
-          if (error) {
-            callBack({status: 'ERROR', msg: 'Removal error'});
-            return;
-          }
+        // droneRef.child(droneId).remove((error) => {
+        //   if (error) {
+        //     callBack({status: 'ERROR', msg: 'Removal error'});
+        //     return;
+        //   }
 
-          callBack(JSON.parse(body));
-        });
+        //   callBack(JSON.parse(body));
+        // });
       });
 };
 
@@ -218,13 +223,14 @@ exports.removeGroup = function(groupId, callBack) {
       return;
     }
 
-    User.update({}, {$pull: {groups: {$in: {groupId: groupId}}}},
+
+    User.updateOne({}, {$pull: {groups: {$in: {groupId: groupId}}}},
         function(err, group) {
           if (err) {
             callBack({status: 'ERROR', msg: err});
             return;
           }
-
+          // console.log(group);
           callBack({status: 'OK', group: group});
         });
   });
@@ -270,12 +276,12 @@ exports.addToGroup = function(groupId, drones, callBack) {
  */
 exports.removeFromGroup = function(groupId, droneId, callBack) {
   Group.findOneAndUpdate({_id: groupId}, {$pull: {drones: droneId}},
-      {new: true},
       function(err, group) {
         if (err) {
           callBack({status: 'ERROR', msg: err});
           return;
         }
+        // console.log(group);
         callBack({status: 'OK', group: group});
       });
 };
@@ -287,15 +293,19 @@ exports.removeFromGroup = function(groupId, droneId, callBack) {
  * @param {function} callBack - function to return result of adding waypoints to
  */
 exports.updateWaypoints = function(id, waypoints, callBack) {
-  const waypointsRef = droneRef.child(id).child('waypoints');
-
-  waypointsRef.set(waypoints, function(err) {
-    if (err) {
-      callBack({status: 'ERROR', msg: err});
-      return;
-    }
-    callBack({status: 'OK'});
+  Drone.findByIdAndUpdate(id, {waypoints: waypoints}, {new: true}).then((response) => {
+    callBack({status: 'OK', update: waypoints});
   });
+
+  //   const waypointsRef = droneRef.child(id).child('waypoints');
+
+//   waypointsRef.set(waypoints, function(err) {
+//     if (err) {
+//       callBack({status: 'ERROR', msg: err});
+//       return;
+//     }
+//     callBack({status: 'OK'});
+//   });
 };
 
 /**
