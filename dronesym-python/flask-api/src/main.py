@@ -30,10 +30,9 @@ def create_new_drone():
 
     if not request.json or not 'location'in request.json or 'droneId' not in request.json:
         abort(400)
-
+    print(request.json)
     home = request.json['location']
     drone_id = request.json['droneId']
-
     q.put((dronepool.create_new_drone, {"db_key": drone_id, "home": home}))
 
     return jsonify({"status": "OK", "message": "Created new drone"})

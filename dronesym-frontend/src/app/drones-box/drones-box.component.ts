@@ -25,10 +25,13 @@ export class DronesBoxComponent {
   @Output('onResponse') response = new EventEmitter<any>();
 
   constructor() {
+
     this.selectedItems = [];
   }
 
   toggleDrone(droneId) {
+    console.log(droneId);
+    console.log(this.drones);
     if (this.selectedItems.indexOf(droneId) === -1) {
       this.selectedItems.push(droneId);
     } else {

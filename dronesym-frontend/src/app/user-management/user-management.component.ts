@@ -35,10 +35,11 @@ export class UserManagementComponent implements OnInit {
     });
 
     droneService.getGroups().then((groups) => {
+      console.log(groups);
       this.groups = groups.groups.map((group) => {
         return {
           name : group.name,
-          key : group._id
+          _id : group._id
         };
       });
     });
@@ -49,7 +50,9 @@ export class UserManagementComponent implements OnInit {
 
   private updateUser(userData) {
     this.users = this.users.map((user) => {
-      if (user.id === userData.id) {
+      console.log(user);
+      console.log(userData);
+      if (user._id === userData.id) {
         return userData;
       } else {
         return user;
@@ -58,7 +61,7 @@ export class UserManagementComponent implements OnInit {
   }
   private updateGroup(groupData) {
     this.groups = this.groups.map((groups) => {
-      if (groups.id === groupData.id) {
+      if (groups._id === groupData.id) {
         return groupData;
       } else {
         return groups;
@@ -90,7 +93,7 @@ export class UserManagementComponent implements OnInit {
       this.userService.updateUserToGroup(this.currUser, groupId)
           .then((res) => {
             console.log(res);
-            // this.updateGroup(res.user);
+            this.updateGroup(res.user);
           });
     });
 
