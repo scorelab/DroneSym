@@ -42,14 +42,14 @@ describe('USER CONTROLLER', () => {
       it('Username is null', (done) => {
         createUser('', email, password, role, (res) => {
           assert.strictEqual(res.status, 'ERROR');
-          assert.strictEqual(res.msg, 'Username , password must be specified');
+          assert.strictEqual(res.msg, 'Username and password must be specified');
           done();
         });
       });
       it('Password is null', (done) => {
         createUser(username, email, '', role, (res) => {
           assert.strictEqual(res.status, 'ERROR');
-          assert.strictEqual(res.msg, 'Username , password must be specified');
+          assert.strictEqual(res.msg, 'Username and password must be specified');
           done();
         });
       });
@@ -92,14 +92,14 @@ describe('USER CONTROLLER', () => {
       it('Username is null', (done) => {
         loginUser('', password, (res) => {
           assert.strictEqual(res.status, 'ERROR');
-          assert.strictEqual(res.msg, 'Username , password must be specified');
+          assert.strictEqual(res.msg, 'Username and password must be specified');
           done();
         });
       });
       it('Password is null', (done) => {
         loginUser(username, '', (res) => {
           assert.strictEqual(res.status, 'ERROR');
-          assert.strictEqual(res.msg, 'Username , password must be specified');
+          assert.strictEqual(res.msg, 'Username and password must be specified');
           done();
         });
       });
