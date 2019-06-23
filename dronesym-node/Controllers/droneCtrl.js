@@ -50,19 +50,24 @@ if (process.env.NODE_ENV !== 'test') {
     const userId = socket.decoded_token.id;
 
     socket.emit('hello', userId);
-
+    
     // Initial drone data sent to client on first connection
     Drone.find().then((response) => {
+      // console.log(response);
       sendSnapsot(response, socket);
     }).catch((err) => {
       console.error(err);
     });
     // Send snapshot using changeStreams upon data change
 
-    // Drone.watch().on('change', (data) => {
-    //   // console.log(data);
-    //   sendSnapsot(data, socket);
-    // });
+    Drone.watch({ fullDocument: 'updateLookup'}).on('change', (data) => {
+      var dataArr = [];
+      if (data.operationType !== 'delete') {
+        dataArr.push(data.fullDocument);
+        // console.log(data.fullDocument);
+        sendSnapsot(dataArr, socket);
+      }
+    });
 
     // Firebase
     // droneRef.once('value', function(snapshot) {
@@ -162,9 +167,11 @@ exports.removeDrone = function(droneId, droneStatus, callBack) {
         removeFromGroups(droneId);
         // Removing Drone From mongoDB
         Drone.findOneAndDelete({_id: droneId}).then((response) => {
+          callBack(JSON.parse(body));
           console.log(response);
         }).catch((err) => {
           console.error(err);
+          callBack({status: 'ERROR', msg: 'Removal error'});
         });
         // droneRef.child(droneId).remove((error) => {
         //   if (error) {
@@ -295,6 +302,8 @@ exports.removeFromGroup = function(groupId, droneId, callBack) {
 exports.updateWaypoints = function(id, waypoints, callBack) {
   Drone.findByIdAndUpdate(id, {waypoints: waypoints}, {new: true}).then((response) => {
     callBack({status: 'OK', update: waypoints});
+  }).catch((err)=>{
+    callBack({status: 'ERROR', msg: 'Update error'});
   });
 
   //   const waypointsRef = droneRef.child(id).child('waypoints');
@@ -350,6 +359,8 @@ exports.updateDroneStatus = function(id, status, callBack) {
   status['timestamp'] = timestamp.valueOf();
   Drone.findByIdAndUpdate(id, {status: status}, {new: true}).then((response) => {
     callBack({status: 'OK', update: status});
+  }).catch((err)=>{
+    callBack({status: 'ERROR', msg: 'Update Error'});
   });
   // droneRef.child(id).update(status, function(err) {
   //   if (err) {
@@ -392,7 +403,6 @@ exports.getDroneById = function(id, callBack) {
  */
 exports.takeoffDrone = function(id, waypoints, callBack) {
   var waypoints = waypoints || [];
-
   request.post(`${flaskUrl}/${id}/takeoff`, {json: {waypoints: waypoints}},
       function(err, response, body) {
         callBack(body);
