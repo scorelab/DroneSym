@@ -100,7 +100,7 @@ def create_new_drone(kwargs):
 
     drone = Sim(instance_count, home)
     drone.launch()
-
+    drone_conn = ''
     while retries > 0:
         try:
             #drone_conn = connect(drone.connection_string(), wait_ready=True)
