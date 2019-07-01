@@ -2,4 +2,4 @@ dronekit_sitl==3.2.0
 dronekit==2.9.1
 Flask==1.0.2
 pymavlink==2.0.6
-requests==2.20.0
+requests==2.22.0
