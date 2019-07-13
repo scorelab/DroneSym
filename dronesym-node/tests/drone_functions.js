@@ -3,14 +3,27 @@ const assert = require('assert');
 const randomstring = require('randomstring');
 const randomlocation = require('random-location');
 const ref = require('../example.db').ref('/drones');
+const mongoose = require('mongoose');
+const mongoConfig = require('../config/example.mongoconfig');
+mongoose.connect(mongoConfig.dbUri, {useNewUrlParser: true});
 
-const {createDrone, getDroneIds, removeDrone, getDroneById} =
+const Drone = require('../Models/drone');
+
+const {createDrone, getDroneIds, removeDrone, getDroneById, updateWaypoints, updateDroneStatus} =
 require('../Controllers/droneCtrl');
 
 function generateDroneName() {
   return randomstring.generate(10);
 }
+function checkWaypointsSame(arr1, arr2) {
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i].lat !== arr2[i].lat || arr1[i].lon !== arr2[i].lon) {
+      return false;
+    }
+  }
 
+  return true;
+}
 function generateDroneLoc() {
   const P = {
     latitude: 52.237049,
@@ -26,7 +39,14 @@ function generateDroneLoc() {
     lon: location.longitude,
   };
 }
+function genWaypoints(num) {
+  const waypoints = [];
+  for (let i = 0; i < num; i++) {
+    waypoints.push(generateDroneLoc());
+  }
 
+  return waypoints;
+}
 function getLastDroneId(callBack) {
   getDroneIds((result) => {
     const droneId = result[result.length - 1];
@@ -48,16 +68,6 @@ describe('DRONE CONTROLLER', () => {
         createDrone(name, des, flying, loc, '597073ad587a6615c459e2bf',
             function(response) {
               assert.strictEqual(response.status, 'OK');
-              done();
-            });
-      });
-      it('Creates entry in firebase database', (done) => {
-        ref.orderByKey().once('value')
-            .then(function(snapshot) {
-              snapshot = snapshot.val();
-              snapshot = Object.values(snapshot);
-              const names = snapshot.map((drone) => drone.name);
-              assert(names.includes(name));
               done();
             });
       });
@@ -90,6 +100,67 @@ describe('DRONE CONTROLLER', () => {
       });
     });
   });
+  describe('Update waypoints', () => {
+    let droneId; let name; let waypoints;
+    before( (done) => {
+      name = generateDroneName();
+      const loc = generateDroneLoc();
+      createDrone(name, 'Test Desc', '1H', loc, '597073ad587a6615c459e2bf', function(response) {
+        getLastDroneId((result) => {
+          droneId = result;
+          done();
+        });
+        waypoints = genWaypoints(2);
+      });
+    });
+    it('Update waypoints - check response', (done) => {
+      updateWaypoints(droneId, waypoints, function(result) {
+        assert.strictEqual(result.status, 'OK');
+        done();
+      });
+    });
+    it('Update waypoints - check database', (done) => {
+      Drone.findOne({_id: droneId}).select({'waypoints': 1, '_id': 0}).then(function(snapshot) {
+        assert(checkWaypointsSame(snapshot, waypoints));
+        done();
+      }).catch((error) => {
+        assert.fail('Fetch failed from DB' + error);
+        done();
+      });
+    });
+  });
+
+  describe('Update Drone Status', () => {
+    let droneStatus; let droneId;
+    const statuses = ['FLYING', 'IDLE'];
+    before( (done) => {
+      name = generateDroneName();
+      const loc = generateDroneLoc();
+      createDrone(name, 'Test Desc', '1H', loc, '597073ad587a6615c459e2bf', function(response) {
+        getLastDroneId((result) => {
+          droneId = result;
+          done();
+        });
+      });
+      droneStatus = statuses[Math.floor(Math.random() * statuses.length)];
+    });
+    it('Update drone status - Result', (done) => {
+      updateDroneStatus(droneId, droneStatus, (result) => {
+        assert.strictEqual(result.status, 'OK');
+        done();
+      });
+    });
+    it('Update drone status - DB check', (done) => {
+      Drone.findOne({_id: droneId}).select({'waypoints': 1, '_id': 0}).then(function(snapshot) {
+        assert(strictEqual(snapshot, droneStatus));
+        done();
+      }).catch((error) => {
+        assert.fail('Fetch failed from DB' + error);
+        done();
+      });
+      done();
+    });
+  });
   describe('Remove drone', () => {
     let droneId; let name; let deletedDroneName;
     beforeEach( (done) => {
@@ -110,16 +181,6 @@ describe('DRONE CONTROLLER', () => {
           assert.strictEqual(result.status, 'OK');
           done();
         });
-      });
-      it('Deletes drone from firebase', (done) => {
-        ref.orderByKey().once('value')
-            .then(function(snapshot) {
-              snapshot = snapshot.val();
-              snapshot = Object.values(snapshot);
-              const names = snapshot.map((drone) => drone.name);
-              assert(!names.includes(deletedDroneName));
-              done();
-            });
       });
     });
     describe('Should throw errors', () => {

@@ -1,13 +1,44 @@
 /* eslint-disable no-var */
 const User = require('../Models/user');
 const Group = require('../Models/group');
+const Drone = require('../Models/drone');
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../config/jwtconfig');
 const db = require('../example.db');
-
+// ChangeStream Watch for User
+User.watch().
+    on('change', (data) => console.log(data));
 /** Regular expression for email validation */
 // eslint-disable-next-line max-len
 regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+
+// /**
+//  * Updates firebase db, in this case when user groups change
+//  * @param {string} droneId
+//  * id of drone
+//  * @param {object} userInfo
+//  * object containing userId, groupId and groupName
+//  * @param {boolean} insert
+//  * boolean informing whether users of given drone changed
+//  */
+
+// const updateFirebase = function(droneId, userInfo, insert=true) {
+//   const droneRef = db.ref('drones/' + droneId + '/users');
+
+//   droneRef.once('value', function(snapshot) {
+//     let users = snapshot.val();
+
+//     if (insert) {
+//       users.push(userInfo);
+//     } else {
+//       users = users.filter(function(user) {
+//         return (user.userId != userInfo.userId && user.groupId != userInfo.groupId) || user.groupId === 'creator';
+//       });
+//     }
+
+//     droneRef.set(users);
+//   });
+// };
 
 /**
  * Updates firebase db, in this case when user groups change
@@ -18,23 +49,60 @@ regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"
  * @param {boolean} insert
  * boolean informing whether users of given drone changed
  */
-const updateFirebase = function(droneId, userInfo, insert=true) {
-  const droneRef = db.ref('drones/' + droneId + '/users');
 
-  droneRef.once('value', function(snapshot) {
-    let users = snapshot.val();
+const updateMongoDB=function(droneId, userInfo, insert=true) {
+  Drone.findOne({_id: droneId}, function(err, drone) {
+    if (err) {
+      // callBack({status: 'ERROR', msg: err});
+      return;
+    }
+    console.log(drone);
+
+    console.log(userInfo);
 
     if (insert) {
-      users.push(userInfo);
+      Drone.findOneAndUpdate({_id: droneId},
+          {$push: {users: userInfo}}, {new: true}, function(err, user) {
+            console.log(user);
+            if (err) {
+              // callBack({status: 'ERROR', msg: err});
+              return;
+            }
+            console.log(user);
+            // callBack({status: 'OK', user: user});
+          });
     } else {
-      users = users.filter(function(user) {
-        return (
-          user.userId != userInfo.userId && user.groupId != userInfo.groupId)
-          || user.groupId === 'creator';
-      });
+      Drone.updateOne({_id: droneId},
+          {$pull: {users: userInfo}}, {new: true}, function(err, user) {
+            console.log('Deleted' + user);
+            if (err) {
+            // callBack({status: 'ERROR', msg: err});
+              return;
+            }
+            console.log(user);
+          // callBack({status: 'OK', user: user});
+          });
+      Group.updateOne({_id: userInfo.groupId},
+          {$pull: {users: {userId: userInfo.userId}}}, {new: true}, function(err, user) {
+            console.log('Deleted' + user);
+            if (err) {
+              // callBack({status: 'ERROR', msg: err});
+              return;
+            }
+            console.log(user);
+            // callBack({status: 'OK', user: user});
+          });
+      User.updateOne({_id: userInfo.userId},
+          {$pull: {groups: {groupId: userInfo.groupId}}}, {new: true}, function(err, user) {
+            console.log('Deleted' + user);
+            if (err) {
+              // callBack({status: 'ERROR', msg: err});
+              return;
+            }
+            console.log(user);
+            // callBack({status: 'OK', user: user});
+          });
     }
-
-    droneRef.set(users);
   });
 };
 /**
@@ -341,7 +409,7 @@ exports.updateUserGroups = function(userId, groupId, insert=true, callBack) {
       const drones = group.drones;
 
       drones.forEach(function(droneId) {
-        updateFirebase(droneId, groupInfo, insert);
+        updateMongoDB(droneId, groupInfo, insert);
       });
 
       if (insert) {

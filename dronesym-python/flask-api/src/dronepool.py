@@ -7,6 +7,7 @@ import node
 import time
 import mavparser
 import threadrunner
+import tempfile
 
 drone_pool = {}
 instance_count = 0
@@ -19,13 +20,13 @@ lock = Lock()
 
 class Sim(SITL, object):
     def __init__(self, instance=1, home=None):
-        super(Sim, self).download("copter", "3.3", verbose=not env_test)
+        super(Sim, self).download("copter", "3.3", verbose=True)
         self.instance = instance
         #Look here
         # self.wd = None
-        # self.defaults_filepath = None
-        # self.gdb = None
-        # self.valgrind =None
+        self.defaults_filepath = None
+        self.gdb = False
+        self.valgrind =None
 
         if home:
             self.home = home
@@ -36,20 +37,21 @@ class Sim(SITL, object):
         return
 
     def connection_string(self):
-        return super(Sim, self).connection_string()[
-            :-4] + str(5760 + self.instance * 10)
+        return super(Sim, self).connection_string()[:-4] + str(5760 + self.instance * 10)
 
     def launch(self):
-        home_str = str(self.home['lat']) + ',' + \
-            str(self.home['lon']) + ',0,353'
-        super(Sim,
-              self).launch(["--instance",
-                            str(self.instance),
-                            "--home",
-                            home_str],
-                           await_ready=True,
-                           verbose=not env_test,
-                           wd=None)
+        home_str = str(self.home['lat']) + ',' + str(self.home['lon']) + ',0,353'
+        wd = tempfile.mkdtemp()
+        super(Sim, self).launch(["--instance", str(self.instance), "--home", home_str], await_ready=True, verbose=True,wd=wd)
+#         home_str = str(self.home['lat']) + ',' + \
+# str(self.home['lon']) + ',0,353'
+#         super(Sim,self).launch(["--instance",
+#                             str(self.instance),
+#                             "--home",
+#                             home_str],
+#                            await_ready=True,
+#                            verbose=not env_test,
+#                            wd=None)
 
     def get_sitl_status(self):
         return {'id': self.instance, 'home': self.home}
@@ -59,7 +61,6 @@ def initialize():
     global q, mq, instance_count
     q = threadrunner.q
     mq = threadrunner.mq
-
     drones = node.get_drones()['drones']
 
     if not drones:
@@ -68,10 +69,10 @@ def initialize():
     for drone_id in drones:
         if drone_id not in list(drone_pool.keys()):
             drone = node.get_drone_by_id(drone_id)
-            location = drone['location']
+            location = drone[0]['location']
             q.put((create_new_drone, {"db_key": drone_id, "home": location}))
 
-            if 'status' in list(drone.keys()) and drone['status'] == 'FLYING':
+            if 'status' in list(drone[0].keys()) and drone[0]['status'] == 'FLYING':
                 q.put((resume_flight, {"drone_id": drone_id}))
 
 
@@ -87,8 +88,7 @@ def resume_flight(kwargs):
     next_waypoint = waypoints.index(drone['waypoint'])
     print(next_waypoint)
 
-    q.put((takeoff_drone, {"drone_id": drone_id,
-                           "waypoints": waypoints[next_waypoint:]}))
+    q.put((takeoff_drone, {"drone_id": drone_id,"waypoints": waypoints[next_waypoint:]}))
 
 
 def create_new_drone(kwargs):
@@ -96,15 +96,15 @@ def create_new_drone(kwargs):
     instance_count += 1
     home = kwargs.get("home", None)
     db_key = kwargs.get("db_key", None)
-
     retries = 3
 
     drone = Sim(instance_count, home)
     drone.launch()
-
+    drone_conn = ''
     while retries > 0:
         try:
             drone_conn = connect(drone.connection_string(), wait_ready=True)
+            #drone_conn = connect('tcp:127.0.0.1:5780', wait_ready=True)
             drone_conn.wait_ready(True, timeout=300)
             break
         except BaseException:
@@ -165,7 +165,8 @@ def takeoff_drone(kwargs):
     drone_id = kwargs.get("drone_id", None)
     target_height = kwargs.get("target_height", 10)
     waypoints = kwargs.get("waypoints", None)
-
+    print(drone_pool)
+    print(waypoints)
     try:
         drone = drone_pool[drone_id]
     except BaseException:

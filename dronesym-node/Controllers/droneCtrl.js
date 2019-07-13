@@ -3,6 +3,7 @@ const request = require('request');
 const io = require('../websocket').connection;
 const Group = require('../Models/group');
 const User = require('../Models/user');
+const Drone = require('../Models/drone');
 const db = require('../example.db');
 
 const droneRef = db.ref('/drones');
@@ -15,12 +16,16 @@ const flaskUrl = 'http://localhost:5000/dronesym/api/flask';
  * @param {string} socket - id of socket
  */
 const sendSnapsot = function(snapshot, socket) {
+  // console.log(snapshot);
   const array = [];
   const userId = socket.decoded_token.id;
 
   snapshot.forEach(function(item) {
-    const drone = item.val();
-
+    // console.log(item);
+    // Firebase
+    // const drone = item.val();
+    const drone = item;
+    // console.log('Val ', drone);
     const droneUsers = drone.users.map(function(user) {
       return user.userId;
     });
@@ -29,7 +34,8 @@ const sendSnapsot = function(snapshot, socket) {
       return;
     }
 
-    drone['key'] = item.key;
+    drone['key'] = item._id;
+    // console.log(drone['key']);
     delete drone['users'];
 
     array.push(drone);
@@ -44,15 +50,33 @@ if (process.env.NODE_ENV !== 'test') {
     const userId = socket.decoded_token.id;
 
     socket.emit('hello', userId);
-
+    
     // Initial drone data sent to client on first connection
-    droneRef.once('value', function(snapshot) {
-      sendSnapsot(snapshot, socket);
+    Drone.find().then((response) => {
+      // console.log(response);
+      sendSnapsot(response, socket);
+    }).catch((err) => {
+      console.error(err);
+    });
+    // Send snapshot using changeStreams upon data change
+
+    Drone.watch({ fullDocument: 'updateLookup'}).on('change', (data) => {
+      var dataArr = [];
+      if (data.operationType !== 'delete') {
+        dataArr.push(data.fullDocument);
+        // console.log(data.fullDocument);
+        sendSnapsot(dataArr, socket);
+      }
     });
 
-    droneRef.on('value', function(snapshot) {
-      sendSnapsot(snapshot, socket);
-    });
+    // Firebase
+    // droneRef.once('value', function(snapshot) {
+    //   sendSnapsot(snapshot, socket);
+    // });
+
+    // droneRef.on('value', function(snapshot) {
+    //   sendSnapsot(snapshot, socket);
+    // });
   });
 }
 // Send update drone data upon change to firebase
@@ -75,17 +99,32 @@ function(name, description, flyingtime, location, userId, callBack) {
     callBack({status: 'ERROR', msg: 'Drone location is required'});
     return;
   }
+  //  Adding drone to mongoDB
+  var drone = new Drone();
+  drone.name = name;
+  drone.description=description;
+  drone.flying_time = flyingtime;
+  drone.users = [{userId: userId, groupId: 'creator'}];
+  drone.location = location;
+  drone.waypoints = [location];
 
-  const droneKey =
-  droneRef.push({'name': name, 'description': description,
-    'flying_time': flyingtime, 'users': [{userId: userId, groupId: 'creator'}],
-    'location': location, 'waypoints': [location]});
-
-  request.post(`${flaskUrl}/spawn`,
-      {json: {droneId: droneKey.key, location: location}},
-      function(error, response, body) {
-        callBack(body);
-      });
+  drone.save(function(err, status) {
+    if (err) {
+      callBack({status: 'ERROR', msg: err});
+      return;
+    }
+    request.post(`${flaskUrl}/spawn`,
+        {json: {droneId: status._id, location: location}},
+        function(error, response, body) {
+          console.log(body);
+          callBack(body);
+        });
+  });
+  //  Adding drone to Firebase
+  // const droneKey =
+  // droneRef.push({'name': name, 'description': description,
+  //   'flying_time': flyingtime, 'users': [{userId: userId, groupId: 'creator'}],
+  //   'location': location, 'waypoints': [location]});
 };
 
 /**
@@ -126,14 +165,22 @@ exports.removeDrone = function(droneId, droneStatus, callBack) {
         }
 
         removeFromGroups(droneId);
-        droneRef.child(droneId).remove((error) => {
-          if (error) {
-            callBack({status: 'ERROR', msg: 'Removal error'});
-            return;
-          }
-
+        // Removing Drone From mongoDB
+        Drone.findOneAndDelete({_id: droneId}).then((response) => {
           callBack(JSON.parse(body));
+          console.log(response);
+        }).catch((err) => {
+          console.error(err);
+          callBack({status: 'ERROR', msg: 'Removal error'});
         });
+        // droneRef.child(droneId).remove((error) => {
+        //   if (error) {
+        //     callBack({status: 'ERROR', msg: 'Removal error'});
+        //     return;
+        //   }
+
+        //   callBack(JSON.parse(body));
+        // });
       });
 };
 
@@ -183,13 +230,14 @@ exports.removeGroup = function(groupId, callBack) {
       return;
     }
 
-    User.update({}, {$pull: {groups: {$in: {groupId: groupId}}}},
+
+    User.updateOne({}, {$pull: {groups: {$in: {groupId: groupId}}}},
         function(err, group) {
           if (err) {
             callBack({status: 'ERROR', msg: err});
             return;
           }
-
+          // console.log(group);
           callBack({status: 'OK', group: group});
         });
   });
@@ -235,12 +283,12 @@ exports.addToGroup = function(groupId, drones, callBack) {
  */
 exports.removeFromGroup = function(groupId, droneId, callBack) {
   Group.findOneAndUpdate({_id: groupId}, {$pull: {drones: droneId}},
-      {new: true},
       function(err, group) {
         if (err) {
           callBack({status: 'ERROR', msg: err});
           return;
         }
+        // console.log(group);
         callBack({status: 'OK', group: group});
       });
 };
@@ -252,15 +300,21 @@ exports.removeFromGroup = function(groupId, droneId, callBack) {
  * @param {function} callBack - function to return result of adding waypoints to
  */
 exports.updateWaypoints = function(id, waypoints, callBack) {
-  const waypointsRef = droneRef.child(id).child('waypoints');
-
-  waypointsRef.set(waypoints, function(err) {
-    if (err) {
-      callBack({status: 'ERROR', msg: err});
-      return;
-    }
-    callBack({status: 'OK'});
+  Drone.findByIdAndUpdate(id, {waypoints: waypoints}, {new: true}).then((response) => {
+    callBack({status: 'OK', update: waypoints});
+  }).catch((err)=>{
+    callBack({status: 'ERROR', msg: 'Update error'});
   });
+
+  //   const waypointsRef = droneRef.child(id).child('waypoints');
+
+//   waypointsRef.set(waypoints, function(err) {
+//     if (err) {
+//       callBack({status: 'ERROR', msg: err});
+//       return;
+//     }
+//     callBack({status: 'OK'});
+//   });
 };
 
 /**
@@ -270,13 +324,24 @@ exports.updateWaypoints = function(id, waypoints, callBack) {
 exports.getDroneIds = function(callBack) {
   const drones = [];
 
-  droneRef.orderByKey().once('value')
-      .then(function(snapshot) {
-        snapshot.forEach(function(drone) {
-          drones.push(drone.key);
-        });
-        callBack(drones);
-      });
+  Drone.find({}, {_id: 1}).then((response) => {
+    response.forEach(function(drone) {
+      drones.push(drone._id);
+    });
+    callBack(drones);
+    console.log(response);
+  }).catch((err) => {
+    console.error(err);
+  });
+
+  // droneRef.orderByKey().once('value')
+  //     .then(function(snapshot) {
+  //       snapshot.forEach(function(drone) {
+  //         drones.push(drone.key);
+  //       });
+  //       // console.log(drones);
+  //       callBack(drones);
+  //     });
 };
 
 /**
@@ -292,13 +357,18 @@ exports.getDroneIds = function(callBack) {
 exports.updateDroneStatus = function(id, status, callBack) {
   const timestamp = new Date();
   status['timestamp'] = timestamp.valueOf();
-  droneRef.child(id).update(status, function(err) {
-    if (err) {
-      console.log(err);
-      return;
-    }
+  Drone.findByIdAndUpdate(id, {status: status}, {new: true}).then((response) => {
     callBack({status: 'OK', update: status});
+  }).catch((err)=>{
+    callBack({status: 'ERROR', msg: 'Update Error'});
   });
+  // droneRef.child(id).update(status, function(err) {
+  //   if (err) {
+  //     console.log(err);
+  //     return;
+  //   }
+  //   callBack({status: 'OK', update: status});
+  // });
 };
 
 /**
@@ -313,11 +383,15 @@ exports.getDroneById = function(id, callBack) {
     callBack({status: 'ERROR', msg: 'Id must be specified'});
     return;
   }
-
-  droneRef.orderByKey().equalTo(id)
-      .once('value', function(snapshot) {
-        callBack(snapshot.child(id));
-      });
+  Drone.find({_id: id}).then((response) => {
+    callBack(response);
+  }).catch((err) => {
+    console.error(err);
+  });
+  // droneRef.orderByKey().equalTo(id)
+  //     .once('value', function(snapshot) {
+  //       callBack(snapshot.child(id));
+  //     });
 };
 
 /**
@@ -329,7 +403,6 @@ exports.getDroneById = function(id, callBack) {
  */
 exports.takeoffDrone = function(id, waypoints, callBack) {
   var waypoints = waypoints || [];
-
   request.post(`${flaskUrl}/${id}/takeoff`, {json: {waypoints: waypoints}},
       function(err, response, body) {
         callBack(body);

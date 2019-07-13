@@ -28,6 +28,7 @@ import { DronesBoxComponent } from './drones-box/drones-box.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { SignupComponent } from './signup/signup.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
     DronesBoxComponent,
     UserManagementComponent,
     SignupComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,

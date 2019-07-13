@@ -33,6 +33,7 @@ router.get('/get', function(req, res) {
 
 router.get('/get/:id', function(req, res) {
   drones.getDroneById(req.params.id, function(drone) {
+    console.log(drone);
     res.json(drone);
   });
 });

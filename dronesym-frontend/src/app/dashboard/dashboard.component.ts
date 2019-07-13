@@ -114,7 +114,7 @@ export class DashboardComponent {
     }
 
     const drone = this.drones.filter((dron) => {
-      return dron.key === this.currDrone.key;
+      return dron._id === this.currDrone._id;
     })[0];
 
     if (!drone) {
@@ -143,22 +143,22 @@ export class DashboardComponent {
 
   public finishAddingWaypoints() {
     this.switchCreateMode(this.createModes.NONE);
-    this.droneFeed.updateDroneWaypoints(this.currDrone.key, this.currDrone.waypoints)
+    this.droneFeed.updateDroneWaypoints(this.currDrone._id, this.currDrone.waypoints)
         .then((status) => console.log(status));
   }
 
   public takeOffDrone() {
-    this.droneFeed.takeOffDrone(this.currDrone.key, this.currDrone.waypoints)
+    this.droneFeed.takeOffDrone(this.currDrone._id, this.currDrone.waypoints)
         .then((status) => console.log(status));
   }
 
   public cancelFlight() {
-    this.droneFeed.landDrone(this.currDrone.key)
+    this.droneFeed.landDrone(this.currDrone._id)
         .then((status) => console.log(status));
   }
 
   public resumeFlight() {
-    this.droneFeed.resumeFlight(this.currDrone.key)
+    this.droneFeed.resumeFlight(this.currDrone._id)
         .then((status) => console.log(status));
   }
 
@@ -166,7 +166,7 @@ export class DashboardComponent {
     this.switchCreateMode(this.createModes.NONE);
     const currPosition = { 'lat': this.currDrone.location.lat, 'lon': this.currDrone.location.lon };
     this.currDrone.waypoints = [currPosition];
-    this.droneFeed.updateDroneWaypoints(this.currDrone.key, this.currDrone.waypoints)
+    this.droneFeed.updateDroneWaypoints(this.currDrone._id, this.currDrone.waypoints)
         .then((status) => console.log(status));
   }
 
@@ -213,7 +213,7 @@ export class DashboardComponent {
   public deleteWaypoint(index) {
     if (this.createMode === this.createModes.WAYPOINTS) {
         this.currDrone.waypoints.splice(index, 1);
-        this.droneFeed.updateDroneWaypoints(this.currDrone.key, this.currDrone.waypoints)
+        this.droneFeed.updateDroneWaypoints(this.currDrone._id, this.currDrone.waypoints)
             .then((status) => console.log('Deleted'));
     }
   }
@@ -251,7 +251,7 @@ export class DashboardComponent {
   }
 
   public landDrone() {
-    this.droneFeed.landDrone(this.currDrone.key)
+    this.droneFeed.landDrone(this.currDrone._id)
         .then((res) => console.log(res));
   }
 

@@ -102,7 +102,7 @@ removeFromGroup(groupId, droneId) {
 }
 
 getName(droneId) {
-  return this.drones.filter((drone) => drone.key === droneId)
+  return this.drones.filter((drone) => drone._id === droneId)
             .map((drone) => drone.name);
 }
 
