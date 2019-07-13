@@ -100,11 +100,11 @@ def create_new_drone(kwargs):
 
     drone = Sim(instance_count, home)
     drone.launch()
-
+    drone_conn = ''
     while retries > 0:
         try:
-            #drone_conn = connect(drone.connection_string(), wait_ready=True)
-            drone_conn = connect('tcp:127.0.0.1:5780', wait_ready=True)
+            drone_conn = connect(drone.connection_string(), wait_ready=True)
+            #drone_conn = connect('tcp:127.0.0.1:5780', wait_ready=True)
             drone_conn.wait_ready(True, timeout=300)
             break
         except BaseException:
