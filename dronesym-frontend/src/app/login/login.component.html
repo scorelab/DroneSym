@@ -1,3 +1,5 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <div class="row login-background">
 	<div class="col s4 offset-s4 login-card">
 		<div class="card">
@@ -12,22 +14,28 @@
 
 				<form materialize>
 					<div class="input-field col s10 offset-s1">
-						<label for="username"> Username </label>
+						<label for="username"> Username / Email</label>
 						<input (input)="setUsername($event)" id="username" type="text"/>
 					</div>
-
 					<div class="input-field col s10 offset-s1">
 						<label for="password"> Password </label>
 						<input (input)="setPassword($event)" id="password" type="password"/>
 					</div>
-
 					<div class="row">
-						<button (click) = "onLogin($event)" class="waves-effect waves-light btn blue darken-3 col s4 offset-s4">Login</button>
+							<div class="col s6 btnn">
+									<button (click) = "onLogin($event)" class="waves-effect waves-light btn blue darken-3 btnn">Login</button>
+							</div>
+							<div class="col s6 btnn">
+									<button  [routerLink]="['/signup']" class="waves-effect waves-light btn blue darken-3 btnn">Signup</button>
+              </div>
+              <br><div class="col s6 btnn">
+              <a href="/resetpassword">Forgot password?</a>
+              </div>
 					</div>
 				</form>
+
 			</div>
 		</div>
-
 		<div class="footer-label center-align"> DroneSym v1.0 </div>
 	</div>
 </div>

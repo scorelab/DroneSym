@@ -3,18 +3,18 @@
 		<h4 class="info-header"> Manage Drones </h4>
 		<div class="half-bar green col s1"></div>
 		<div class="half-bar yellow col s1"></div>
+		<app-breadcrumb></app-breadcrumb>
 	</div>
 
-	<confirm-dialog [message]="'Rename Drone'" [show]="showRenameConfirmation" (onResponse)="renameResponse($event)" [inputEnabled]="true"></confirm-dialog>
+	<app-confirm-dialog [message]="'Rename Drone'" [show]="showRenameConfirmation" (onResponse)="renameResponse($event)" [inputEnabled]="true" [newDrone]="false"></app-confirm-dialog>
 
-	<confirm-dialog [message]="'Confirm removing the drone?'" [show]="showDeleteConfirmation" (onResponse)="deleteResponse($event)" [inputEnabled]="false"></confirm-dialog>
+	<app-confirm-dialog [message]="'Confirm removing the drone?'" [show]="showDeleteConfirmation" (onResponse)="deleteResponse($event)" [inputEnabled]="false" [newDrone]="false"></app-confirm-dialog>
 
 	<div class="row">
 		<div *ngFor="let drone of drones" class="collapsible-header col s8">
-	        <h5>{{ drone.name }}
+	       {{ drone.name }} - {{drone.description}}
 		        <span (click)="showDeleteConfirmationDialog(drone)" class="new badge red" data-badge-caption="delete"></span>
 		        <span (click)="showRenameConfirmationDialog(drone)" class="new badge light-blue" data-badge-caption="rename"></span>
-	        </h5>
+
 		</div>
 	</div>
-</div>

@@ -3,7 +3,7 @@ import { DecimalPipe } from '@angular/common';
 import { MaterializeAction } from 'angular2-materialize';
 
 @Component({
-  selector: 'drone-option-box',
+  selector: 'app-drone-option-box',
   templateUrl: './drone-option-box.component.html',
   styleUrls: ['./drone-option-box.component.css']
 })
@@ -16,21 +16,22 @@ export class DroneOptionBoxComponent implements OnInit {
 
   @Output('onSelected') onSelected = new EventEmitter<string>();
   @Input('name') droneName: string;
+  @Input('description') droneDescription: string;
 
   @Input()
-  set state(state: string){
+  set state(state: string) {
     this.droneState = state || 'FINISHED';
   }
   @Input()
-  set altitude(value: number){
+  set altitude(value: number) {
     this.droneAlt = value || 0;
   }
   @Input()
-  set heading(value: number){
+  set heading(value: number) {
     this.droneHeading = value || 0;
   }
   @Input()
-  set airspeed(value: number){
+  set airspeed(value: number) {
     this.droneSpeed = value || 0;
   }
 
@@ -41,19 +42,19 @@ export class DroneOptionBoxComponent implements OnInit {
   ngOnInit() {
   }
 
-  public onWaypoints(){
+  public onWaypoints() {
     this.onSelected.emit('SELECT_WAYPOINTS');
   }
 
-  public onTakeoff(){
-    this.onSelected.emit('SELECT_TAKEOFF');;
+  public onTakeoff() {
+    this.onSelected.emit('SELECT_TAKEOFF');
   }
 
-  public onResume(){
+  public onResume() {
     this.onSelected.emit('SELECT_RESUME');
   }
 
-  public onCancel(){
+  public onCancel() {
     this.onSelected.emit('SELECT_CANCEL');
   }
 

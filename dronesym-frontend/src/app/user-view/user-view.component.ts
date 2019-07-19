@@ -8,20 +8,20 @@ import { UserService } from '../user-service/user.service';
   styleUrls: ['./user-view.component.css']
 })
 export class UserViewComponent implements AfterViewInit {
-  userRole :string;
+  userRole: string;
 
   constructor(private router: Router, private userService: UserService) {
     this.userService.getUserRole().then((role) => {
       this.userRole = role;
-    })
+    });
   }
 
-  ngAfterViewInit(){
-  	this.router.navigate(['dashboard/map']);
+  ngAfterViewInit() {
+  this.router.navigate(['dashboard/map']);
   }
 
-  logout(){
-  	this.userService.logout();
-  	this.router.navigate(['login']);
+  logout() {
+  this.userService.logout();
+  this.router.navigate(['login']);
   }
 }

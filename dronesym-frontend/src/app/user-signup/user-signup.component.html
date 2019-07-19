@@ -13,6 +13,11 @@
 						<input (input)="setUsername($event)" id="username" type="text"/>
 					</div>
 
+					<div class="input-field col s10 offset-s1">
+						<label for="email"> Email </label>
+						<input (input)="setEmail($event)" id="email" type="text"/>
+					</div>
+
 					<div class="input-field col s10 offset-s1" >
 						<select (change)="onRoleSelect($event)" materialize="material_select">
 							<option value="" selected disabled> Choose Role </option>

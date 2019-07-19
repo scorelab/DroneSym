@@ -228,8 +228,12 @@ dronesym-frontend/src/environments/environment.ts
 dronesym-node/db.js
 dronesym-node/config/mongoconfig.js
 dronesym-node/dronedb-213c3-firebase-adminsdk-7u7ke-14febae0d1.json
-
+dronesym-node/dronesym-d5898-5e6e2d94c38d.json
+dronesym-node/example.db.js
 #py.test caches
 dronesym-python/flask-api/tests/__pycache__
+
+#.bak python
+*.bak
 
 # End of https://www.gitignore.io/api/git,node,linux,python,angular,firebase

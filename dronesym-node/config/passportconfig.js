@@ -1,32 +1,29 @@
-var JwtStrategy = require('passport-jwt').Strategy;
-var ExtractJwt = require('passport-jwt').ExtractJwt;
-var jwtConfig = require('./jwtconfig');
-var User = require('../Models/user');
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+const jwtConfig = require('./jwtconfig');
+const User = require('../Models/user');
 
-var jwtOptions = {
-	jwtFromRequest: ExtractJwt.fromAuthHeader(),
-	secretOrKey:jwtConfig.secret
-}
+const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('jwt'),
+  secretOrKey: jwtConfig.secret,
+};
 
-var jwtAuthenticate = new JwtStrategy(jwtOptions, function(payload, done){
+const jwtAuthenticate = new JwtStrategy(jwtOptions, function(payload, done) {
+  User.findById(payload.id, function(err, user) {
+    if (err) {
+      done(err);
+      return;
+    }
 
-	User.findById(payload.id, function(err, user){
-		if(err){
-			done(err);
-			return;
-		}
+    if (user) {
+      done(null, user);
+    } else {
+      console.log('User not found');
+      done(null, false);
+    }
+  });
+});
 
-		if(user){
-			done(null, user);
-		}
-		else{
-			console.log('User not found');
-			done(null, false);
-		}
-
-	});
-})
-
-module.exports = function(passport){
-	passport.use(jwtAuthenticate);
-}
+module.exports = function(passport) {
+  passport.use(jwtAuthenticate);
+};

@@ -1,0 +1,14 @@
+version: 1
+
+update_configs:
+  - package_manager: "javascript"
+    directory: "/dronesym-node"
+    update_schedule: "monthly"
+
+  - package_manager: "javascript"
+    directory: "/dronesym-frontend"
+    update_schedule: "monthly"
+    
+  - package_manager: "python"
+    directory: "/dronesym-python"
+    update_schedule: "monthly"

@@ -3,15 +3,16 @@
 		<h4 class="info-header"> Manage Groups </h4>
 		<div class="half-bar blue col s1"></div>
 		<div class="half-bar yellow col s1"></div>
+		<app-breadcrumb></app-breadcrumb>
 	</div>
 
 	<div class="row" *ngIf="userRole === 'admin'">
 		<a (click)="showCreateGroupDialog()" class="waves-effect waves-light blue btn"><i class="material-icons medium left">gamepad</i> Create Group</a>
 	</div>
 
-	<confirm-dialog [message]="'Create New Group'" [show]="this.showGroupDialog" (onResponse)="createGroup($event)" [inputEnabled]="true"></confirm-dialog>
+	<app-confirm-dialog [message]="'Create New Group'" [show]="this.showGroupDialog" (onResponse)="createGroup($event)" [inputEnabled]="true"></app-confirm-dialog>
 
-	<drones-box (onResponse)="addDronesToGroup($event)" [message]="'Select Drones'" [drones]="drones" [show]="showDronesDialog"></drones-box>
+	<app-drones-box (onResponse)="addDronesToGroup($event)" [message]="'Select Drones'" [drones]="drones" [show]="showDronesDialog"></app-drones-box>
 
 	<div class="row">
 		<ul materialize="collapsible" class="collapsible col s10" data-collapsible="accordion">

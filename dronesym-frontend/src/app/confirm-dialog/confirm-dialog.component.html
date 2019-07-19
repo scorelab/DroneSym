@@ -1,6 +1,6 @@
 <div id="dialog" class="modal" materialize="modal" [materializeActions]="modalActions">
     <div class="modal-content">
-      <h5 class=".center-align">{{ message }}</h5>
+      <h5 class="center-align">{{ message }}</h5>
     </div>
 
     <form materialize *ngIf="inputEnabled">
@@ -9,11 +9,19 @@
 				<label for="name"> Name </label>
 				<input (input)="setName($event)" id="name" type="text"/>
 			</div>
+			<div class="input-field col s6 offset-s3" *ngIf="newDrone">
+				<label for="description"> Description </label>
+				<input (input)="setDescription($event)" id="description" type="text"/>
+			</div>
+			<div class="input-field col s6 offset-s3" *ngIf="newDrone">
+				<label for="flying_time"> Flying Time </label>
+				<input (input)="setFlyingTime($event)" id="flying_time" type="text" />
+			</div>
 		</div>
     </form>
 
 	<div class="modal-footer">
-	  <a (click)="confirm()" class="modal-action modal-close waves-effect waves-blue btn-flat">Continue</a>
-	  <a (click)="cancel()" class="modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
+	  <a (click)="confirm()" class="modal-action modal-close btn teal ">Continue</a>
+	  <a (click)="cancel()" class="modal-action modal-close waves-effect waves-red btn red lighten-1">Cancel</a>
 	</div>
 </div>

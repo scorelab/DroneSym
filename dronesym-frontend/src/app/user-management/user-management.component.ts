@@ -11,37 +11,38 @@ import { DronesBoxComponent } from '../drones-box/drones-box.component';
 })
 export class UserManagementComponent implements OnInit {
 
-  public showUserSignUpDialog :boolean;
+  public showUserSignUpDialog: boolean;
   public showDroneGroupsDialog: boolean;
   public userRole;
   public users;
   public groups;
   public currUser;
 
-  constructor(private userService :UserService, private droneService :DroneDataService) {
-  	this.showUserSignUpDialog = false;
+  constructor(private userService: UserService, private droneService: DroneDataService) {
+  this.showUserSignUpDialog = false;
     this.showDroneGroupsDialog = false;
     this.groups = [];
     this.users = [];
-    this.currUser = "";
+    this.currUser = '';
 
-  	userService.getUserRole().then((role) => {
-  		this.userRole = role;
-  	})
+  userService.getUserRole().then((role) => {
+  this.userRole = role;
+  });
 
     userService.getUserList().then((users) => {
       this.users = users.users;
       console.log(this.users);
-    })
+    });
 
     droneService.getGroups().then((groups) => {
+      console.log(groups);
       this.groups = groups.groups.map((group) => {
         return {
           name : group.name,
-          key : group._id
-        }
+          _id : group._id
+        };
       });
-    })
+    });
   }
 
   ngOnInit() {
@@ -49,17 +50,27 @@ export class UserManagementComponent implements OnInit {
 
   private updateUser(userData) {
     this.users = this.users.map((user) => {
-      if(user.id === userData.id) {
+      console.log(user);
+      console.log(userData);
+      if (user._id === userData.id) {
         return userData;
-      }
-      else {
+      } else {
         return user;
+      }
+    });
+  }
+  private updateGroup(groupData) {
+    this.groups = this.groups.map((groups) => {
+      if (groups._id === groupData.id) {
+        return groupData;
+      } else {
+        return groups;
       }
     });
   }
 
   public showCreateUserDialog() {
-  	this.showUserSignUpDialog = true;
+  this.showUserSignUpDialog = true;
   }
 
   public showGroupsDialog(userId) {
@@ -68,31 +79,39 @@ export class UserManagementComponent implements OnInit {
   }
 
   public onDronesBoxResponse($event) {
-    let groups = $event.items;
+    const groups = $event.items;
     console.log(groups);
 
     groups.forEach((groupId) => {
       this.userService.addUserToGroup(this.currUser, groupId)
           .then((res) => {
+            console.log(res);
             this.updateUser(res.user);
-          })
+          });
+    });
+    groups.forEach((groupId) => {
+      this.userService.updateUserToGroup(this.currUser, groupId)
+          .then((res) => {
+            console.log(res);
+            this.updateGroup(res.user);
+          });
     });
 
      this.showDroneGroupsDialog = false;
-     this.currUser = "";
+     this.currUser = '';
   }
 
   public onUserSignupResponse() {
     this.userService.getUserList().then((users) => {
       this.users = users.users;
     });
-  	this.showUserSignUpDialog = false;
+  this.showUserSignUpDialog = false;
   }
 
   public removeFromGroup(userId, groupId) {
     this.userService.removeUserFromGroup(userId, groupId)
         .then((res) => {
           this.updateUser(res.user);
-        })
+        });
   }
 }

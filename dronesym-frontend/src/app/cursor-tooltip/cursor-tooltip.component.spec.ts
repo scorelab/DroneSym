@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CurosTooltipComponent } from './cursor-tooltip.component';
+import { CursorTooltipComponent } from './cursor-tooltip.component';
 
-describe('CurosTooltipComponent', () => {
-  let component: CurosTooltipComponent;
-  let fixture: ComponentFixture<CurosTooltipComponent>;
+describe('CursorTooltipComponent', () => {
+  let component: CursorTooltipComponent;
+  let fixture: ComponentFixture<CursorTooltipComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CurosTooltipComponent ]
+      declarations: [ CursorTooltipComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CurosTooltipComponent);
+    fixture = TestBed.createComponent(CursorTooltipComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
