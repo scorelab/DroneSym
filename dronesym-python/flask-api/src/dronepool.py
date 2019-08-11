@@ -37,7 +37,7 @@ class Sim(SITL, object):
         return
 
     def connection_string(self):
-        return super(Sim, self).connection_string()[:-4] + str(5760 + self.instance * 10)
+        return super(Sim, self).connection_string()[:-4] + str(5760 + self.instance*20)
 
     def launch(self):
         home_str = str(self.home['lat']) + ',' + str(self.home['lon']) + ',0,353'
@@ -82,11 +82,17 @@ def resume_flight(kwargs):
 
     waypoints = []
 
-    for wp in sorted(drone['waypoints']):
-        waypoints.append(drone['waypoints'][wp])
+    print("drone[0].waypoints:", drone[0]['waypoints'])
+    # for wp in sorted(drone[0]['waypoints'],key = lambda i: i['_id']):
+    #     waypoints.append(drone[0]['waypoints'][wp])
+    
+    sortedWp = sorted(drone[0]['waypoints'],key = lambda i: i['_id'])
+    for wp in sortedWp:
+        waypoints.append(drone[0]['waypoints'][sortedWp.index(wp)])
 
-    next_waypoint = waypoints.index(drone['waypoint'])
-    print(next_waypoint)
+    next_waypoint = waypoints.index(drone[0]['waypoint'])
+    
+    # print(next_waypoint)
 
     q.put((takeoff_drone, {"drone_id": drone_id,"waypoints": waypoints[next_waypoint:]}))
 
@@ -165,8 +171,8 @@ def takeoff_drone(kwargs):
     drone_id = kwargs.get("drone_id", None)
     target_height = kwargs.get("target_height", 10)
     waypoints = kwargs.get("waypoints", None)
-    print(drone_pool)
-    print(waypoints)
+    # print(drone_pool)
+    # print(waypoints)
     try:
         drone = drone_pool[drone_id]
     except BaseException:
@@ -212,10 +218,10 @@ def takeoff_drone(kwargs):
 
         if command_len >= wp_len:
             diff = command_len - wp_len
-            next_wp = max(drone.commands.__next__ - diff, 0) % len(waypoints)
+            next_wp = max(drone.commands.next - diff, 0) % len(waypoints)
             waypoint = waypoints[next_wp]
             # print "df: " + `diff`
-            # print next_wp
+            print(next_wp)
             node.update_drone(drone_id, {"waypoint": waypoint})
 
         if drone.mode == VehicleMode(
@@ -223,7 +229,7 @@ def takeoff_drone(kwargs):
             detach_event_listeners(drone, value, "HALTED")
             return
 
-        if drone.commands.__next__ == len(drone.commands):
+        if drone.commands.next == len(drone.commands):
             detach_event_listeners(drone, value, "FINISHED")
             return
 
