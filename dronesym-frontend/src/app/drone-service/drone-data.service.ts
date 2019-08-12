@@ -42,6 +42,7 @@ export class DroneDataService {
         this.droneObserver = observer;
 
         this.feed.on('SOCK_FEED_UPDATE', (data) => {
+          // console.log(data);
           this.drones = data;
           observer.next(this.drones);
         });

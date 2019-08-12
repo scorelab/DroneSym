@@ -13,6 +13,7 @@ import { DroneGroupsComponent } from './drone-groups/drone-groups.component';
 import { DroneListComponent } from './drone-list/drone-list.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { SignupComponent } from './signup/signup.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 const appRoutes: Routes = [
   {
@@ -22,6 +23,10 @@ const appRoutes: Routes = [
   {
     path: 'signup',
     component: SignupComponent
+  },
+  {
+    path: 'resetpassword',
+    component: ForgotPasswordComponent
   },
   {
     path: 'dashboard',

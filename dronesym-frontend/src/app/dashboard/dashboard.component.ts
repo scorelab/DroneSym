@@ -49,7 +49,8 @@ export class DashboardComponent {
           }
 
           this.drones = data;
-          this.updateCurrDrone();
+           this.updateCurrDrone();
+
         });
 
     this.userService.getUserRole()
@@ -108,7 +109,7 @@ export class DashboardComponent {
     }
   }
 
-  private updateCurrDrone() {
+  public updateCurrDrone() {
     if (!this.currDrone) {
       return;
     }
@@ -129,7 +130,8 @@ export class DashboardComponent {
 
   public setCurrentDrone(drone) {
     this.currDrone = drone;
-    console.log(this.currDrone);
+    this.updateCurrDrone();
+    // console.log(this.currDrone);
   }
 
   public goToCreateDroneMode() {

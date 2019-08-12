@@ -1,7 +1,7 @@
 import unittest
 import mocks
 from dronekit import VehicleMode
-
+import unittest
 from inspect import getsourcefile
 import os.path
 import sys
