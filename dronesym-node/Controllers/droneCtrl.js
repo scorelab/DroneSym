@@ -6,7 +6,7 @@ const User = require('../Models/user');
 const Drone = require('../Models/drone');
 const db = require('../example.db');
 
-const droneRef = db.ref('/drones');
+// const droneRef = db.ref('/drones');
 
 const flaskUrl = 'http://localhost:5000/dronesym/api/flask';
 
@@ -357,7 +357,7 @@ exports.getDroneIds = function(callBack) {
 exports.updateDroneStatus = function(id, status, callBack) {
   const timestamp = new Date();
   status['timestamp'] = timestamp.valueOf();
-  Drone.findByIdAndUpdate(id, {status: status}, {new: true}).then((response) => {
+  Drone.findByIdAndUpdate(id,status,{new: true}).then((response) => {
     callBack({status: 'OK', update: status});
   }).catch((err)=>{
     callBack({status: 'ERROR', msg: 'Update Error'});
@@ -402,6 +402,7 @@ exports.getDroneById = function(id, callBack) {
  * @param {function} callBack - function to return result of takeoffing drone to
  */
 exports.takeoffDrone = function(id, waypoints, callBack) {
+  console.log(waypoints);
   var waypoints = waypoints || [];
   request.post(`${flaskUrl}/${id}/takeoff`, {json: {waypoints: waypoints}},
       function(err, response, body) {
