@@ -1,0 +1,20 @@
+<div id="dialog" class="modal" materialize="modal" [materializeActions]="modalActions">
+  <div class="modal-content">
+      A password reset code has been sent to your email account!
+    <h5 class="center-align">{{ message }}</h5>
+  </div>
+
+  <form materialize *ngIf="inputEnabled">
+    <div class="row">
+
+      <div class="input-field col s6 offset-s3">
+      <label for="code"> Code : </label>
+      <input (input)="setCode($event)" id="code" type="text"/>
+    </div>
+  </div>
+  </form>
+<div class="modal-footer">
+  <a (click)="confirm()" class="modal-action modal-close btn teal ">Continue</a>
+  <a (click)="cancel()" class="modal-action modal-close waves-effect waves-red btn red lighten-1">Cancel</a>
+</div>
+</div>

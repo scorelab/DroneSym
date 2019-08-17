@@ -29,6 +29,8 @@ import { UserManagementComponent } from './user-management/user-management.compo
 import { SignupComponent } from './signup/signup.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetCodeDialogComponent } from './reset-code-dialog/reset-code-dialog.component';
+import { NewPasswordDialogComponent } from './new-password-dialog/new-password-dialog.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
     UserManagementComponent,
     SignupComponent,
     BreadcrumbComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ResetCodeDialogComponent,
+    NewPasswordDialogComponent
   ],
   imports: [
     BrowserModule,

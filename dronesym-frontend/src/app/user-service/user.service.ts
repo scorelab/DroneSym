@@ -17,7 +17,30 @@ export class UserService {
   constructor(private http: AuthHttpService) {
     this.baseUrl = `${environment.nodeApiURL}/user`;
   }
-
+  public updatePass(username, pass){
+    const user = { 'uname': username, 'password': pass, };
+    return this.http.post(`${this.baseUrl}/updatePass`, user)
+           .pipe(map((res) => res.json()))
+           .toPromise();
+  }
+  public sendEmail(code){
+    return this.http.post(`${this.baseUrl}/sendEmail`, { 'code': code })
+    .pipe(map((res) => {
+      const status = res.json();
+      console.log(status);
+      return status;
+     }))
+    .toPromise();
+  }
+public checkUser(username){
+  return this.http.post(`${this.baseUrl}/check`, { 'uname': username })
+        .pipe(map((res) => {
+          const status = res.json();
+          console.log(status);
+          return status;
+         }))
+        .toPromise();
+}
   public login(username, password) {
     return this.http.post(`${this.baseUrl}/login`, { 'uname': username, 'password': password })
         .pipe(map((res) => {

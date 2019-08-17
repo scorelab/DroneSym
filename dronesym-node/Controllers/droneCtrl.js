@@ -116,7 +116,7 @@ function(name, description, flyingtime, location, userId, callBack) {
     request.post(`${flaskUrl}/spawn`,
         {json: {droneId: status._id, location: location}},
         function(error, response, body) {
-          console.log(body);
+          // console.log(body);
           callBack(body);
         });
   });
@@ -329,7 +329,7 @@ exports.getDroneIds = function(callBack) {
       drones.push(drone._id);
     });
     callBack(drones);
-    console.log(response);
+    // console.log(response);
   }).catch((err) => {
     console.error(err);
   });
@@ -402,7 +402,7 @@ exports.getDroneById = function(id, callBack) {
  * @param {function} callBack - function to return result of takeoffing drone to
  */
 exports.takeoffDrone = function(id, waypoints, callBack) {
-  console.log(waypoints);
+  // console.log(waypoints);
   var waypoints = waypoints || [];
   request.post(`${flaskUrl}/${id}/takeoff`, {json: {waypoints: waypoints}},
       function(err, response, body) {

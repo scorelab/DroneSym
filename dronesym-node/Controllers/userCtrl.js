@@ -5,6 +5,8 @@ const Drone = require('../Models/drone');
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../config/jwtconfig');
 const db = require('../example.db');
+const nodemailer = require('nodemailer');
+const bcrypt = require('bcrypt-nodejs');
 // ChangeStream Watch for User
 User.watch().
     on('change', (data) => console.log(data));
@@ -12,36 +14,18 @@ User.watch().
 // eslint-disable-next-line max-len
 regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
-// /**
-//  * Updates firebase db, in this case when user groups change
-//  * @param {string} droneId
-//  * id of drone
-//  * @param {object} userInfo
-//  * object containing userId, groupId and groupName
-//  * @param {boolean} insert
-//  * boolean informing whether users of given drone changed
-//  */
-
-// const updateFirebase = function(droneId, userInfo, insert=true) {
-//   const droneRef = db.ref('drones/' + droneId + '/users');
-
-//   droneRef.once('value', function(snapshot) {
-//     let users = snapshot.val();
-
-//     if (insert) {
-//       users.push(userInfo);
-//     } else {
-//       users = users.filter(function(user) {
-//         return (user.userId != userInfo.userId && user.groupId != userInfo.groupId) || user.groupId === 'creator';
-//       });
-//     }
-
-//     droneRef.set(users);
-//   });
-// };
+/**
+ * Updates mongodb, in this case when user groups change
+ * @param {string} droneId
+ * id of drone
+ * @param {object} userInfo
+ * object containing userId, groupId and groupName
+ * @param {boolean} insert
+ * boolean informing whether users of given drone changed
+ */
 
 /**
- * Updates firebase db, in this case when user groups change
+ * Updates mongo db, in this case when user groups change
  * @param {string} droneId
  * id of drone
  * @param {object} userInfo
@@ -56,19 +40,15 @@ const updateMongoDB=function(droneId, userInfo, insert=true) {
       // callBack({status: 'ERROR', msg: err});
       return;
     }
-    console.log(drone);
-
-    console.log(userInfo);
 
     if (insert) {
       Drone.findOneAndUpdate({_id: droneId},
           {$push: {users: userInfo}}, {new: true}, function(err, user) {
-            console.log(user);
             if (err) {
               // callBack({status: 'ERROR', msg: err});
               return;
             }
-            console.log(user);
+            // console.log(user);
             // callBack({status: 'OK', user: user});
           });
     } else {
@@ -79,7 +59,7 @@ const updateMongoDB=function(droneId, userInfo, insert=true) {
             // callBack({status: 'ERROR', msg: err});
               return;
             }
-            console.log(user);
+            // console.log(user);
           // callBack({status: 'OK', user: user});
           });
       Group.updateOne({_id: userInfo.groupId},
@@ -89,8 +69,8 @@ const updateMongoDB=function(droneId, userInfo, insert=true) {
               // callBack({status: 'ERROR', msg: err});
               return;
             }
-            console.log(user);
-            // callBack({status: 'OK', user: user});
+            // console.log(user);
+            callBack({status: 'OK', user: user});
           });
       User.updateOne({_id: userInfo.userId},
           {$pull: {groups: {groupId: userInfo.groupId}}}, {new: true}, function(err, user) {
@@ -99,7 +79,7 @@ const updateMongoDB=function(droneId, userInfo, insert=true) {
               // callBack({status: 'ERROR', msg: err});
               return;
             }
-            console.log(user);
+            // console.log(user);
             // callBack({status: 'OK', user: user});
           });
     }
@@ -296,7 +276,87 @@ exports.loginUser = function(uname, password, callBack) {
     });
   }
 };
+exports.sendEmail = function(code, callBack) {
+  // Generate SMTP service account from ethereal.email
+  nodemailer.createTestAccount((err, account) => {
+    if (err) {
+      console.error('Failed to create a testing account. ' + err.message);
+      return process.exit(1);
+    }
 
+    console.log('Credentials obtained, sending message...');
+
+    // Create a SMTP transporter object
+    const transporter = nodemailer.createTransport({
+      host: account.smtp.host,
+      port: account.smtp.port,
+      secure: account.smtp.secure,
+      auth: {
+        user: account.user,
+        pass: account.pass,
+      },
+    });
+
+    // Message object
+    const message = {
+      from: 'DroneSym Support <support@dronesym.com>',
+      to: 'Recipient <recipient@example.com>',
+      subject: 'Password Reset',
+      text: 'Password reset code :'+ code,
+      html: '<p>Password reset code : <b>'+ code + '</b></p>',
+    };
+
+    transporter.sendMail(message, (err, info) => {
+      if (err) {
+        console.log('Error occurred. ' + err.message);
+        return process.exit(1);
+      }
+
+      console.log('Message sent: %s', info.messageId);
+      // Preview only available when sending through an Ethereal account
+      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      callBack({status: 'OK', res: info});
+    });
+  });
+};
+exports.check = function(uname, callBack) {
+  if (!uname) {
+    callBack({status: 'ERROR', msg: 'email must be specified'});
+    return;
+  }
+
+  if (regexp.test(uname)) {
+    User.findOne({email: uname}, function(err, user) {
+      if (err) {
+        callBack({status: 'ERROR', msg: err});
+        return;
+      }
+
+      if (!user) {
+        callBack({status: 'ERROR', msg: 'Invalid Email-Id'});
+        return;
+      } else {
+        callBack({status: 'OK', res: user.email});
+        return;
+      }
+    });
+  } else {
+    User.findOne({uname: uname}, function(err, user) {
+      if (err) {
+        callBack({status: 'ERROR', msg: err});
+        return;
+      }
+
+      if (!user) {
+        callBack({status: 'ERROR', msg: 'Invalid username'});
+        return;
+      } else {
+        callBack({status: 'OK', res: user.email});
+        return;
+      }
+    });
+  }
+};
 /**
  * Function that authorizes user (IDK where it is used)
  * @param {array} roles - array of roles
@@ -330,10 +390,10 @@ exports.updateUserInGroup=function(userId, groupId, insert=true, callBack) {
       callBack({status: 'ERROR', msg: err});
       return;
     }
-    console.log(user);
+    // console.log(user);
 
     const userInfo = {userId: userId, userName: user.uname};
-    console.log(groupId);
+    // console.log(groupId);
 
     Group.findOne({_id: groupId}, function(err, group) {
       if (err) {
@@ -345,13 +405,13 @@ exports.updateUserInGroup=function(userId, groupId, insert=true, callBack) {
         callBack({status: 'ERROR', msg: 'Group not found'});
         return;
       }
-      console.log(group);
+      // console.log(group);
       if (insert) {
         Group.findOneAndUpdate({_id: groupId},
             {$push: {users: userInfo}}, {new: true}, function(err, user) {
-              console.log(user);
+              // console.log(user);
               if (err) {
-                console.log(1);
+                // console.log(1);
                 callBack({status: 'ERROR', msg: err});
                 return;
               }
@@ -372,6 +432,39 @@ exports.updateUserInGroup=function(userId, groupId, insert=true, callBack) {
       }
     });
   });
+};
+
+exports.updatePass=function(username, pass, callBack) {
+  let encPass = '';
+  // User.findOne({uname: username}, function(err, user) {
+  //   if (err) {
+  //     callBack({status: 'ERROR', msg: err});
+  //     return;
+  //   } else {
+  //     const SALT_FACTOR = 5;
+  //     bcrypt.genSalt(SALT_FACTOR, function(err, salt) {
+  //   if (err) {
+  //     return next(err);
+  //   }
+  //   bcrypt.hash(pass, salt, null, function(err, hash) {
+  //     if (err) {
+  //       return next(err);
+  //     }
+
+  //     encPass = hash;
+  //     next();
+  //   });
+  // }
+  //     User.update({uname: username}, {
+  //       password: encPass
+  //   }, function(err, user) {
+  //           if (err) {
+  //             callBack({status: 'ERROR'});
+  //             return;
+  //           }
+  //           callBack({status: 'OK', group: filterUser(user)});
+  //         });
+  //       }
 };
 
 /**

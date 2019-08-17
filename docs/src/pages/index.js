@@ -11,6 +11,7 @@ const IndexPage = () => (
     <SEO title="Home" />
     <h2>Project Introduction</h2>
     <p>DroneSym is a web-based platform for tracking and managing drone fleets in real-time. It provides the ability to configure the flight paths and monitor their status through an online dashboard. Add, configure, and monitor entire fleets of drones through a web-browser.</p>
+    
     <h2>Requirements</h2>
     DroneSym requires <br/> 
     <br/> 

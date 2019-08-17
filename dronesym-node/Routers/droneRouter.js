@@ -18,7 +18,7 @@ router.post('/create', authenticate, authorize(['admin']), function(req, res) {
 router.post('/remove/:id', authenticate, authorize(['admin']),
     function(req, res) {
       const drone = req.body;
-      console.log(drone);
+      // console.log(drone);
 
       drones.removeDrone(req.params.id, drone.status, function(status) {
         res.json(status);
@@ -33,7 +33,7 @@ router.get('/get', function(req, res) {
 
 router.get('/get/:id', function(req, res) {
   drones.getDroneById(req.params.id, function(drone) {
-    console.log(drone);
+    // console.log(drone);
     res.json(drone);
   });
 });
@@ -68,7 +68,7 @@ router.post('/update/waypoints/:id', authenticate, authorize(['admin', 'user']),
       const waypoints = req.body.waypoints;
 
       drones.updateWaypoints(droneId, waypoints, function(status) {
-        console.log(status);
+        // console.log(status);
         res.json(status);
       });
     });

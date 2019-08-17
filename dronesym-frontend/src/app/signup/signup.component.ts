@@ -75,7 +75,7 @@ export class SignupComponent implements OnInit {
           Materialize.toast('Oops something went wrong...', 4000);
           console.log(err);
         });
-    console.log(this.user);
+    // console.log(this.user);
   }
 
 }

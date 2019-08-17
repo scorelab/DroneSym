@@ -11,7 +11,21 @@ router.post('/login', function(req, res) {
     res.json(status);
   });
 });
-
+router.post('/sendEmail', function(req, res) {
+  userCtrl.sendEmail(req.body.code, function(status) {
+    res.json(status);
+  });
+});
+router.post('/updatePass', function(req, res) {
+  userCtrl.updatePass(req.body.username,req.body.pass, function(status) {
+    res.json(status);
+  });
+});
+router.post('/check', function(req, res) {
+  userCtrl.check(req.body.uname, function(status) {
+    res.json(status);
+  });
+});
 router.post('/create', authenticate, authorize(['admin']), function(req, res) {
   userCtrl.createUser(req.body.uname, req.body.email,
       req.body.password, req.body.role,

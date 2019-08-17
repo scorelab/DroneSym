@@ -30,8 +30,8 @@ export class DronesBoxComponent {
   }
 
   toggleDrone(droneId) {
-    console.log(droneId);
-    console.log(this.drones);
+    // console.log(droneId);
+    // console.log(this.drones);
     if (this.selectedItems.indexOf(droneId) === -1) {
       this.selectedItems.push(droneId);
     } else {

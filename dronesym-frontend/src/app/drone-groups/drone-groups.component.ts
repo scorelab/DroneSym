@@ -35,7 +35,7 @@ private initialize() {
   this.droneFeed.getGroups()
     .then((res) => {
       this.groups = res.groups;
-      console.log(this.groups);
+      // console.log(this.groups);
     })
     .catch((err) => console.log(err));
 
@@ -71,7 +71,7 @@ addDronesToGroup($event) {
   if ($event.action === 'DRONES_BOX_CONFIRM' && $event.items.length > 0) {
     this.droneFeed.addToGroup(this.currGroup, $event.items)
       .then((res) => {
-        console.log(res.group);
+        // console.log(res.group);
         const newGroup = res.group;
         this.groups = this.groups.map((group) => group._id === newGroup._id ? newGroup : group);
       });

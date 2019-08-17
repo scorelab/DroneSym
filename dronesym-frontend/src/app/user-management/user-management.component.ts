@@ -31,11 +31,11 @@ export class UserManagementComponent implements OnInit {
 
     userService.getUserList().then((users) => {
       this.users = users.users;
-      console.log(this.users);
+      // console.log(this.users);
     });
 
     droneService.getGroups().then((groups) => {
-      console.log(groups);
+      // console.log(groups);
       this.groups = groups.groups.map((group) => {
         return {
           name : group.name,
@@ -50,8 +50,8 @@ export class UserManagementComponent implements OnInit {
 
   private updateUser(userData) {
     this.users = this.users.map((user) => {
-      console.log(user);
-      console.log(userData);
+      // console.log(user);
+      // console.log(userData);
       if (user._id === userData.id) {
         return userData;
       } else {
@@ -80,19 +80,19 @@ export class UserManagementComponent implements OnInit {
 
   public onDronesBoxResponse($event) {
     const groups = $event.items;
-    console.log(groups);
+    // console.log(groups);
 
     groups.forEach((groupId) => {
       this.userService.addUserToGroup(this.currUser, groupId)
           .then((res) => {
-            console.log(res);
+            // console.log(res);
             this.updateUser(res.user);
           });
     });
     groups.forEach((groupId) => {
       this.userService.updateUserToGroup(this.currUser, groupId)
           .then((res) => {
-            console.log(res);
+            // console.log(res);
             this.updateGroup(res.user);
           });
     });
