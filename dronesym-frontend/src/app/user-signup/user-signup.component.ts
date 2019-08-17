@@ -92,13 +92,13 @@ export class UserSignupComponent implements OnInit {
           this.onResponse.emit({ status : 'ERROR', msg : err });
           console.log(err);
         });
-    console.log(this.user);
+    // console.log(this.user);
   }
 
   public onRoleSelect($event) {
     const role = $event.target.value.toLowerCase();
     this.user.role = role;
-    console.log(this.user);
+    // console.log(this.user);
   }
 
   public cancel() {
