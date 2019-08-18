@@ -11,6 +11,17 @@ import threadrunner
 app = Flask(__name__)
 api_base_url = '/dronesym/api/flask'
 
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Lax',
+)
+# response.headers['X-Content-Type-Options'] = 'nosniff'
+# response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+@app.after_request
+def apply_caching(response):
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    return response
 
 @app.errorhandler(404)
 def send_not_found(error):
@@ -24,10 +35,12 @@ def send_bad_request(error):
 
 @app.route(api_base_url + '/spawn', methods=['POST'])
 def create_new_drone():
+    
     # This routes creates a new Dronekit SITL in the Drone Pool.
     # The initial position needs to be send along the request as a JSON
     global q
-
+    # response.headers['X-Content-Type-Options'] = 'nosniff'
+    # response.headers['X-Frame-Options'] = 'SAMEORIGIN'
     if not request.json or not 'location'in request.json or 'droneId' not in request.json:
         abort(400)
     print(request.json)
