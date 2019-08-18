@@ -17,7 +17,7 @@ router.post('/sendEmail', function(req, res) {
   });
 });
 router.post('/updatePass', function(req, res) {
-  userCtrl.updatePass(req.body.username,req.body.pass, function(status) {
+  userCtrl.updatePass(req.body.uname, req.body.password, function(status) {
     res.json(status);
   });
 });

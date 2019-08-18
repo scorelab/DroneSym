@@ -27,7 +27,6 @@ export class NewPasswordDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("Hi from new pass");
   }
   public setPassword($event) {
     this.pass.password = $event.target.value;
@@ -42,8 +41,8 @@ export class NewPasswordDialogComponent implements OnInit {
   }
 
   public confirm() {
-    if(this.pass.password === this.pass.retype){
-      this.onResponse.emit({'message' : 'DIALOG_CONFIRM', 'pass' : this.pass.password});
+    if (this.pass.password === this.pass.retype) {
+      this.onResponse.emit({'message' : 'DIALOG_CONFIRM', 'pass' : this.pass.password, 'retype' : this.pass.retype});
     }
 
   }

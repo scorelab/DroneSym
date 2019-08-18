@@ -9,7 +9,7 @@
 
       <div class="input-field col s6 offset-s3">
       <label for="code"> Code : </label>
-      <input (input)="setCode($event)" id="code" type="text"/>
+      <input [value]="code" (input)="setCode($event)" id="code" type="text"/>
     </div>
   </div>
   </form>

@@ -46,41 +46,20 @@ export class ForgotPasswordComponent implements OnInit {
 }
   ngOnInit() {
   }
-  // public createDrone(name, description, flying_time, location) {
-  //   this.droneFeed.createDrone(name, description, flying_time, location)
-  //       .then((res) => {
-  //         if (res.status === 'ERROR') {
-  //           console.log(res);
-  //           Materialize.toast(res.msg, 4000);
-  //         }
-  //       });
-  // }
 
-  // public processDialogResponse($data) {
-  //   console.log($data);
-  //   if (this.createMode === this.createModes.DRONES) {
-  //     if ($data.message === 'DIALOG_CONFIRM') {
-  //       this.createDrone($data.name, $data.description, $data.flying_time, this.centerCoords);
-  //     }
-  //   }
-
-  //   this.map.setOptions({ draggableCursor: null });
-  //   this.dialogParams.droneDialog.show = false;
-  //   this.createMode = this.createModes.NONE;
-  // }
   sendEmail(code){
-    this.userService.sendEmail(this.genCode)
+    this.userService.sendEmail(code)
     .then((res) => {
 
     });
   }
   checkUser($event) {
+    this.genCode = this.generateCode();
     $event.preventDefault();
     this.userService.checkUser(this.user.username)
         .then((res) => {
           if (res.status === 'OK') {
             this.validUser = true;
-              this.genCode = this.generateCode();
               this.sendEmail(this.genCode);
               this.dialogParams.codeDialog.show = true;
           } else {
@@ -90,7 +69,7 @@ export class ForgotPasswordComponent implements OnInit {
   }
   public processDialogResponse($data) {
     console.log('Generated :' + this.genCode);
-    console.log($data);
+    // ($data);
     if (this.validUser === true) {
       if ($data.message === 'DIALOG_CONFIRM') {
         if ($data.code === this.genCode) {
@@ -100,26 +79,23 @@ export class ForgotPasswordComponent implements OnInit {
       }
     } else {
       Materialize.toast('Dialog canceled!', 4000);
+      this.router.navigate(['/resetpassword']);
     }
     this.dialogParams.codeDialog.show = false;
   }
-  if (this.user.password !== this.user.retype) {
-    Materialize.toast('Retype password does not match', 3000);
-    return;
-  }
-
   }
   public processPassDialogResponse($data) {
     console.log($data);
-    if($data.pass !== $data.retype){
+    if ($data.pass !== $data.retype) {
       Materialize.toast('Retype password does not match', 3000);
       return;
     } else {
-      this.userService.updatePass(this.user.uname, this.user.password)
+      console.log($data.pass);
+      this.userService.updatePass(this.user.username, $data.pass)
         .then((status) => {
           if (status.status === 'OK') {
             Materialize.toast('Password updated successfully', 4000);
-
+            this.router.navigate(['/login']);
           } else if (status.status === 'ERROR') {
             Materialize.toast(status.msg, 4000);
           }
