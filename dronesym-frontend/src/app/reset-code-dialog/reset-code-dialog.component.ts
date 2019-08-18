@@ -9,6 +9,7 @@ import { MaterializeAction } from 'angular2-materialize';
 export class ResetCodeDialogComponent implements OnInit {
   modalActions = new EventEmitter<string|MaterializeAction>();
   code: string;
+  codes:string;
   @Output('onResponse') onResponse = new EventEmitter<any>();
   @Input('message') message: string;
   @Input('inputEnabled') inputEnabled: boolean;
@@ -27,6 +28,7 @@ export class ResetCodeDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.code = '';
   }
 
   public setCode($event) {

@@ -8,8 +8,8 @@ const db = require('../example.db');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt-nodejs');
 // ChangeStream Watch for User
-User.watch().
-    on('change', (data) => console.log(data));
+// User.watch().
+//     on('change', (data) => console.log(data));
 /** Regular expression for email validation */
 // eslint-disable-next-line max-len
 regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
@@ -281,6 +281,7 @@ exports.sendEmail = function(code, callBack) {
   nodemailer.createTestAccount((err, account) => {
     if (err) {
       console.error('Failed to create a testing account. ' + err.message);
+      callBack({status: 'ERROR', msg: 'Failed to create a testing account.'});
       return process.exit(1);
     }
 
@@ -309,14 +310,15 @@ exports.sendEmail = function(code, callBack) {
     transporter.sendMail(message, (err, info) => {
       if (err) {
         console.log('Error occurred. ' + err.message);
+        callBack({status: 'ERROR', msg: 'Error occurred.'});
         return process.exit(1);
       }
 
       console.log('Message sent: %s', info.messageId);
       // Preview only available when sending through an Ethereal account
       console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-      callBack({status: 'OK', res: info});
     });
+    callBack({status: 'OK', res: 'success'});
   });
 };
 exports.check = function(uname, callBack) {
@@ -434,37 +436,25 @@ exports.updateUserInGroup=function(userId, groupId, insert=true, callBack) {
   });
 };
 
-exports.updatePass=function(username, pass, callBack) {
-  let encPass = '';
-  // User.findOne({uname: username}, function(err, user) {
-  //   if (err) {
-  //     callBack({status: 'ERROR', msg: err});
-  //     return;
-  //   } else {
-  //     const SALT_FACTOR = 5;
-  //     bcrypt.genSalt(SALT_FACTOR, function(err, salt) {
-  //   if (err) {
-  //     return next(err);
-  //   }
-  //   bcrypt.hash(pass, salt, null, function(err, hash) {
-  //     if (err) {
-  //       return next(err);
-  //     }
+exports.updatePass = function(user, pass, callBack) {
+  const SALT_FACTOR = 5;
+  bcrypt.genSalt(SALT_FACTOR, function(err, salt) {
+    bcrypt.hash(pass, salt, null, function(err, hash) {
+      // console.log(hash);
+      User.update({uname: user}, {
+        password: hash,
+      }, function(err, user) {
+        if (err) {
+          callBack({status: 'ERROR'});
+          return;
+        }
 
-  //     encPass = hash;
-  //     next();
-  //   });
-  // }
-  //     User.update({uname: username}, {
-  //       password: encPass
-  //   }, function(err, user) {
-  //           if (err) {
-  //             callBack({status: 'ERROR'});
-  //             return;
-  //           }
-  //           callBack({status: 'OK', group: filterUser(user)});
-  //         });
-  //       }
+        callBack({status: 'OK'});
+      });
+      // Store hash in your password DB.
+    });
+  });
+  // callBack({status: 'OK'});
 };
 
 /**

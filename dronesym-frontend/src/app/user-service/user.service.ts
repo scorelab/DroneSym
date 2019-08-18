@@ -17,13 +17,13 @@ export class UserService {
   constructor(private http: AuthHttpService) {
     this.baseUrl = `${environment.nodeApiURL}/user`;
   }
-  public updatePass(username, pass){
-    const user = { 'uname': username, 'password': pass, };
-    return this.http.post(`${this.baseUrl}/updatePass`, user)
+  public updatePass(username, pass) {
+    // const user = { 'uname': username, 'password': pass};
+    return this.http.post(`${this.baseUrl}/updatePass`, {'uname': username, 'password': pass} )
            .pipe(map((res) => res.json()))
            .toPromise();
   }
-  public sendEmail(code){
+  public sendEmail(code) {
     return this.http.post(`${this.baseUrl}/sendEmail`, { 'code': code })
     .pipe(map((res) => {
       const status = res.json();
@@ -32,11 +32,11 @@ export class UserService {
      }))
     .toPromise();
   }
-public checkUser(username){
+public checkUser(username) {
   return this.http.post(`${this.baseUrl}/check`, { 'uname': username })
         .pipe(map((res) => {
           const status = res.json();
-          console.log(status);
+          // console.log(status);
           return status;
          }))
         .toPromise();
