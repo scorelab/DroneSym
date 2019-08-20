@@ -16,7 +16,6 @@ matrix:
         - npm install
         - virtualenv  -p python3 ../flask_env
         - source ../flask_env/bin/activate
-        - pip3 install -r ../dronesym-python/requirements.txt
         
       cache:
         directories:
