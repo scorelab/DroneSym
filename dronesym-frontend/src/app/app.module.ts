@@ -31,6 +31,7 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetCodeDialogComponent } from './reset-code-dialog/reset-code-dialog.component';
 import { NewPasswordDialogComponent } from './new-password-dialog/new-password-dialog.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { NewPasswordDialogComponent } from './new-password-dialog/new-password-d
     AgmCoreModule.forRoot({
       apiKey: environment.mapsApiKey
     }),
-    AppRouter
+    AppRouter,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     DroneDataService,
