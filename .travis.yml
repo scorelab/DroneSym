@@ -5,7 +5,7 @@ matrix:
     - language: python
       python:
           - 3.5
-      install: "pip3.5 install -r dronesym-python/requirements.txt"
+      install: "pip3 install -r dronesym-python/requirements.txt"
       script: pytest dronesym-python
       
     - language: node_js
@@ -16,7 +16,7 @@ matrix:
         - npm install
         - virtualenv  -p python3 ../flask_env
         - source ../flask_env/bin/activate
-        - pip3.5 install -r ../dronesym-python/requirements.txt
+        - pip3 install -r ../dronesym-python/requirements.txt
         
       cache:
         directories:
