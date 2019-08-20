@@ -2,10 +2,11 @@
 const assert = require('assert');
 const randomstring = require('randomstring');
 const randomlocation = require('random-location');
+require('dotenv').config();
 const ref = require('../example.db').ref('/drones');
 const mongoose = require('mongoose');
-const mongoConfig = require('../config/example.mongoconfig');
-mongoose.connect(mongoConfig.dbUri, {useNewUrlParser: true});
+
+mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true});
 
 const Drone = require('../Models/drone');
 

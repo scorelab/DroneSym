@@ -12,6 +12,8 @@ services:
     build: './dronesym-node'
     ports:
       - "3000:3000"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/dronesym
   angular:
     build: './dronesym-frontend'
     ports:

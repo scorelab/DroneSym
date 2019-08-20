@@ -32,10 +32,6 @@ testem.log
 #System Files
 .DS_Store
 
-### Firebase ###
-.idea
-**/node_modules/*
-**/.firebaserc
 ### Git ###
 *.orig
 
@@ -110,10 +106,6 @@ typings/
 
 # Yarn Integrity file
 .yarn-integrity
-
-# dotenv environment variables file
-.env
-
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -227,7 +219,6 @@ dronesym-python/flask-api/pip-selfcheck.json
 dronesym-frontend/src/environments/environment.ts
 dronesym-node/db.js
 dronesym-node/config/mongoconfig.js
-dronesym-node/dronedb-213c3-firebase-adminsdk-7u7ke-14febae0d1.json
 dronesym-node/dronesym-d5898-5e6e2d94c38d.json
 dronesym-node/example.db.js
 #py.test caches
