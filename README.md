@@ -12,14 +12,13 @@
 
 1. Install Node.js 6.x (or higher)
 2. Python version 2.7 (or higher)
+3. MongoDB version 3.6 (or higher)
 
 ### Part 1 - Setting up the Node environment
 
 1. After cloning the repo navigate to `dronesym-node` folder
 2. Run `npm install` to pull the dependencies
-3. Create a _Firebase Admin sdk private key_ following the instructions in the **Generating Firebase Key File and Database URL** section below
-4. In `example.db.js` file provide the path to your firebase key file and the database url
-5. Run `mongod` to start running Mongo
+5. Run `mongod --replSet rs` to start running Mongo with a Replica Set.
 6. Open another terminal without disturbing the terminal running mongod, then import the database with `mongorestore --db dronesym dronedb/dronesym`
 7. Run `npm start` to start the Node server
 
@@ -59,7 +58,7 @@ feedURL: 'http://localhost:3000/feed'
 
 **Note: Dronesym Node server (`./dronesym-node/`) and DroneSym Flask server (`./dronesym-python/flask-api/src`) should be running before starting the frontend server\_**
 
-Starting the Angular2 development server
+Starting the Angular development server
 
 ```sh
 $ npm install
@@ -108,11 +107,3 @@ For node unit tests - **both the flask server and node server have to be running
 
 Navigate to `dronesym-node`
 Run `npm test`
-
-### Generating Firebase Key File and Database URL
-
-1. Sign into your google account and go to the [Firebase Console](https://console.firebase.google.com/) page.
-2. Add your project on then go to the settings panel for user credentials.
-3. Generate and Download a new private key and move it to the same directory as the _example.db.js_ file.
-4. Open _example.db.js_ and paste the name of the downloaded file into the _creds = require_ line, as shown. Also, copy the database URL (looks like _https://<database_name>.firebaseio.com_) from the console and paste it in the _databaseURL_ line, as shown.
-   ![Edit Database File](https://i.imgur.com/DxNTFZZ.png)
