@@ -31,6 +31,7 @@
   },
   "author": "SCoRe Community",
   "contributors": [
+    "dilinade",
     "hasa93",
     "rhperera",
     "malithsen",
@@ -44,7 +45,7 @@
   "homepage": "https://github.com/hasa93/DroneSym#readme",
   "engines": {},
   "dependencies": {
-    "bcrypt-nodejs": "0.0.3",
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
