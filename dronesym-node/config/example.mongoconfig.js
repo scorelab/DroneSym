@@ -1,3 +1,3 @@
 module.exports = {
-  dbUri: 'mongodb://localhost/dronesym',
+  dbUri: 'mongodb://localhost:27017/dronesym',
 };

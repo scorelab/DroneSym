@@ -8,6 +8,7 @@ let bodyParser = require('body-parser');
 let cors = require('cors');
 let app = express();
 let http = require('http');
+require('dotenv').config();
 // You can change the port to any other, if 3000 is busy or being used by any other service.
 let port = 3000;
 
@@ -28,7 +29,7 @@ let passportConfig = require('./config/passportconfig')(passport);
 app.use(passport.initialize());
 
 // mongodb connection
-mongoose.connect(mongoConfig.dbUri, {useNewUrlParser: true});
+mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true});
 
 mongoose.connection.on('error', function(err) {
   console.log(err);

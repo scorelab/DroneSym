@@ -1,11 +1,11 @@
 const assert = require('assert');
 const randomstring = require('randomstring');
-
+const dotenv = require('dotenv').config();
 const {createUser, loginUser, getUserList} = require('../Controllers/userCtrl');
 
 const mongoose = require('mongoose');
 const mongoConfig = require('../config/example.mongoconfig');
-mongoose.connect(mongoConfig.dbUri);
+mongoose.connect(process.env.MONGO_URL);
 
 const User = require('../Models/user');
 
