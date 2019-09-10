@@ -58,7 +58,7 @@ feedURL: 'http://localhost:3000/feed'
 
 **Note: Dronesym Node server (`./dronesym-node/`) and DroneSym Flask server (`./dronesym-python/flask-api/src`) should be running before starting the frontend server\_**
 
-**Note: You should enable Google Maps JavaScript API before using API key
+**Note: You should enable Google Maps JavaScript API before using API key_**
 
 Starting the Angular development server
 
