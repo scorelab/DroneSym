@@ -21,7 +21,7 @@
 5. Run `mongod --replSet rs` to start running Mongo with a Replica Set.
 6. Open another terminal without disturbing the terminal running mongod, then import the database with `mongorestore --db dronesym dronedb/dronesym`
 7. Run `npm start` to start the Node server
-
+**Create a folder C:\data\db if you get a error starting with replica set(For windows users)**
 **Note: Make sure you have an admin account in the database under user collection. (Refer the schema in Models folder)**
 
 ### Part 2 - Setting up Python environment
@@ -49,7 +49,7 @@ Set environmental variable in `./dronesym-frontend/src/environments/environment.
 ```sh
 $ cp src/environments/example.environment.ts src/environments/environment.ts`
 ```
-
+Edit the environment.ts as follows
 ```sh
 mapsApiKey: 'YOUR_GOOGLE_MAPS_API_KEY',
 nodeApiURL: 'http://localhost:3000/dronesym/api/node',
@@ -57,6 +57,8 @@ feedURL: 'http://localhost:3000/feed'
 ```
 
 **Note: Dronesym Node server (`./dronesym-node/`) and DroneSym Flask server (`./dronesym-python/flask-api/src`) should be running before starting the frontend server\_**
+
+**Note: You should enable Google Maps JavaScript API before using API key**
 
 Starting the Angular development server
 
