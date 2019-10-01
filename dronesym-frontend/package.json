@@ -55,7 +55,7 @@
     "materialize-css": "^0.100.2",
     "mixin-deep": "^2.0.1",
     "rxjs": "^6.4.0",
-    "rxjs-compat": "^6.4.0",
+    "rxjs-compat": "^6.5.3",
     "socket.io-client": "^2.2.0",
     "tslib": "^1.9.3",
     "tslint": "^5.16.0",
