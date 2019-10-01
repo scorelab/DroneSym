@@ -4,7 +4,6 @@ const Group = require('../Models/group');
 const Drone = require('../Models/drone');
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../config/jwtconfig');
-const db = require('../example.db');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 // ChangeStream Watch for User

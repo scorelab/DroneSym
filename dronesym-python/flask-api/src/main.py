@@ -11,10 +11,7 @@ import threadrunner
 app = Flask(__name__)
 api_base_url = '/dronesym/api/flask'
 
-app.config.update(
-    SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE='Lax',
-)
+
 # response.headers['X-Content-Type-Options'] = 'nosniff'
 # response.headers['X-Frame-Options'] = 'SAMEORIGIN'
 @app.after_request
