@@ -4,7 +4,6 @@ const io = require('../websocket').connection;
 const Group = require('../Models/group');
 const User = require('../Models/user');
 const Drone = require('../Models/drone');
-const db = require('../example.db');
 
 // const droneRef = db.ref('/drones');
 
