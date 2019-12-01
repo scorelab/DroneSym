@@ -49,7 +49,7 @@
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
-    "dotenv": "^8.1.0",
+    "dotenv": "^8.2.0",
     "eslint": "^5.16.0",
     "eslint-config-google": "^0.13.0",
     "eslint-utils": "^1.4.2",
