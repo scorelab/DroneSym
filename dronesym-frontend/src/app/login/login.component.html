@@ -22,14 +22,14 @@
 						<input (input)="setPassword($event)" id="password" type="password"/>
 					</div>
 					<div class="row">
-							<div class="col s6 btnn">
-									<button (click) = "onLogin($event)" class="waves-effect waves-light btn blue darken-3 btnn">Login</button>
+							<div class="col s6 ">
+									<button (click) = "onLogin($event)" class="waves-effect waves-light btn blue darken-3">Login</button>
 							</div>
-							<div class="col s6 btnn">
-									<button  [routerLink]="['/signup']" class="waves-effect waves-light btn blue darken-3 btnn">Signup</button>
+							<div class="col s6">
+									<button  [routerLink]="['/signup']" class="waves-effect waves-light btn blue darken-3">Signup</button>
               </div>
-              <br><div class="col s6 btnn">
-              <a [routerLink]="'/resetpassword'">Forgot password?</a>
+              <br><div class="col s12 btnn">
+              <a id="forget-link" [routerLink]="'/resetpassword'">Forgot password?</a>
               </div>
 					</div>
 				</form>

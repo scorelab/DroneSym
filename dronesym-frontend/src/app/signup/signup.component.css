@@ -45,36 +45,10 @@
 	padding-right: 40px;
 	}
 }
-@media screen and (max-width: 660px) {
-.row .col.offset-s4 {
-	margin-left: 25%;
-}
-.row .btn {
-	float:left;
-	margin-right:34%
-}
-}
-@media screen and (max-width: 630px) {
-.row .col.offset-s4 {
-	margin-left: 24%;
-}
-.row .btn {
-	float:right;
-	margin-right:34%
-}
-}
-@media screen and (max-width: 630px) {
-.row .col.offset-s4 {
-	margin-left: 22%;
-}
-.row .btn {
-	float:right;
-	margin-right:33%
-}
+
 .footer-label[_ngcontent-c1] {
 	margin-left:70px;
 	width:200px;
-}
 }
 @media screen and (max-width: 560px) {
 .row .col.offset-s4 {
