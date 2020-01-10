@@ -42,14 +42,19 @@
   
   
             <div class="row">
-              <button (click) = "onSignup($event)" class="waves-effect waves-light btn blue darken-3 col s3 offset-s3">Create User</button>
-              <a  [routerLink]="['/login']" class="center-align waves-effect waves-red btn-flat col s3">Cancel</a>
+              <div class="col s6">
+                <button (click) = "onSignup($event)" class="waves-effect waves-light btn blue darken-3">Create User</button>
+              </div>
+              <div class="col s6">
+                <a  [routerLink]="['/login']" class="center-align waves-effect waves-red btn-flat">Cancel</a>
+              </div>
             </div>
           </form>
 				
 			</div>
 		</div>
-
-		<div class="footer-label center-align"> DroneSym v1.0 </div>
+    <div class="row">
+      <div class="footer-label col s12"> DroneSym v1.0 </div>
+    </div>
 	</div>
 </div>
