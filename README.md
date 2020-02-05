@@ -34,7 +34,8 @@ Run the following commands :
     $  sudo chmod 0755 /data/db
     ```
     If one wants to change the MongoDB default data path i.e. "C:\data\db" (Windows) or "/data/db" (Linux) to some other directory then use:
-    `mongod --dbpath /usr/local/mongodb-data`
+    `mongod --dbpath new_dbpath`
+    where **new_dbpath** is the path of the new data store directory. Ex : new_dbpath = /usr/local/var/mongodb-data
 4. Run `mongod --replSet rs` to start running Mongo with a Replica Set.
 5. Open another terminal without disturbing the terminal running mongod, then import the database with `mongorestore --db dronesym dronedb/dronesym`
 6. Run `npm start` to start the Node server
