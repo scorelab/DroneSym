@@ -18,24 +18,24 @@
 
 1. After cloning the repo navigate to `dronesym-node` folder
 2. Run `npm install` to pull the dependencies
-3. To avoid the error : `exception in initAndListen: NonExistentPath: Data directory C:\data\db\ not found., terminating"(Windows)    or "Error: dbpath (/data/db) doesn't exist"(Linux)`, create the dbpath as follows before running mongodb with replica set.
-**For Windows Users :**
-  Create a folder C:\data\db
-**For Linux Users :**
-Run the following commands :
-    To create the directory **/data/db** directory where **data** directory is in the **root** directory run:
+3. To avoid the error : `exception in initAndListen: NonExistentPath: Data directory C:\data\db\ not found., terminating"(Windows)    or "Error: dbpath (/data/db) doesn't exist"(Linux)`, create the dbpath as follows before running mongodb with replica set.  
+**For Windows Users :**  
+  Create a folder C:\data\db  
+**For Linux Users :**  
+Run the following commands :  
+    To create the directory **/data/db** directory where **data** directory is in the **root** directory run:  
     ```sh
     $  sudo mkdir -p /data/db
     ```
-    As the owner and the group of '/data' directory are root, we need to change ownership of the directory to the current user to access it.
-    We can change the ownership of the directory as follows:
+    As the owner and the group of '/data' directory are root, we need to change ownership of the directory to the current user to access it.  
+    We can change the ownership of the directory as follows:  
     ```sh
     $  sudo chown -R username:group/data
     $  sudo chmod 0755 /data/db
     ```
-    If one wants to change the MongoDB default data path i.e. "C:\data\db" (Windows) or "/data/db" (Linux) to some other directory then use:
-    `mongod --dbpath new_dbpath`
-    where **new_dbpath** is the path of the new data store directory. Ex : new_dbpath = /usr/local/var/mongodb-data
+    If one wants to change the MongoDB default data path i.e. "C:\data\db" (Windows) or "/data/db" (Linux) to some other directory then use:  
+    `mongod --dbpath new_dbpath`  
+    where **new_dbpath** is the path of the new data store directory. Ex : new_dbpath = /usr/local/var/mongodb-data  
 4. Run `mongod --replSet rs` to start running Mongo with a Replica Set.
 5. Open another terminal without disturbing the terminal running mongod, then import the database with `mongorestore --db dronesym dronedb/dronesym`
 6. Run `npm start` to start the Node server
