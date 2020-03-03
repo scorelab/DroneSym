@@ -46,10 +46,6 @@
 	}
 }
 
-.footer-label[_ngcontent-c1] {
-	margin-left:70px;
-	width:200px;
-}
 @media screen and (max-width: 560px) {
 .row .col.offset-s4 {
 	margin-left: 18%;
@@ -94,4 +90,14 @@
 }
 .btnn{
 	text-align: center
+}
+.dronesym-logo {
+	text-align: center;
+}
+.img-responsive {
+	max-width: 100%;
+	height: auto;
+}
+.footer {
+	text-align: center;
 }
