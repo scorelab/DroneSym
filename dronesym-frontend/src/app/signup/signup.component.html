@@ -3,9 +3,9 @@
 <div class="row login-background">
 	<div class="col s4 offset-s4 login-card">
 		<div class="card">
-			<div class="card-image">
-				<div class="logo-container">
-					<img src="./assets/img/dronesym_logo.png"/>
+			<div >
+				<div class="dronesym-logo">
+          <img class="img-responsive" src="./assets/img/dronesym_logo.png"/>
 				</div>
 			</div>
 
@@ -40,21 +40,23 @@
               <input (input)="setRetype($event)" id="retype" type="password"/>
             </div>
   
-  
-            <div class="row">
-              <div class="col s6">
-                <button (click) = "onSignup($event)" class="waves-effect waves-light btn blue darken-3">Create User</button>
-              </div>
-              <div class="col s6">
-                <a  [routerLink]="['/login']" class="center-align waves-effect waves-red btn-flat">Cancel</a>
+            <div style="text-align: center;">
+              <div class="row">
+                <div class="col s6">
+                  <button (click) = "onSignup($event)" class="waves-effect waves-light btn blue darken-3">Create User</button>
+                </div>
+                <div class="col s6">
+                  <a  [routerLink]="['/login']" class="center-align waves-effect waves-red btn-flat">Cancel</a>
+                </div>
               </div>
             </div>
+            
           </form>
 				
 			</div>
 		</div>
-    <div class="row">
-      <div class="footer-label col s12"> DroneSym v1.0 </div>
+    <div class="footer">
+      <div class="footer-label"> DroneSym v1.0 </div>
     </div>
 	</div>
 </div>
