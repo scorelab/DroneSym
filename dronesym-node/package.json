@@ -54,6 +54,7 @@
     "eslint-config-google": "^0.13.0",
     "eslint-utils": "^1.4.2",
     "express": "^4.16.4",
+    "helmet": "^3.22.0",
     "http": "0.0.0",
     "is-ci": "^2.0.0",
     "jsonwebtoken": "^8.5.0",
@@ -65,9 +66,9 @@
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "request": "^2.88.0",
-    "socket.io": "^2.2.0",
     "sinon": "^7.1.1",
     "sinon-mongoose": "^2.2.1",
+    "socket.io": "^2.2.0",
     "socketio-jwt": "^4.5.0"
   },
   "devDependencies": {

@@ -385,6 +385,7 @@ exports.getDroneById = function(id, callBack) {
   Drone.find({_id: id}).then((response) => {
     callBack(response);
   }).catch((err) => {
+    callBack({status:'Error',msg:'ID not found'});
     console.error(err);
   });
   // droneRef.orderByKey().equalTo(id)
