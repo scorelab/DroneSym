@@ -18,7 +18,8 @@ let sockConn = require('./websocket').init(http);
 let droneRouter = require('./Routers/droneRouter');
 let userRouter = require('./Routers/userRouter');
 let mongoConfig = require('./config/example.mongoconfig');
-
+const helmet = require('helmet');
+app.use(helmet.hidePoweredBy());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
