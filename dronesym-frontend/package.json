@@ -45,7 +45,7 @@
     "@angular/http": "^7.2.8",
     "@angular/platform-browser": "^7.2.8",
     "@angular/platform-browser-dynamic": "^7.2.8",
-    "@angular/pwa": "^0.12.4",
+    "@angular/pwa": "^0.1002.0",
     "@angular/router": "^7.2.8",
     "@angular/service-worker": "^7.2.8",
     "angular2-materialize": "^15.1.10",
