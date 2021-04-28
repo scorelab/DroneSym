@@ -1,0 +1,51 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/dronesym-node"
+  schedule:
+    interval: monthly
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: mocha
+    versions:
+    - 8.2.1
+  - dependency-name: nodemon
+    versions:
+    - 2.0.6
+  - dependency-name: lodash
+    versions:
+    - 4.17.20
+- package-ecosystem: npm
+  directory: "/dronesym-frontend"
+  schedule:
+    interval: monthly
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: "@angular/language-service"
+    versions:
+    - 11.0.5
+    - 11.1.1
+  - dependency-name: "@angular/pwa"
+    versions:
+    - 0.1100.5
+    - 0.1101.2
+  - dependency-name: "@types/jasmine"
+    versions:
+    - 3.6.2
+    - 3.6.3
+  - dependency-name: "@types/node"
+    versions:
+    - 14.14.17
+    - 14.14.22
+  - dependency-name: "@angular/cli"
+    versions:
+    - 11.0.5
+    - 11.1.2
+  - dependency-name: elliptic
+    versions:
+    - 6.5.3
+- package-ecosystem: pip
+  directory: "/dronesym-python"
+  schedule:
+    interval: monthly
+  open-pull-requests-limit: 10
